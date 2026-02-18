@@ -1171,7 +1171,6 @@
                 // Таблица лидеров (одна для меню и Game Over)
                 this.menuHighscoreListOl = document.getElementById('menuHighscoreListOl');
                 this.menuNetworkIndicator = document.getElementById('menuNetworkIndicator');
-                // Элементы таблицы в Game Over
                 this.gameOverHighscoreListOl = document.getElementById('gameOverHighscoreListOl');
                 this.gameOverNetworkIndicator = document.getElementById('gameOverNetworkIndicator');
 
@@ -1259,29 +1258,13 @@
                 await this.loadActiveHighscores();
                 console.log('Final highscores count:', this.highscores.length);
 
-                // 4. Обновляем UI - показываем таблицу в меню и в UI
-                this.updateSupabaseStatus();
+                // 4. Обновляем UI
                 this.displayHighscores();
-                this.displayMenuHighscores(); // ← Показываем таблицу в меню
             }
 
             // Проверка и отображение статуса сети
             async checkAndShowNetworkStatus() {
                 this.supabaseConnected = await this.db.checkConnection(true);
-                this.updateNetworkIndicator();
-            }
-
-            // Обновление индикатора сети
-            updateNetworkIndicator() {
-                if (this.networkIndicatorEl) {
-                    if (this.supabaseConnected) {
-                        this.networkIndicatorEl.textContent = '🌐'; // Онлайн
-                        this.networkIndicatorEl.title = 'Онлайн: глобальная таблица лидеров';
-                    } else {
-                        this.networkIndicatorEl.textContent = '🔴'; // Оффлайн
-                        this.networkIndicatorEl.title = 'Оффлайн: локальная таблица лидеров';
-                    }
-                }
             }
 
             // Загрузка рекордов из активного источника
@@ -1301,18 +1284,6 @@
                 // Если Supabase не подключён или пуст, используем локальные
                 this.highscores = this.loadHighscores();
                 console.log(`Using ${this.highscores.length} local scores`);
-            }
-
-            updateSupabaseStatus() {
-                if (this.supabaseStatusEl) {
-                    if (this.supabaseConnected) {
-                        this.supabaseStatusEl.textContent = '✅ Supabase подключён';
-                        this.supabaseStatusEl.style.color = '#32CD32';
-                    } else {
-                        this.supabaseStatusEl.textContent = '⚠️ Supabase не подключён (работает локально)';
-                        this.supabaseStatusEl.style.color = '#FF6347';
-                    }
-                }
             }
 
             resize() {
@@ -1421,19 +1392,6 @@
                 }
             }
 
-            // Управление состоянием свёрнутых секций в Game Over
-            setGameOverSectionsCollapsed(collapsed) {
-                const gameOverContent = document.getElementById('gameOverHighscoresContent');
-                const gameOverToggle = document.getElementById('gameOverHighscoresToggle');
-
-                if (gameOverContent) {
-                    gameOverContent.style.display = collapsed ? 'none' : 'block';
-                }
-                if (gameOverToggle) {
-                    gameOverToggle.textContent = collapsed ? '▲' : '▼';
-                }
-            }
-
             clearLocalScores() {
                 // Проверяем подключение к Supabase
                 if (!this.supabaseConnected) {
@@ -1507,13 +1465,10 @@
                 document.body.classList.remove('playing');
                 document.body.classList.add('menu');
 
-                // ПРОВЕРКА: обновляем статус сети и загружаем актуальные рекорды
+                // Проверяем сеть и обновляем таблицу
                 await this.checkAndShowNetworkStatus();
                 await this.loadActiveHighscores();
                 this.displayHighscores();
-                
-                // Разворачиваем таблицу лидеров, сворачиваем инструкцию после игры
-                this.setGameOverSectionsCollapsed(false);
             }
 
             shoot() {
@@ -1906,11 +1861,6 @@
 
             async saveHighscore() {
                 const name = this.playerNameEl.value.trim() || 'Аноним';
-                const highscore = {
-                    name: name,
-                    score: this.score,
-                    date: new Date().toLocaleDateString('ru-RU')
-                };
 
                 // ПРОВЕРКА: сначала проверяем доступность Supabase
                 await this.checkAndShowNetworkStatus();
@@ -1932,6 +1882,11 @@
                     }
                 } else {
                     // Сохраняем локально
+                    const highscore = {
+                        name: name,
+                        score: this.score,
+                        date: new Date().toLocaleDateString('ru-RU')
+                    };
                     this.highscores.push(highscore);
                     this.highscores.sort((a, b) => b.score - a.score);
                     this.highscores = this.highscores.slice(0, 10);
@@ -1943,47 +1898,15 @@
                 localStorage.setItem('crazyChickenLastPlayerName', name);
                 this.lastPlayerName = name;
 
-                // Обновляем индикатор сети и таблицу
-                this.updateNetworkIndicator();
-                this.displayHighscores();
-
-                this.playerNameEl.value = '';
-
-                // Скрываем форму сохранения и заголовок "Игра окончена"
+                // Скрываем форму и показываем меню
                 document.getElementById('highscoreForm').style.display = 'none';
                 document.getElementById('gameOverTitle').style.display = 'none';
+                
+                // Просто показываем меню с развёрнутой таблицей
+                this.showMenu();
             }
 
             displayHighscores() {
-                // Используем таблицу в меню как основную
-                if (this.menuHighscoreListOl) {
-                    this.menuHighscoreListOl.innerHTML = '';
-
-                    const scores = this.highscores.length > 0 ? this.highscores : [];
-
-                    for (const hs of scores) {
-                        const li = document.createElement('li');
-                        const onlineMark = this.supabaseConnected ? ' 🌐' : '';
-                        li.textContent = `${hs.name} - ${hs.score} очков (${hs.date})${onlineMark}`;
-                        li.style.margin = '5px 0';
-                        this.menuHighscoreListOl.appendChild(li);
-                    }
-
-                    if (scores.length === 0) {
-                        const li = document.createElement('li');
-                        li.textContent = 'Пока нет результатов';
-                        this.menuHighscoreListOl.appendChild(li);
-                    }
-                }
-
-                // Обновляем статус Supabase
-                this.updateSupabaseStatus();
-                
-                // Обновляем таблицу в меню и Game Over
-                this.displayMenuHighscores();
-            }
-
-            displayMenuHighscores() {
                 // Обновляем таблицу в меню (топ-5)
                 if (this.menuHighscoreListOl) {
                     this.menuHighscoreListOl.innerHTML = '';
@@ -1994,7 +1917,7 @@
                         for (const hs of scores) {
                             const li = document.createElement('li');
                             const onlineMark = this.supabaseConnected ? ' 🌐' : '';
-                            li.textContent = `${hs.name} - ${hs.score} очков${onlineMark}`;
+                            li.textContent = `${hs.name} - ${hs.score} очков (${hs.date})${onlineMark}`;
                             li.style.margin = '5px 0';
                             this.menuHighscoreListOl.appendChild(li);
                         }
