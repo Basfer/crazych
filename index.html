@@ -232,7 +232,10 @@
     <!-- ============================================
          HTML - Разметка игры
          ============================================ -->
-    
+
+    <!-- Supabase Client (CDN) -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
     <!-- Canvas для рендеринга -->
     <canvas id="gameCanvas"></canvas>
 
@@ -965,13 +968,87 @@
         }
 
         /* ============================================
+           DATABASE MANAGER - Работа с Supabase
+           ============================================ */
+        class DatabaseManager {
+            constructor() {
+                // ВНИМАНИЕ: Эти данные видны в браузере, но RLS защищает базу
+                this.supabaseUrl = 'https://YOUR_PROJECT_ID.supabase.co';
+                this.supabaseKey = 'YOUR_ANON_KEY'; // Анонимный ключ (только на запись)
+                this.supabase = null;
+                this.initialized = false;
+                
+                // Проверяем, загружен ли Supabase
+                if (typeof supabase !== 'undefined') {
+                    try {
+                        this.supabase = supabase.createClient(this.supabaseUrl, this.supabaseKey);
+                        this.initialized = true;
+                        console.log('Supabase initialized');
+                    } catch (e) {
+                        console.warn('Supabase not available:', e);
+                    }
+                }
+            }
+
+            // Сохранение результата
+            async saveScore(name, score) {
+                if (!this.initialized) {
+                    console.log('Supabase not initialized, saving locally only');
+                    return false;
+                }
+
+                try {
+                    const { data, error } = await this.supabase
+                        .from('highscores')
+                        .insert([{ name, score }]);
+
+                    if (error) {
+                        console.error('Error saving score:', error);
+                        return false;
+                    }
+
+                    console.log('Score saved successfully:', data);
+                    return true;
+                } catch (e) {
+                    console.error('Network error:', e);
+                    return false;
+                }
+            }
+
+            // Получение топ игроков
+            async getHighscores(limit = 10) {
+                if (!this.initialized) {
+                    return [];
+                }
+
+                try {
+                    const { data, error } = await this.supabase
+                        .from('highscores')
+                        .select('*')
+                        .order('score', { ascending: false })
+                        .limit(limit);
+
+                    if (error) {
+                        console.error('Error fetching scores:', error);
+                        return [];
+                    }
+
+                    return data || [];
+                } catch (e) {
+                    console.error('Network error:', e);
+                    return [];
+                }
+            }
+        }
+
+        /* ============================================
            GAME MANAGER - Управление игрой
            ============================================ */
         class GameManager {
             constructor() {
                 this.canvas = document.getElementById('gameCanvas');
                 this.ctx = this.canvas.getContext('2d');
-                
+
                 // UI элементы
                 this.scoreEl = document.getElementById('scoreValue');
                 this.ammoEl = document.getElementById('ammoValue');
@@ -1016,10 +1093,14 @@
 
                 // Звук
                 this.soundManager = new SoundManager();
-                
+
+                // База данных
+                this.db = new DatabaseManager();
+
                 // Highscores
                 this.highscores = this.loadHighscores();
-                
+                this.loadingScores = false;
+
                 // Инициализация
                 this.resize();
                 this.setupEventListeners();
@@ -1111,15 +1192,17 @@
                 document.body.classList.add('menu');
             }
 
-            gameOver() {
+            async gameOver() {
                 this.state = 'GAME_OVER';
                 this.soundManager.playGameOver();
-                
+
                 this.finalScoreEl.textContent = `Счёт: ${this.score}`;
                 this.gameOverEl.style.display = 'flex';
                 document.body.classList.remove('playing');
                 document.body.classList.add('menu');
-                
+
+                // Загружаем актуальные результаты из Supabase
+                await this.loadHighscoresFromSupabase();
                 this.displayHighscores();
             }
 
@@ -1511,7 +1594,7 @@
                 return saved ? JSON.parse(saved) : [];
             }
 
-            saveHighscore() {
+            async saveHighscore() {
                 const name = this.playerNameEl.value.trim() || 'Аноним';
                 const highscore = {
                     name: name,
@@ -1519,15 +1602,23 @@
                     date: new Date().toLocaleDateString('ru-RU')
                 };
 
+                // Сохраняем локально
                 this.highscores.push(highscore);
                 this.highscores.sort((a, b) => b.score - a.score);
-                this.highscores = this.highscores.slice(0, 10); // Топ 10
-
+                this.highscores = this.highscores.slice(0, 10);
                 localStorage.setItem('crazyChickenHighscores', JSON.stringify(this.highscores));
-                
+
                 // Сохраняем последнее имя игрока
                 localStorage.setItem('crazyChickenLastPlayerName', name);
                 this.lastPlayerName = name;
+
+                // Сохраняем в Supabase
+                const saved = await this.db.saveScore(name, this.score);
+                if (saved) {
+                    console.log('Score saved to Supabase');
+                    // Загружаем актуальные результаты
+                    await this.loadHighscoresFromSupabase();
+                }
 
                 this.displayHighscores();
                 this.playerNameEl.value = '';
@@ -1537,11 +1628,40 @@
                 document.getElementById('gameOverTitle').style.display = 'none';
             }
 
+            async loadHighscoresFromSupabase() {
+                if (this.loadingScores) return;
+                this.loadingScores = true;
+
+                const scores = await this.db.getHighscores(10);
+                
+                if (scores.length > 0) {
+                    // Преобразуем формат Supabase в формат игры
+                    this.highscores = scores.map(s => ({
+                        name: s.name,
+                        score: s.score,
+                        date: new Date(s.created_at).toLocaleDateString('ru-RU')
+                    }));
+                    localStorage.setItem('crazyChickenHighscores', JSON.stringify(this.highscores));
+                }
+
+                this.loadingScores = false;
+            }
+
             displayHighscores() {
                 this.highscoreListOl.innerHTML = '';
-                for (const hs of this.highscores) {
+                
+                // Если есть результаты из Supabase, показываем их
+                const scores = this.highscores.length > 0 ? this.highscores : [];
+                
+                for (const hs of scores) {
                     const li = document.createElement('li');
                     li.textContent = `${hs.name} - ${hs.score} очков (${hs.date})`;
+                    this.highscoreListOl.appendChild(li);
+                }
+                
+                if (scores.length === 0) {
+                    const li = document.createElement('li');
+                    li.textContent = 'Пока нет результатов';
                     this.highscoreListOl.appendChild(li);
                 }
             }
