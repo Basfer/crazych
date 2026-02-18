@@ -1168,10 +1168,7 @@
                 this.gameOverEl = document.getElementById('gameOver');
                 this.finalScoreEl = document.getElementById('finalScore');
                 this.playerNameEl = document.getElementById('playerName');
-                this.highscoreListOl = document.getElementById('highscoreListOl');
-                this.supabaseStatusEl = document.getElementById('supabaseStatus');
-                this.networkIndicatorEl = document.getElementById('networkIndicator');
-                // Элементы таблицы в меню
+                // Таблица лидеров (одна для меню и Game Over)
                 this.menuHighscoreListOl = document.getElementById('menuHighscoreListOl');
                 this.menuNetworkIndicator = document.getElementById('menuNetworkIndicator');
                 // Элементы таблицы в Game Over
@@ -1491,8 +1488,12 @@
                 this.state = 'MENU';
                 this.menuEl.style.display = 'flex';
                 this.gameOverEl.style.display = 'none';
-                // Разворачиваем секции при возврате в меню
+                // Разворачиваем таблицу лидеров, сворачиваем инструкцию
                 this.setMenuSectionsCollapsed(false);
+                const instructionsContent = document.getElementById('instructionsContent');
+                const instructionsToggle = document.getElementById('instructionsToggle');
+                if (instructionsContent) instructionsContent.style.display = 'none';
+                if (instructionsToggle) instructionsToggle.textContent = '▲';
                 document.body.classList.remove('playing');
                 document.body.classList.add('menu');
             }
@@ -1954,38 +1955,39 @@
             }
 
             displayHighscores() {
-                this.highscoreListOl.innerHTML = '';
+                // Используем таблицу в меню как основную
+                if (this.menuHighscoreListOl) {
+                    this.menuHighscoreListOl.innerHTML = '';
 
-                // Если есть результаты из Supabase, показываем их
-                const scores = this.highscores.length > 0 ? this.highscores : [];
+                    const scores = this.highscores.length > 0 ? this.highscores : [];
 
-                for (const hs of scores) {
-                    const li = document.createElement('li');
-                    // Добавляем метку "ONLINE" для результатов из Supabase
-                    const onlineMark = this.supabaseConnected ? ' 🌐' : '';
-                    li.textContent = `${hs.name} - ${hs.score} очков (${hs.date})${onlineMark}`;
-                    this.highscoreListOl.appendChild(li);
-                }
+                    for (const hs of scores) {
+                        const li = document.createElement('li');
+                        const onlineMark = this.supabaseConnected ? ' 🌐' : '';
+                        li.textContent = `${hs.name} - ${hs.score} очков (${hs.date})${onlineMark}`;
+                        li.style.margin = '5px 0';
+                        this.menuHighscoreListOl.appendChild(li);
+                    }
 
-                if (scores.length === 0) {
-                    const li = document.createElement('li');
-                    li.textContent = 'Пока нет результатов';
-                    this.highscoreListOl.appendChild(li);
+                    if (scores.length === 0) {
+                        const li = document.createElement('li');
+                        li.textContent = 'Пока нет результатов';
+                        this.menuHighscoreListOl.appendChild(li);
+                    }
                 }
 
                 // Обновляем статус Supabase
                 this.updateSupabaseStatus();
                 
-                // Обновляем таблицу в меню
+                // Обновляем таблицу в меню и Game Over
                 this.displayMenuHighscores();
             }
 
             displayMenuHighscores() {
-                // Обновляем таблицу в меню
+                // Обновляем таблицу в меню (топ-5)
                 if (this.menuHighscoreListOl) {
                     this.menuHighscoreListOl.innerHTML = '';
 
-                    // Показываем топ-5 в меню
                     const scores = this.highscores.slice(0, 5);
 
                     if (scores.length > 0) {
@@ -2010,11 +2012,10 @@
                     }
                 }
 
-                // Обновляем таблицу в Game Over
+                // Обновляем таблицу в Game Over (топ-10)
                 if (this.gameOverHighscoreListOl) {
                     this.gameOverHighscoreListOl.innerHTML = '';
 
-                    // Показываем все 10 лучших
                     const scores = this.highscores.slice(0, 10);
 
                     if (scores.length > 0) {
