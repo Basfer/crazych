@@ -1061,7 +1061,13 @@
                 try {
                     // Проверяем, есть ли уже такие результаты в базе
                     const { data: existingScores } = await this.getHighscores(100);
-                    const existingSet = new Set(existingScores.map(s => `${s.name}-${s.score}`));
+                    const existingSet = new Set();
+                    
+                    if (existingScores && existingScores.length > 0) {
+                        existingScores.forEach(s => {
+                            existingSet.add(`${s.name}-${s.score}`);
+                        });
+                    }
 
                     // Сохраняем только те, которых ещё нет в базе
                     for (const score of localScores) {
@@ -1069,6 +1075,8 @@
                         if (!existingSet.has(key)) {
                             const saved = await this.saveScore(score.name, score.score);
                             if (saved) migrated++;
+                            // Небольшая задержка между запросами
+                            await new Promise(resolve => setTimeout(resolve, 50));
                         }
                     }
 
@@ -1154,17 +1162,16 @@
                 this.db = new DatabaseManager();
 
                 // Highscores
-                this.highscores = this.loadHighscores();
+                this.highscores = [];
                 this.loadingScores = false;
                 this.supabaseConnected = false;
 
                 // Инициализация
                 this.resize();
                 this.setupEventListeners();
-                this.loadHighscores();
 
-                // Миграция локальных рекордов в Supabase (при первом запуске)
-                this.migrateScoresIfNeeded();
+                // СРАЗУ загружаем рекорды из Supabase и мигрируем локальные
+                this.initHighscores();
 
                 // Запуск цикла
                 this.lastTime = 0;
@@ -1174,21 +1181,40 @@
                 requestAnimationFrame((t) => this.gameLoop(t));
             }
 
-            async migrateScoresIfNeeded() {
+            async initHighscores() {
+                // 1. Проверяем подключение к Supabase
+                this.supabaseConnected = await this.db.checkConnection();
+                console.log('Supabase connected:', this.supabaseConnected);
+
+                // 2. Мигрируем локальные рекорды
                 const localScores = this.loadHighscores();
-                if (localScores.length > 0) {
+                if (localScores.length > 0 && this.supabaseConnected) {
                     console.log(`Found ${localScores.length} local scores to migrate`);
                     const result = await this.db.migrateLocalScores(localScores);
                     if (result.migrated > 0) {
                         console.log(`Migrated ${result.migrated} scores to Supabase`);
                     }
                 }
-                // Проверяем подключение к Supabase
-                this.supabaseConnected = await this.db.checkConnection();
-                console.log('Supabase connected:', this.supabaseConnected);
-                
-                // Обновляем статус в UI
+
+                // 3. Загружаем актуальные рекорды из Supabase
+                if (this.supabaseConnected) {
+                    const scores = await this.db.getHighscores(10);
+                    if (scores.length > 0) {
+                        this.highscores = scores.map(s => ({
+                            name: s.name,
+                            score: s.score,
+                            date: new Date(s.created_at).toLocaleDateString('ru-RU')
+                        }));
+                        console.log(`Loaded ${this.highscores.length} scores from Supabase`);
+                    }
+                } else {
+                    // Если Supabase не подключён, используем локальные
+                    this.highscores = localScores;
+                }
+
+                // 4. Обновляем UI
                 this.updateSupabaseStatus();
+                this.displayHighscores();
             }
 
             updateSupabaseStatus() {
@@ -1306,8 +1332,7 @@
                 document.body.classList.remove('playing');
                 document.body.classList.add('menu');
 
-                // Загружаем актуальные результаты из Supabase
-                await this.loadHighscoresFromSupabase();
+                // Показываем уже загруженные результаты
                 this.displayHighscores();
             }
 
@@ -1722,7 +1747,14 @@
                 if (saved) {
                     console.log('Score saved to Supabase');
                     // Загружаем актуальные результаты
-                    await this.loadHighscoresFromSupabase();
+                    const scores = await this.db.getHighscores(10);
+                    if (scores.length > 0) {
+                        this.highscores = scores.map(s => ({
+                            name: s.name,
+                            score: s.score,
+                            date: new Date(s.created_at).toLocaleDateString('ru-RU')
+                        }));
+                    }
                 }
 
                 this.displayHighscores();
@@ -1731,25 +1763,6 @@
                 // Скрываем форму сохранения и заголовок "Игра окончена"
                 document.getElementById('highscoreForm').style.display = 'none';
                 document.getElementById('gameOverTitle').style.display = 'none';
-            }
-
-            async loadHighscoresFromSupabase() {
-                if (this.loadingScores) return;
-                this.loadingScores = true;
-
-                const scores = await this.db.getHighscores(10);
-                
-                if (scores.length > 0) {
-                    // Преобразуем формат Supabase в формат игры
-                    this.highscores = scores.map(s => ({
-                        name: s.name,
-                        score: s.score,
-                        date: new Date(s.created_at).toLocaleDateString('ru-RU')
-                    }));
-                    localStorage.setItem('crazyChickenHighscores', JSON.stringify(this.highscores));
-                }
-
-                this.loadingScores = false;
             }
 
             displayHighscores() {
