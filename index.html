@@ -1,0 +1,1558 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Crazy Chicken - Moorhuhn Clone</title>
+    <style>
+        /* ============================================
+           CSS - Стили игры
+           ============================================ */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            overflow: hidden;
+            cursor: none;
+            font-family: 'Courier New', monospace;
+            background: #000;
+        }
+
+        #gameCanvas {
+            display: block;
+            width: 100vw;
+            height: 100vh;
+        }
+
+        /* UI Контейнер */
+        #ui {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        /* Верхняя панель */
+        #topBar {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            padding: 20px;
+            background: linear-gradient(to bottom, rgba(0,0,0,0.7), transparent);
+        }
+
+        .stat-box {
+            background: rgba(139, 69, 19, 0.8);
+            border: 3px solid #8B4513;
+            border-radius: 10px;
+            padding: 10px 20px;
+            color: #FFD700;
+            text-shadow: 2px 2px 4px #000;
+            min-width: 150px;
+            text-align: center;
+        }
+
+        .stat-label {
+            font-size: 14px;
+            color: #DEB887;
+            margin-bottom: 5px;
+        }
+
+        .stat-value {
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+        #ammoValue {
+            color: #FF6347;
+        }
+
+        #timeValue {
+            color: #32CD32;
+        }
+
+        #scoreValue {
+            color: #FFD700;
+        }
+
+        /* Меню */
+        #menu, #gameOver {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background: rgba(0, 0, 0, 0.8);
+            pointer-events: auto;
+            cursor: default;
+        }
+
+        #gameOver {
+            display: none;
+        }
+
+        .menu-title {
+            font-size: 72px;
+            color: #FFD700;
+            text-shadow: 4px 4px 8px #000, 0 0 30px #FF6347;
+            margin-bottom: 20px;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        .menu-subtitle {
+            font-size: 24px;
+            color: #DEB887;
+            margin-bottom: 40px;
+            text-align: center;
+            line-height: 1.6;
+        }
+
+        .menu-btn {
+            font-family: 'Courier New', monospace;
+            font-size: 28px;
+            padding: 15px 50px;
+            background: linear-gradient(to bottom, #8B4513, #5D2906);
+            color: #FFD700;
+            border: 4px solid #DEB887;
+            border-radius: 10px;
+            cursor: pointer;
+            text-shadow: 2px 2px 4px #000;
+            transition: all 0.3s;
+            margin: 10px;
+        }
+
+        .menu-btn:hover {
+            background: linear-gradient(to bottom, #A0522D, #8B4513);
+            transform: scale(1.1);
+            box-shadow: 0 0 20px #FF6347;
+        }
+
+        .instructions {
+            margin-top: 40px;
+            padding: 20px;
+            background: rgba(139, 69, 19, 0.5);
+            border-radius: 10px;
+            color: #DEB887;
+            font-size: 16px;
+            text-align: center;
+        }
+
+        .instructions h3 {
+            color: #FFD700;
+            margin-bottom: 15px;
+        }
+
+        .instructions ul {
+            list-style: none;
+            text-align: left;
+        }
+
+        .instructions li {
+            margin: 8px 0;
+        }
+
+        /* Game Over экран */
+        #finalScore {
+            font-size: 48px;
+            color: #FFD700;
+            margin: 20px 0;
+        }
+
+        #highscoreForm {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin: 20px 0;
+        }
+
+        #highscoreForm input {
+            font-family: 'Courier New', monospace;
+            font-size: 20px;
+            padding: 10px;
+            margin: 10px;
+            background: #2a1810;
+            border: 2px solid #8B4513;
+            color: #FFD700;
+            border-radius: 5px;
+            text-align: center;
+        }
+
+        #highscoreList {
+            margin-top: 20px;
+            padding: 20px;
+            background: rgba(139, 69, 19, 0.5);
+            border-radius: 10px;
+            color: #DEB887;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+
+        #highscoreList h3 {
+            color: #FFD700;
+            margin-bottom: 10px;
+        }
+
+        #highscoreList ol {
+            text-align: left;
+            padding-left: 20px;
+        }
+
+        #highscoreList li {
+            margin: 5px 0;
+        }
+
+        /* Скрытый курсор при игре */
+        body.playing {
+            cursor: none;
+        }
+
+        body.menu {
+            cursor: default;
+        }
+    </style>
+</head>
+<body>
+    <!-- ============================================
+         HTML - Разметка игры
+         ============================================ -->
+    
+    <!-- Canvas для рендеринга -->
+    <canvas id="gameCanvas"></canvas>
+
+    <!-- UI элементы -->
+    <div id="ui">
+        <div id="topBar">
+            <div class="stat-box">
+                <div class="stat-label">СЧЁТ</div>
+                <div class="stat-value" id="scoreValue">0</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-label">ПАТРОНЫ</div>
+                <div class="stat-value" id="ammoValue">60</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-label">ВРЕМЯ</div>
+                <div class="stat-value" id="timeValue">90</div>
+            </div>
+            <div class="stat-box" style="min-width: 120px;">
+                <div class="stat-label">КУРИЦЫ</div>
+                <div class="stat-value" style="font-size: 18px;">
+                    <span id="spawnedValue">0</span> / <span id="hitValue">0</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Главное меню -->
+    <div id="menu">
+        <h1 class="menu-title">🐔 CRAZY CHICKEN 🐔</h1>
+        <p class="menu-subtitle">Охота на куропаток<br>Классическая игра</p>
+        <button class="menu-btn" id="startBtn">НАЧАТЬ ИГРУ</button>
+        
+        <div class="instructions">
+            <h3>📜 ИНСТРУКЦИЯ</h3>
+            <ul>
+                <li>🎯 <strong>Мышь</strong> - прицеливание</li>
+                <li>🔫 <strong>ЛКМ</strong> - выстрел</li>
+                <li>🐔 <strong>Обычная курица</strong> - 10 очков</li>
+                <li>⚡ <strong>Быстрая курица</strong> - 20 очков</li>
+                <li>🪂 <strong>Курица с парашютом</strong> - 30 очков</li>
+                <li>🛸 <strong>НЛО</strong> - 50 очков</li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- Экран Game Over -->
+    <div id="gameOver">
+        <h1 class="menu-title" id="gameOverTitle">ИГРА ОКОНЧЕНА</h1>
+        <div id="finalScore">Счёт: 0</div>
+
+        <div id="highscoreForm">
+            <label style="color: #DEB887;">Введите ваше имя:</label>
+            <input type="text" id="playerName" maxlength="10" placeholder="Имя">
+            <button class="menu-btn" id="saveScoreBtn">СОХРАНИТЬ</button>
+        </div>
+        
+        <div id="highscoreList">
+            <h3>🏆 ТАБЛИЦА ЛИДЕРОВ</h3>
+            <ol id="highscoreListOl"></ol>
+        </div>
+        
+        <button class="menu-btn" id="restartBtn">ИГРАТЬ СНОВА</button>
+    </div>
+
+    <script>
+        // ============================================
+        // JAVASCRIPT - Логика игры
+        // ============================================
+
+        /* ============================================
+           SOUND MANAGER - Управление звуками
+           ============================================ */
+        class SoundManager {
+            constructor() {
+                this.audioContext = null;
+                this.initialized = false;
+            }
+
+            init() {
+                if (this.initialized) return;
+                try {
+                    this.audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                    this.initialized = true;
+                } catch (e) {
+                    console.warn('Web Audio API не поддерживается');
+                }
+            }
+
+            // Синтезированный звук выстрела
+            playShoot() {
+                if (!this.initialized) return;
+                
+                const ctx = this.audioContext;
+                const duration = 0.15;
+                
+                // Создаем шум для выстрела
+                const bufferSize = ctx.sampleRate * duration;
+                const buffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
+                const data = buffer.getChannelData(0);
+                
+                for (let i = 0; i < bufferSize; i++) {
+                    data[i] = Math.random() * 2 - 1;
+                }
+                
+                const noise = ctx.createBufferSource();
+                noise.buffer = buffer;
+                
+                // Фильтр для звука выстрела
+                const filter = ctx.createBiquadFilter();
+                filter.type = 'lowpass';
+                filter.frequency.value = 3000;
+                
+                // Огибающая громкости
+                const gain = ctx.createGain();
+                gain.gain.setValueAtTime(0.5, ctx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + duration);
+                
+                noise.connect(filter);
+                filter.connect(gain);
+                gain.connect(ctx.destination);
+                noise.start();
+            }
+
+            // Звук попадания (крик курицы)
+            playHit() {
+                if (!this.initialized) return;
+
+                const ctx = this.audioContext;
+
+                // Создаем "крик курицы" с помощью частотной модуляции
+                // Куриный крик имеет характерные быстрые изменения частоты
+
+                const oscillator = ctx.createOscillator();
+                const modulator = ctx.createOscillator();
+                const modGain = ctx.createGain();
+                const gain = ctx.createGain();
+
+                // Основная частота с модуляцией для эффекта "кудахтанья"
+                // Повышено на 2 тона от оригинала
+                oscillator.type = 'sawtooth';
+                oscillator.frequency.setValueAtTime(750, ctx.currentTime);
+                oscillator.frequency.linearRampToValueAtTime(875, ctx.currentTime + 0.05);
+                oscillator.frequency.linearRampToValueAtTime(625, ctx.currentTime + 0.1);
+                oscillator.frequency.linearRampToValueAtTime(812, ctx.currentTime + 0.15);
+                oscillator.frequency.linearRampToValueAtTime(500, ctx.currentTime + 0.25);
+
+                // Модулятор для эффекта трели
+                modulator.type = 'sine';
+                modulator.frequency.value = 30;
+                modGain.gain.value = 50;
+
+                modulator.connect(modGain);
+                modGain.connect(oscillator.frequency);
+
+                // Огибающая громкости
+                gain.gain.setValueAtTime(0.4, ctx.currentTime);
+                gain.gain.linearRampToValueAtTime(0.3, ctx.currentTime + 0.1);
+                gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.35);
+
+                oscillator.connect(gain);
+                gain.connect(ctx.destination);
+                
+                oscillator.start(ctx.currentTime);
+                oscillator.stop(ctx.currentTime + 0.35);
+                modulator.start(ctx.currentTime);
+                modulator.stop(ctx.currentTime + 0.35);
+            }
+
+            // Звук промаха (забавный "упс")
+            playMiss() {
+                if (!this.initialized) return;
+
+                const ctx = this.audioContext;
+
+                // Забавный нисходящий звук с вибрацией - очень громкий и длинный
+                const oscillator = ctx.createOscillator();
+                const modulator = ctx.createOscillator();
+                const modGain = ctx.createGain();
+                const gain = ctx.createGain();
+
+                oscillator.type = 'triangle';
+                // Смешная частота с "вилянием"
+                oscillator.frequency.setValueAtTime(450, ctx.currentTime);
+                oscillator.frequency.linearRampToValueAtTime(280, ctx.currentTime + 0.15);
+                oscillator.frequency.linearRampToValueAtTime(400, ctx.currentTime + 0.25);
+                oscillator.frequency.linearRampToValueAtTime(200, ctx.currentTime + 0.45);
+
+                // Модуляция для эффекта "виляния"
+                modulator.type = 'sine';
+                modulator.frequency.value = 10;
+                modGain.gain.value = 40;
+
+                modulator.connect(modGain);
+                modGain.connect(oscillator.frequency);
+
+                gain.gain.setValueAtTime(0.5, ctx.currentTime);
+                gain.gain.linearRampToValueAtTime(0.35, ctx.currentTime + 0.2);
+                gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.6);
+
+                oscillator.connect(gain);
+                gain.connect(ctx.destination);
+                
+                oscillator.start(ctx.currentTime);
+                oscillator.stop(ctx.currentTime + 0.6);
+                modulator.start(ctx.currentTime);
+                modulator.stop(ctx.currentTime + 0.6);
+            }
+
+            // Звук Game Over
+            playGameOver() {
+                if (!this.initialized) return;
+                
+                const ctx = this.audioContext;
+                
+                // Простая мелодия
+                const notes = [523.25, 440.00, 392.00, 349.23, 329.63, 261.63];
+                const duration = 0.4;
+                
+                notes.forEach((freq, index) => {
+                    const oscillator = ctx.createOscillator();
+                    const gain = ctx.createGain();
+                    
+                    oscillator.type = 'square';
+                    oscillator.frequency.value = freq;
+                    
+                    const startTime = ctx.currentTime + index * duration;
+                    gain.gain.setValueAtTime(0.1, startTime);
+                    gain.gain.exponentialRampToValueAtTime(0.01, startTime + duration);
+                    
+                    oscillator.connect(gain);
+                    gain.connect(ctx.destination);
+                    oscillator.start(startTime);
+                    oscillator.stop(startTime + duration);
+                });
+            }
+
+            // Звук спавна курицы
+            playSpawn() {
+                if (!this.initialized) return;
+                
+                const ctx = this.audioContext;
+                
+                const oscillator = ctx.createOscillator();
+                const gain = ctx.createGain();
+                
+                oscillator.type = 'sine';
+                oscillator.frequency.setValueAtTime(600, ctx.currentTime);
+                oscillator.frequency.exponentialRampToValueAtTime(800, ctx.currentTime + 0.1);
+                
+                gain.gain.setValueAtTime(0.05, ctx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.1);
+                
+                oscillator.connect(gain);
+                gain.connect(ctx.destination);
+                oscillator.start();
+                oscillator.stop(ctx.currentTime + 0.1);
+            }
+        }
+
+        /* ============================================
+           PARTICLE - Система частиц (перья)
+           ============================================ */
+        class Particle {
+            constructor(x, y, color) {
+                this.x = x;
+                this.y = y;
+                this.vx = (Math.random() - 0.5) * 10;
+                this.vy = (Math.random() - 0.5) * 10;
+                this.size = Math.random() * 6 + 2;
+                this.color = color;
+                this.life = 1.0;
+                this.decay = Math.random() * 0.02 + 0.015;
+                this.gravity = 0.3;
+            }
+
+            update() {
+                this.x += this.vx;
+                this.y += this.vy;
+                this.vy += this.gravity;
+                this.life -= this.decay;
+            }
+
+            draw(ctx) {
+                ctx.save();
+                ctx.globalAlpha = this.life;
+                ctx.fillStyle = this.color;
+                ctx.beginPath();
+                ctx.ellipse(this.x, this.y, this.size, this.size / 2, Math.random() * Math.PI, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.restore();
+            }
+
+            isDead() {
+                return this.life <= 0;
+            }
+        }
+
+        /* ============================================
+           CHICKEN - Класс курицы
+           ============================================ */
+        class Chicken {
+            constructor(canvasWidth, canvasHeight) {
+                this.canvasWidth = canvasWidth;
+                this.canvasHeight = canvasHeight;
+                
+                // Типы куриц
+                const types = [
+                    { name: 'normal', points: 10, speed: 2, color: '#8B4513', probability: 0.5 },
+                    { name: 'fast', points: 20, speed: 4, color: '#DC143C', probability: 0.25 },
+                    { name: 'falling', points: 30, speed: 1.5, color: '#DAA520', probability: 0.15 },
+                    { name: 'ufo', points: 50, speed: 6, color: '#32CD32', probability: 0.1 }
+                ];
+                
+                // Выбор типа на основе вероятности
+                const rand = Math.random();
+                let cumulative = 0;
+                this.type = types[0];
+                for (const t of types) {
+                    cumulative += t.probability;
+                    if (rand <= cumulative) {
+                        this.type = t;
+                        break;
+                    }
+                }
+                
+                this.points = this.type.points;
+                this.speed = this.type.speed;
+                this.color = this.type.color;
+
+                // Анимация и размер (должно быть ДО startPosition!)
+                this.wingAngle = 0;
+                this.wingSpeed = 0.3 + Math.random() * 0.2;
+                this.size = 40 + Math.random() * 20;
+
+                // Позиция и направление
+                this.direction = Math.random() < 0.5 ? 1 : -1;
+                this.startPosition();
+
+                // Для зигзага (быстрая курица)
+                this.zigzagOffset = Math.random() * Math.PI * 2;
+
+                // Состояние
+                this.isDead = false;
+                this.deathY = this.y;
+            }
+
+            startPosition() {
+                // Защита от некорректных размеров
+                const cw = this.canvasWidth || 1920;
+                const ch = this.canvasHeight || 1080;
+
+                if (this.type.name === 'falling') {
+                    // Падающая курица начинается сверху в случайной позиции по X
+                    this.x = this.size * 2 + Math.random() * (cw - this.size * 4);
+                    this.y = -this.size * 2;
+                    this.vx = (Math.random() - 0.5) * 2;
+                    this.vy = this.speed;
+                } else {
+                    // Обычные курицы летят сбоку
+                    if (this.direction === 1) {
+                        // Летит слева направо — появляется за левым краем
+                        this.x = -this.size * 2;
+                    } else {
+                        // Летит справа налево — появляется за правым краем
+                        this.x = cw + this.size * 2;
+                    }
+                    // Y позиция по всей высоте экрана кроме нижней трети
+                    const minY = 50;
+                    const maxY = Math.floor(ch * 2 / 3); // Верхние 2/3 экрана
+                    this.y = minY + Math.random() * (maxY - minY);
+                    this.vx = this.speed * this.direction;
+                    this.vy = 0;
+                }
+
+                // Проверка корректности позиций
+                if (!isFinite(this.x) || !isFinite(this.y)) {
+                    this.x = this.direction === 1 ? -this.size * 2 : cw + this.size * 2;
+                    this.y = 150;
+                }
+            }
+
+            update() {
+                if (this.type.name === 'falling') {
+                    this.x += this.vx;
+                    this.y += this.vy;
+
+                    // Парашют замедляет падение
+                    if (this.vy < 2) {
+                        this.vy += 0.05;
+                    }
+                    
+                    // Ограничиваем движение по X, чтобы не улетать за границы экрана
+                    const margin = this.size * 2;
+                    if (this.x < margin) {
+                        this.x = margin;
+                        this.vx = Math.abs(this.vx) * 0.5; // Отскок вправо
+                    } else if (this.x > this.canvasWidth - margin) {
+                        this.x = this.canvasWidth - margin;
+                        this.vx = -Math.abs(this.vx) * 0.5; // Отскок влево
+                    }
+                } else if (this.type.name === 'fast') {
+                    // Зигзагообразное движение
+                    this.x += this.vx;
+                    this.zigzagOffset += 0.1;
+                    this.y += Math.sin(this.zigzagOffset) * 3;
+                } else if (this.type.name === 'ufo') {
+                    // НЛО летит быстрее и с небольшим покачиванием
+                    this.x += this.vx;
+                    this.y += Math.sin(Date.now() / 100) * 2;
+                } else {
+                    // Обычная курица - прямая траектория
+                    this.x += this.vx;
+                }
+                
+                // Анимация крыльев
+                this.wingAngle = Math.sin(Date.now() / 100 * this.wingSpeed * 10) * 0.5;
+            }
+
+            draw(ctx) {
+                ctx.save();
+                ctx.translate(this.x, this.y);
+                
+                // Отражение по горизонтали в зависимости от направления
+                if (this.direction === -1) {
+                    ctx.scale(-1, 1);
+                }
+                
+                const s = this.size / 40; // Масштаб
+                
+                if (this.type.name === 'ufo') {
+                    // Рисуем НЛО
+                    this.drawUFO(ctx, s);
+                } else if (this.type.name === 'falling') {
+                    // Рисуем курицу с парашютом
+                    this.drawFallingChicken(ctx, s);
+                } else {
+                    // Рисуем обычную курицу
+                    this.drawChicken(ctx, s);
+                }
+
+                // Отладка: точка в центре курицы
+                ctx.fillStyle = '#FF00FF';
+                ctx.beginPath();
+                ctx.arc(0, 0, 3, 0, Math.PI * 2);
+                ctx.fill();
+
+                ctx.restore();
+            }
+
+            drawChicken(ctx, s) {
+                // Тело
+                ctx.fillStyle = this.color;
+                ctx.beginPath();
+                ctx.ellipse(0, 0, 25 * s, 18 * s, 0, 0, Math.PI * 2);
+                ctx.fill();
+                
+                // Голова
+                ctx.beginPath();
+                ctx.arc(20 * s, -10 * s, 12 * s, 0, Math.PI * 2);
+                ctx.fill();
+                
+                // Клюв
+                ctx.fillStyle = '#FFD700';
+                ctx.beginPath();
+                ctx.moveTo(28 * s, -10 * s);
+                ctx.lineTo(38 * s, -7 * s);
+                ctx.lineTo(28 * s, -4 * s);
+                ctx.fill();
+                
+                // Глаз
+                ctx.fillStyle = '#FFF';
+                ctx.beginPath();
+                ctx.arc(23 * s, -13 * s, 4 * s, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.fillStyle = '#000';
+                ctx.beginPath();
+                ctx.arc(24 * s, -13 * s, 2 * s, 0, Math.PI * 2);
+                ctx.fill();
+                
+                // Гребень
+                ctx.fillStyle = '#DC143C';
+                ctx.beginPath();
+                ctx.arc(18 * s, -20 * s, 5 * s, 0, Math.PI * 2);
+                ctx.arc(23 * s, -23 * s, 5 * s, 0, Math.PI * 2);
+                ctx.arc(28 * s, -20 * s, 5 * s, 0, Math.PI * 2);
+                ctx.fill();
+                
+                // Крылья (анимация)
+                ctx.fillStyle = this.color;
+                ctx.save();
+                ctx.rotate(this.wingAngle);
+                ctx.beginPath();
+                ctx.ellipse(-5 * s, 5 * s, 15 * s, 8 * s, -0.3, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.restore();
+                
+                // Хвост
+                ctx.beginPath();
+                ctx.ellipse(-22 * s, -5 * s, 10 * s, 6 * s, 0.5, 0, Math.PI * 2);
+                ctx.fill();
+            }
+
+            drawFallingChicken(ctx, s) {
+                // Парашют
+                ctx.fillStyle = '#FF6347';
+                ctx.beginPath();
+                ctx.arc(0, -35 * s, 25 * s, Math.PI, 0);
+                ctx.fill();
+                
+                // Стропы
+                ctx.strokeStyle = '#FFF';
+                ctx.lineWidth = 1;
+                ctx.beginPath();
+                ctx.moveTo(-20 * s, -35 * s);
+                ctx.lineTo(0, -10 * s);
+                ctx.moveTo(20 * s, -35 * s);
+                ctx.lineTo(0, -10 * s);
+                ctx.stroke();
+                
+                // Курица
+                this.drawChicken(ctx, s * 0.8);
+            }
+
+            drawUFO(ctx, s) {
+                // Корпус НЛО
+                ctx.fillStyle = '#C0C0C0';
+                ctx.beginPath();
+                ctx.ellipse(0, 5 * s, 30 * s, 10 * s, 0, 0, Math.PI * 2);
+                ctx.fill();
+                
+                // Купол
+                ctx.fillStyle = '#87CEEB';
+                ctx.beginPath();
+                ctx.arc(0, 0, 15 * s, Math.PI, 0);
+                ctx.fill();
+                
+                // Огни
+                const colors = ['#FF0000', '#00FF00', '#0000FF', '#FFFF00'];
+                for (let i = 0; i < 4; i++) {
+                    const angle = (Date.now() / 200 + i * Math.PI / 2) % (Math.PI * 2);
+                    ctx.fillStyle = colors[i];
+                    ctx.beginPath();
+                    ctx.arc(Math.cos(angle) * 25 * s, 5 * s, 3 * s, 0, Math.PI * 2);
+                    ctx.fill();
+                }
+            }
+
+            isOffScreen() {
+                const margin = 150;
+                if (this.type.name === 'falling') {
+                    // Падающая курица удаляется, когда ушла вниз за экран
+                    return this.y > this.canvasHeight + margin;
+                }
+                
+                // Проверка по направлению полёта
+                if (this.direction === 1) {
+                    // Летит вправо — удаляем, когда ушла за правый край
+                    return this.x > this.canvasWidth + margin;
+                } else {
+                    // Летит влево — удаляем, когда ушла за левый край
+                    return this.x < -margin;
+                }
+            }
+
+            checkHit(mouseX, mouseY) {
+                const dx = mouseX - this.x;
+                const dy = mouseY - this.y;
+                const distance = Math.sqrt(dx * dx + dy * dy);
+                return distance < this.size * 1.5;
+            }
+        }
+
+        /* ============================================
+           BACKGROUND - Фон игры
+           ============================================ */
+        class Background {
+            constructor(canvasWidth, canvasHeight) {
+                this.canvasWidth = canvasWidth;
+                this.canvasHeight = canvasHeight;
+            }
+
+            draw(ctx) {
+                // Сбрасываем массив деревьев перед каждой отрисовкой
+                this.trees = [];
+                
+                // Небо (градиент)
+                const skyGradient = ctx.createLinearGradient(0, 0, 0, this.canvasHeight);
+                skyGradient.addColorStop(0, '#1E90FF');
+                skyGradient.addColorStop(0.5, '#87CEEB');
+                skyGradient.addColorStop(1, '#E0F6FF');
+                ctx.fillStyle = skyGradient;
+                ctx.fillRect(0, 0, this.canvasWidth, this.canvasHeight);
+                
+                // Солнце
+                ctx.fillStyle = '#FFD700';
+                ctx.beginPath();
+                ctx.arc(this.canvasWidth - 100, 80, 50, 0, Math.PI * 2);
+                ctx.fill();
+                
+                // Солнечные лучи
+                ctx.strokeStyle = 'rgba(255, 215, 0, 0.3)';
+                ctx.lineWidth = 3;
+                for (let i = 0; i < 8; i++) {
+                    const angle = (i / 8) * Math.PI * 2;
+                    ctx.beginPath();
+                    ctx.moveTo(
+                        this.canvasWidth - 100 + Math.cos(angle) * 60,
+                        80 + Math.sin(angle) * 60
+                    );
+                    ctx.lineTo(
+                        this.canvasWidth - 100 + Math.cos(angle) * 90,
+                        80 + Math.sin(angle) * 90
+                    );
+                    ctx.stroke();
+                }
+                
+                // Облака
+                this.drawCloud(ctx, 150, 100, 1);
+                this.drawCloud(ctx, 400, 150, 0.8);
+                this.drawCloud(ctx, 700, 80, 1.2);
+                
+                // Горы
+                this.drawMountains(ctx);
+                
+                // Земля
+                const groundGradient = ctx.createLinearGradient(0, this.canvasHeight - 100, 0, this.canvasHeight);
+                groundGradient.addColorStop(0, '#228B22');
+                groundGradient.addColorStop(1, '#006400');
+                ctx.fillStyle = groundGradient;
+                ctx.fillRect(0, this.canvasHeight - 100, this.canvasWidth, 100);
+                
+                // Деревья (увеличенные, 2 дерева ближе к середине с округлой кроной)
+                this.drawTree(ctx, 150, this.canvasHeight - 120); // треугольное
+                this.drawTree(ctx, this.canvasWidth * 0.35, this.canvasHeight - 130, true); // округлое
+                this.drawTree(ctx, this.canvasWidth * 0.65, this.canvasHeight - 140, true); // округлое
+                this.drawTree(ctx, this.canvasWidth - 150, this.canvasHeight - 120); // треугольное
+            }
+
+            drawCloud(ctx, x, y, scale) {
+                ctx.fillStyle = 'rgba(255, 255, 255, 0.8)';
+                ctx.beginPath();
+                ctx.arc(x, y, 30 * scale, 0, Math.PI * 2);
+                ctx.arc(x + 40 * scale, y - 10 * scale, 35 * scale, 0, Math.PI * 2);
+                ctx.arc(x + 80 * scale, y, 30 * scale, 0, Math.PI * 2);
+                ctx.arc(x + 40 * scale, y + 10 * scale, 25 * scale, 0, Math.PI * 2);
+                ctx.fill();
+            }
+
+            drawMountains(ctx) {
+                ctx.fillStyle = '#696969';
+                ctx.beginPath();
+                ctx.moveTo(0, this.canvasHeight - 100);
+                
+                // Горный хребет
+                const peaks = [
+                    { x: 100, h: 150 },
+                    { x: 250, h: 200 },
+                    { x: 400, h: 120 },
+                    { x: 550, h: 180 },
+                    { x: 700, h: 140 },
+                    { x: 850, h: 160 },
+                    { x: 1000, h: 100 }
+                ];
+                
+                ctx.lineTo(0, this.canvasHeight - 100);
+                for (const peak of peaks) {
+                    ctx.lineTo(peak.x, this.canvasHeight - 100 - peak.h);
+                }
+                ctx.lineTo(this.canvasWidth, this.canvasHeight - 100);
+                ctx.lineTo(this.canvasWidth, this.canvasHeight);
+                ctx.lineTo(0, this.canvasHeight);
+                ctx.fill();
+                
+                // Снежные шапки
+                ctx.fillStyle = '#FFF';
+                for (const peak of peaks) {
+                    if (peak.h > 140) {
+                        ctx.beginPath();
+                        ctx.moveTo(peak.x - 30, this.canvasHeight - 100 - peak.h + 40);
+                        ctx.lineTo(peak.x, this.canvasHeight - 100 - peak.h);
+                        ctx.lineTo(peak.x + 30, this.canvasHeight - 100 - peak.h + 40);
+                        ctx.fill();
+                    }
+                }
+            }
+
+            drawTree(ctx, x, y, roundCrown = false) {
+                // Ствол (в 4 раза больше оригинала)
+                ctx.fillStyle = '#8B4513';
+                ctx.fillRect(x - 40, y, 80, 160);
+
+                if (roundCrown) {
+                    // Округлая крона
+                    ctx.fillStyle = '#006400';
+                    // Нижний ярус
+                    ctx.beginPath();
+                    ctx.arc(x, y - 100, 100, 0, Math.PI * 2);
+                    ctx.fill();
+                    // Средний ярус
+                    ctx.beginPath();
+                    ctx.arc(x, y - 180, 85, 0, Math.PI * 2);
+                    ctx.fill();
+                    // Верхний ярус
+                    ctx.beginPath();
+                    ctx.arc(x, y - 250, 70, 0, Math.PI * 2);
+                    ctx.fill();
+                    
+                    // Сохраняем параметры дерева для проверки попаданий
+                    this.trees.push({ x, y, width: 200, height: 320 });
+                } else {
+                    // Треугольная крона (в 4 раза больше оригинала)
+                    ctx.fillStyle = '#006400';
+                    ctx.beginPath();
+                    ctx.moveTo(x - 120, y);
+                    ctx.lineTo(x, y - 240);
+                    ctx.lineTo(x + 120, y);
+                    ctx.fill();
+
+                    ctx.beginPath();
+                    ctx.moveTo(x - 100, y - 120);
+                    ctx.lineTo(x, y - 320);
+                    ctx.lineTo(x + 100, y - 120);
+                    ctx.fill();
+                    
+                    // Сохраняем параметры дерева для проверки попаданий
+                    this.trees.push({ x, y, width: 240, height: 320 });
+                }
+            }
+        }
+
+        /* ============================================
+           GAME MANAGER - Управление игрой
+           ============================================ */
+        class GameManager {
+            constructor() {
+                this.canvas = document.getElementById('gameCanvas');
+                this.ctx = this.canvas.getContext('2d');
+                
+                // UI элементы
+                this.scoreEl = document.getElementById('scoreValue');
+                this.ammoEl = document.getElementById('ammoValue');
+                this.timeEl = document.getElementById('timeValue');
+                this.spawnedEl = document.getElementById('spawnedValue');
+                this.hitEl = document.getElementById('hitValue');
+                this.menuEl = document.getElementById('menu');
+                this.gameOverEl = document.getElementById('gameOver');
+                this.finalScoreEl = document.getElementById('finalScore');
+                this.playerNameEl = document.getElementById('playerName');
+                this.highscoreListOl = document.getElementById('highscoreListOl');
+
+                // Кнопки
+                this.startBtn = document.getElementById('startBtn');
+                this.restartBtn = document.getElementById('restartBtn');
+                this.saveScoreBtn = document.getElementById('saveScoreBtn');
+
+                // Настройки игры
+                this.ROUND_TIME = 90;
+                this.MAX_AMMO = 60;
+                this.MAX_CHICKENS = 7;
+
+                // Состояние
+                this.state = 'MENU'; // MENU, PLAYING, GAME_OVER
+                this.score = 0;
+                this.ammo = 0;
+                this.time = 0;
+                this.spawned = 0;
+                this.hit = 0;
+
+                // Игровые объекты
+                this.chickens = [];
+                this.particles = [];
+                this.background = null;
+                
+                // Мышь
+                this.mouseX = 0;
+                this.mouseY = 0;
+
+                // Последнее имя игрока
+                this.lastPlayerName = localStorage.getItem('crazyChickenLastPlayerName') || '';
+
+                // Звук
+                this.soundManager = new SoundManager();
+                
+                // Highscores
+                this.highscores = this.loadHighscores();
+                
+                // Инициализация
+                this.resize();
+                this.setupEventListeners();
+                this.loadHighscores();
+                
+                // Запуск цикла
+                this.lastTime = 0;
+                this.spawnTimer = 0;
+                this.gameTimer = 0;
+                
+                requestAnimationFrame((t) => this.gameLoop(t));
+            }
+
+            resize() {
+                this.canvas.width = window.innerWidth;
+                this.canvas.height = window.innerHeight;
+                this.background = new Background(this.canvas.width, this.canvas.height);
+            }
+
+            setupEventListeners() {
+                // Изменение размера
+                window.addEventListener('resize', () => this.resize());
+                
+                // Движение мыши
+                this.canvas.addEventListener('mousemove', (e) => {
+                    this.mouseX = e.clientX;
+                    this.mouseY = e.clientY;
+                });
+                
+                // Инициализация позиции мыши в центре
+                this.mouseX = this.canvas.width / 2;
+                this.mouseY = this.canvas.height / 2;
+                
+                // Клик (выстрел)
+                this.canvas.addEventListener('click', () => {
+                    if (this.state === 'PLAYING') {
+                        this.shoot();
+                    }
+                });
+                
+                // Кнопки меню
+                this.startBtn.addEventListener('click', () => this.startGame());
+                this.restartBtn.addEventListener('click', () => this.showMenu());
+                this.saveScoreBtn.addEventListener('click', () => this.saveHighscore());
+                
+                // Enter для сохранения имени
+                this.playerNameEl.addEventListener('keypress', (e) => {
+                    if (e.key === 'Enter') {
+                        this.saveHighscore();
+                    }
+                });
+            }
+
+            startGame() {
+                this.soundManager.init();
+
+                this.state = 'PLAYING';
+                this.score = 0;
+                this.ammo = this.MAX_AMMO;
+                this.time = this.ROUND_TIME;
+                this.spawned = 0;
+                this.hit = 0;
+                this.chickens = [];
+                this.particles = [];
+                this.gameTimer = 0;
+                this.spawnTimer = 0;
+
+                // Спавн первой курицы для теста
+                setTimeout(() => this.spawnChicken(), 500);
+
+                this.menuEl.style.display = 'none';
+                this.gameOverEl.style.display = 'none';
+                // Показываем форму сохранения и заголовок для следующего Game Over
+                document.getElementById('highscoreForm').style.display = 'flex';
+                document.getElementById('gameOverTitle').style.display = 'block';
+                // Подставляем последнее имя игрока
+                this.playerNameEl.value = this.lastPlayerName;
+                document.body.classList.remove('menu');
+                document.body.classList.add('playing');
+
+                this.updateUI();
+            }
+
+            showMenu() {
+                this.state = 'MENU';
+                this.menuEl.style.display = 'flex';
+                this.gameOverEl.style.display = 'none';
+                document.body.classList.remove('playing');
+                document.body.classList.add('menu');
+            }
+
+            gameOver() {
+                this.state = 'GAME_OVER';
+                this.soundManager.playGameOver();
+                
+                this.finalScoreEl.textContent = `Счёт: ${this.score}`;
+                this.gameOverEl.style.display = 'flex';
+                document.body.classList.remove('playing');
+                document.body.classList.add('menu');
+                
+                this.displayHighscores();
+            }
+
+            shoot() {
+                if (this.ammo <= 0) return;
+
+                this.ammo--;
+                this.soundManager.playShoot();
+
+                // Проверка попадания в дерево (преграда)
+                let hitTree = false;
+                const ch = this.canvas.height;
+                const trees = [
+                    { x: 150, y: ch - 120, width: 240, height: 320 },
+                    { x: this.canvas.width * 0.35, y: ch - 130, width: 200, height: 320 },
+                    { x: this.canvas.width * 0.65, y: ch - 140, width: 200, height: 320 },
+                    { x: this.canvas.width - 150, y: ch - 120, width: 240, height: 320 }
+                ];
+                
+                for (const tree of trees) {
+                    // Проверяем, попал ли клик в область дерева
+                    const halfWidth = tree.width / 2;
+                    if (this.mouseX >= tree.x - halfWidth &&
+                        this.mouseX <= tree.x + halfWidth &&
+                        this.mouseY >= tree.y - tree.height &&
+                        this.mouseY <= tree.y + 50) { // +50 для запаса на ствол
+                        hitTree = true;
+                        break;
+                    }
+                }
+
+                if (hitTree) {
+                    // Попали в дерево - промах с забавным звуком
+                    this.soundManager.playMiss();
+                    this.updateUI();
+
+                    // Проверка окончания игры — если патроны кончились
+                    if (this.ammo <= 0) {
+                        setTimeout(() => this.gameOver(), 500);
+                    }
+                    return;
+                }
+
+                // Проверка попаданий в куриц
+                let isHit = false;
+                for (let i = this.chickens.length - 1; i >= 0; i--) {
+                    const chicken = this.chickens[i];
+                    if (chicken.checkHit(this.mouseX, this.mouseY)) {
+                        // Попадание!
+                        this.score += chicken.points;
+                        this.hit++;
+                        this.soundManager.playHit();
+                        this.createParticles(chicken.x, chicken.y, chicken.color);
+                        this.chickens.splice(i, 1);
+                        isHit = true;
+                        break;
+                    }
+                }
+
+                if (!isHit) {
+                    this.soundManager.playMiss();
+                }
+
+                this.updateUI();
+
+                // Проверка окончания игры — если патроны кончились
+                if (this.ammo <= 0) {
+                    setTimeout(() => this.gameOver(), 500);
+                }
+            }
+
+            createParticles(x, y, color) {
+                for (let i = 0; i < 15; i++) {
+                    this.particles.push(new Particle(x, y, color));
+                }
+            }
+
+            spawnChicken() {
+                if (this.chickens.length >= this.MAX_CHICKENS) return;
+
+                // Убедимся, что размеры корректны
+                let width = this.canvas.width;
+                let height = this.canvas.height;
+
+                if (!width || !height) {
+                    width = window.innerWidth;
+                    height = window.innerHeight;
+                }
+
+                this.chickens.push(new Chicken(width, height));
+                this.spawned++;
+                this.soundManager.playSpawn();
+                this.updateUI();
+            }
+
+            update(deltaTime) {
+                if (this.state !== 'PLAYING') return;
+                
+                // Таймер игры
+                this.gameTimer += deltaTime;
+                if (this.gameTimer >= 1000) {
+                    this.gameTimer -= 1000;
+                    this.time--;
+                    this.updateUI();
+                    
+                    if (this.time <= 0) {
+                        this.gameOver();
+                        return;
+                    }
+                }
+                
+                // Спавн куриц
+                this.spawnTimer += deltaTime;
+                const spawnInterval = Math.max(800, 2000 - this.score * 5); // Чем больше очков, тем чаще спавн (минимум 800мс)
+                if (this.spawnTimer >= spawnInterval) {
+                    this.spawnTimer = 0;
+                    this.spawnChicken();
+                }
+                
+                // Обновление куриц
+                for (let i = this.chickens.length - 1; i >= 0; i--) {
+                    this.chickens[i].update();
+                    if (this.chickens[i].isOffScreen()) {
+                        this.chickens.splice(i, 1);
+                    }
+                }
+                
+                // Обновление частиц
+                for (let i = this.particles.length - 1; i >= 0; i--) {
+                    this.particles[i].update();
+                    if (this.particles[i].isDead()) {
+                        this.particles.splice(i, 1);
+                    }
+                }
+            }
+
+            draw() {
+                // Очистка
+                this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+
+                // Фон (без деревьев)
+                if (this.background) {
+                    this.drawBackgroundWithoutTrees();
+                }
+
+                // Курицы
+                for (const chicken of this.chickens) {
+                    chicken.draw(this.ctx);
+                }
+
+                // Деревья (поверх куриц)
+                if (this.background) {
+                    this.drawTrees();
+                }
+
+                // Частицы
+                for (const particle of this.particles) {
+                    particle.draw(this.ctx);
+                }
+
+                // Прицел
+                if (this.state === 'PLAYING') {
+                    this.drawCrosshair();
+                }
+            }
+
+            drawBackgroundWithoutTrees() {
+                const ctx = this.ctx;
+                const cw = this.canvas.width;
+                const ch = this.canvas.height;
+                
+                // Небо (градиент)
+                const skyGradient = ctx.createLinearGradient(0, 0, 0, ch);
+                skyGradient.addColorStop(0, '#1E90FF');
+                skyGradient.addColorStop(0.5, '#87CEEB');
+                skyGradient.addColorStop(1, '#E0F6FF');
+                ctx.fillStyle = skyGradient;
+                ctx.fillRect(0, 0, cw, ch);
+
+                // Солнце
+                ctx.fillStyle = '#FFD700';
+                ctx.beginPath();
+                ctx.arc(cw - 100, 80, 50, 0, Math.PI * 2);
+                ctx.fill();
+
+                // Солнечные лучи
+                ctx.strokeStyle = 'rgba(255, 215, 0, 0.3)';
+                ctx.lineWidth = 3;
+                for (let i = 0; i < 8; i++) {
+                    const angle = (i / 8) * Math.PI * 2;
+                    ctx.beginPath();
+                    ctx.moveTo(
+                        cw - 100 + Math.cos(angle) * 60,
+                        80 + Math.sin(angle) * 60
+                    );
+                    ctx.lineTo(
+                        cw - 100 + Math.cos(angle) * 90,
+                        80 + Math.sin(angle) * 90
+                    );
+                    ctx.stroke();
+                }
+
+                // Облака
+                this.drawCloud(150, 100, 1);
+                this.drawCloud(400, 150, 0.8);
+                this.drawCloud(700, 80, 1.2);
+
+                // Горы
+                this.drawMountains();
+
+                // Земля
+                const groundGradient = ctx.createLinearGradient(0, ch - 100, 0, ch);
+                groundGradient.addColorStop(0, '#228B22');
+                groundGradient.addColorStop(1, '#006400');
+                ctx.fillStyle = groundGradient;
+                ctx.fillRect(0, ch - 100, cw, 100);
+            }
+
+            drawCloud(x, y, scale) {
+                const ctx = this.ctx;
+                ctx.fillStyle = 'rgba(255, 255, 255, 0.8)';
+                ctx.beginPath();
+                ctx.arc(x, y, 30 * scale, 0, Math.PI * 2);
+                ctx.arc(x + 40 * scale, y - 10 * scale, 35 * scale, 0, Math.PI * 2);
+                ctx.arc(x + 80 * scale, y, 30 * scale, 0, Math.PI * 2);
+                ctx.arc(x + 40 * scale, y + 10 * scale, 25 * scale, 0, Math.PI * 2);
+                ctx.fill();
+            }
+
+            drawMountains() {
+                const ctx = this.ctx;
+                const ch = this.canvas.height;
+                
+                ctx.fillStyle = '#696969';
+                ctx.beginPath();
+                ctx.moveTo(0, ch - 100);
+
+                // Горный хребет
+                const peaks = [
+                    { x: 100, h: 150 },
+                    { x: 250, h: 200 },
+                    { x: 400, h: 120 },
+                    { x: 550, h: 180 },
+                    { x: 700, h: 140 },
+                    { x: 850, h: 160 },
+                    { x: 1000, h: 100 }
+                ];
+
+                ctx.lineTo(0, ch - 100);
+                for (const peak of peaks) {
+                    ctx.lineTo(peak.x, ch - 100 - peak.h);
+                }
+                ctx.lineTo(this.canvas.width, ch - 100);
+                ctx.lineTo(this.canvas.width, ch);
+                ctx.lineTo(0, ch);
+                ctx.fill();
+
+                // Снежные шапки
+                ctx.fillStyle = '#FFF';
+                for (const peak of peaks) {
+                    if (peak.h > 140) {
+                        ctx.beginPath();
+                        ctx.moveTo(peak.x - 30, ch - 100 - peak.h + 40);
+                        ctx.lineTo(peak.x, ch - 100 - peak.h);
+                        ctx.lineTo(peak.x + 30, ch - 100 - peak.h + 40);
+                        ctx.fill();
+                    }
+                }
+            }
+
+            drawTrees() {
+                const ctx = this.ctx;
+                const ch = this.canvas.height;
+                
+                // Рисуем деревья в том же порядке, что и в background.draw()
+                this._drawTree(150, ch - 120); // треугольное
+                this._drawTree(this.canvas.width * 0.35, ch - 130, true); // округлое
+                this._drawTree(this.canvas.width * 0.65, ch - 140, true); // округлое
+                this._drawTree(this.canvas.width - 150, ch - 120); // треугольное
+            }
+
+            _drawTree(x, y, roundCrown = false) {
+                const ctx = this.ctx;
+                
+                // Ствол (в 4 раза больше оригинала)
+                ctx.fillStyle = '#8B4513';
+                ctx.fillRect(x - 40, y, 80, 160);
+
+                if (roundCrown) {
+                    // Округлая крона
+                    ctx.fillStyle = '#006400';
+                    // Нижний ярус
+                    ctx.beginPath();
+                    ctx.arc(x, y - 100, 100, 0, Math.PI * 2);
+                    ctx.fill();
+                    // Средний ярус
+                    ctx.beginPath();
+                    ctx.arc(x, y - 180, 85, 0, Math.PI * 2);
+                    ctx.fill();
+                    // Верхний ярус
+                    ctx.beginPath();
+                    ctx.arc(x, y - 250, 70, 0, Math.PI * 2);
+                    ctx.fill();
+                } else {
+                    // Треугольная крона (в 4 раза больше оригинала)
+                    ctx.fillStyle = '#006400';
+                    ctx.beginPath();
+                    ctx.moveTo(x - 120, y);
+                    ctx.lineTo(x, y - 240);
+                    ctx.lineTo(x + 120, y);
+                    ctx.fill();
+
+                    ctx.beginPath();
+                    ctx.moveTo(x - 100, y - 120);
+                    ctx.lineTo(x, y - 320);
+                    ctx.lineTo(x + 100, y - 120);
+                    ctx.fill();
+                }
+            }
+
+            drawCrosshair() {
+                const x = this.mouseX;
+                const y = this.mouseY;
+                const size = 20;
+                
+                this.ctx.save();
+                this.ctx.strokeStyle = '#FF0000';
+                this.ctx.lineWidth = 2;
+                this.ctx.shadowColor = '#000';
+                this.ctx.shadowBlur = 4;
+                
+                // Внешний круг
+                this.ctx.beginPath();
+                this.ctx.arc(x, y, size, 0, Math.PI * 2);
+                this.ctx.stroke();
+                
+                // Внутренний круг
+                this.ctx.beginPath();
+                this.ctx.arc(x, y, size / 2, 0, Math.PI * 2);
+                this.ctx.stroke();
+                
+                // Перекрестие
+                this.ctx.beginPath();
+                this.ctx.moveTo(x - size - 5, y);
+                this.ctx.lineTo(x + size + 5, y);
+                this.ctx.moveTo(x, y - size - 5);
+                this.ctx.lineTo(x, y + size + 5);
+                this.ctx.stroke();
+                
+                // Точка в центре
+                this.ctx.fillStyle = '#FF0000';
+                this.ctx.beginPath();
+                this.ctx.arc(x, y, 3, 0, Math.PI * 2);
+                this.ctx.fill();
+                
+                this.ctx.restore();
+            }
+
+            updateUI() {
+                this.scoreEl.textContent = this.score;
+                this.ammoEl.textContent = this.ammo;
+                this.timeEl.textContent = this.time;
+                this.spawnedEl.textContent = this.spawned;
+                this.hitEl.textContent = this.hit;
+
+                // Цвет патронов меняется когда мало
+                if (this.ammo <= 10) {
+                    this.ammoEl.style.color = '#FF0000';
+                } else {
+                    this.ammoEl.style.color = '#FF6347';
+                }
+            }
+
+            gameLoop(timestamp) {
+                const deltaTime = timestamp - this.lastTime;
+                this.lastTime = timestamp;
+                
+                this.update(deltaTime);
+                this.draw();
+                
+                requestAnimationFrame((t) => this.gameLoop(t));
+            }
+
+            // ============================================
+            // HIGHSCORE SYSTEM - Таблица лидеров
+            // ============================================
+            loadHighscores() {
+                const saved = localStorage.getItem('crazyChickenHighscores');
+                return saved ? JSON.parse(saved) : [];
+            }
+
+            saveHighscore() {
+                const name = this.playerNameEl.value.trim() || 'Аноним';
+                const highscore = {
+                    name: name,
+                    score: this.score,
+                    date: new Date().toLocaleDateString('ru-RU')
+                };
+
+                this.highscores.push(highscore);
+                this.highscores.sort((a, b) => b.score - a.score);
+                this.highscores = this.highscores.slice(0, 10); // Топ 10
+
+                localStorage.setItem('crazyChickenHighscores', JSON.stringify(this.highscores));
+                
+                // Сохраняем последнее имя игрока
+                localStorage.setItem('crazyChickenLastPlayerName', name);
+                this.lastPlayerName = name;
+
+                this.displayHighscores();
+                this.playerNameEl.value = '';
+
+                // Скрываем форму сохранения и заголовок "Игра окончена"
+                document.getElementById('highscoreForm').style.display = 'none';
+                document.getElementById('gameOverTitle').style.display = 'none';
+            }
+
+            displayHighscores() {
+                this.highscoreListOl.innerHTML = '';
+                for (const hs of this.highscores) {
+                    const li = document.createElement('li');
+                    li.textContent = `${hs.name} - ${hs.score} очков (${hs.date})`;
+                    this.highscoreListOl.appendChild(li);
+                }
+            }
+        }
+
+        // ============================================
+        // ЗАПУСК ИГРЫ
+        // ============================================
+        window.addEventListener('DOMContentLoaded', () => {
+            const game = new GameManager();
+        });
+    </script>
+</body>
+</html>
