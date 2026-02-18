@@ -1222,8 +1222,8 @@
                 // СРАЗУ загружаем рекорды из Supabase и мигрируем локальные
                 // Сначала загружаем локальные для мгновенного отображения
                 this.highscores = this.loadHighscores();
-                this.displayMenuHighscores();
-                
+                this.displayHighscores();
+
                 // Затем асинхронно загружаем из Supabase
                 this.initHighscores();
 
@@ -1516,7 +1516,7 @@
                 for (let i = this.chickens.length - 1; i >= 0; i--) {
                     const chicken = this.chickens[i];
                     if (chicken.checkHit(this.mouseX, this.mouseY)) {
-                        // Попадание!
+                        // Попа��ание!
                         this.score += chicken.points;
                         this.hit++;
                         this.soundManager.playHit();
