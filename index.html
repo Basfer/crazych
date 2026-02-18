@@ -328,10 +328,6 @@
             </div>
         </div>
 
-        <div style="margin-top: 15px;">
-            <button class="menu-btn" id="clearLocalScoresBtn" style="font-size: 16px; padding: 10px 30px; background: linear-gradient(to bottom, #8B0000, #5D0000);">🗑️ ОЧИСТИТЬ ЛОКАЛЬНЫЕ</button>
-        </div>
-
         <button class="menu-btn" id="restartBtn">ИГРАТЬ СНОВА</button>
     </div>
 
@@ -1031,6 +1027,7 @@
             async checkConnection(force = false) {
                 if (!this.initialized) {
                     this.cacheAvailable = false;
+                    console.log('Supabase check: not initialized');
                     return false;
                 }
 
@@ -1041,15 +1038,23 @@
                 }
 
                 try {
+                    console.log('Checking Supabase connection...');
                     const { data, error } = await this.supabase
                         .from('highscores')
                         .select('id')
                         .limit(1);
-                    
+
+                    if (error) {
+                        console.error('Supabase connection error:', error.message);
+                    } else {
+                        console.log('Supabase connection successful');
+                    }
+
                     this.cacheAvailable = !error;
                     this.lastCheckTime = now;
                     return this.cacheAvailable;
                 } catch (e) {
+                    console.error('Supabase connection failed:', e.message);
                     this.cacheAvailable = false;
                     this.lastCheckTime = now;
                     return false;
@@ -1177,7 +1182,6 @@
                 this.startBtn = document.getElementById('startBtn');
                 this.restartBtn = document.getElementById('restartBtn');
                 this.saveScoreBtn = document.getElementById('saveScoreBtn');
-                this.clearLocalScoresBtn = document.getElementById('clearLocalScoresBtn');
 
                 // Настройки игры
                 this.ROUND_TIME = 90;
@@ -1220,6 +1224,11 @@
                 this.setupEventListeners();
 
                 // СРАЗУ загружаем рекорды из Supabase и мигрируем локальные
+                // Сначала загружаем локальные для мгновенного отображения
+                this.highscores = this.loadHighscores();
+                this.displayMenuHighscores();
+                
+                // Затем асинхронно загружаем из Supabase
                 this.initHighscores();
 
                 // Запуск цикла
@@ -1231,11 +1240,16 @@
             }
 
             async initHighscores() {
+                console.log('Starting initHighscores...');
+                
                 // 1. Проверяем подключение к Supabase
                 await this.checkAndShowNetworkStatus();
+                console.log('Supabase connected:', this.supabaseConnected);
 
                 // 2. Мигрируем локальные рекорды
                 const localScores = this.loadHighscores();
+                console.log('Local scores found:', localScores.length);
+                
                 if (localScores.length > 0 && this.supabaseConnected) {
                     console.log(`Found ${localScores.length} local scores to migrate`);
                     const result = await this.db.migrateLocalScores(localScores);
@@ -1246,6 +1260,7 @@
 
                 // 3. Загружаем актуальные рекорды из Supabase или используем локальные
                 await this.loadActiveHighscores();
+                console.log('Final highscores count:', this.highscores.length);
 
                 // 4. Обновляем UI - показываем таблицу в меню и в UI
                 this.updateSupabaseStatus();
@@ -1334,7 +1349,7 @@
                 this.startBtn.addEventListener('click', () => this.startGame());
                 this.restartBtn.addEventListener('click', () => this.showMenu());
                 this.saveScoreBtn.addEventListener('click', () => this.saveHighscore());
-                this.clearLocalScoresBtn.addEventListener('click', () => this.clearLocalScores());
+                // this.clearLocalScoresBtn.addEventListener('click', () => this.clearLocalScores());
 
                 // Enter для сохранения имени
                 this.playerNameEl.addEventListener('keypress', (e) => {
