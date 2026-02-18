@@ -297,7 +297,15 @@
             <h3>🏆 ТАБЛИЦА ЛИДЕРОВ</h3>
             <ol id="highscoreListOl"></ol>
         </div>
-        
+
+        <div id="supabaseStatus" style="margin-top: 10px; font-size: 14px; color: #DEB887;">
+            🔄 Подключение к Supabase...
+        </div>
+
+        <div style="margin-top: 15px;">
+            <button class="menu-btn" id="clearLocalScoresBtn" style="font-size: 16px; padding: 10px 30px; background: linear-gradient(to bottom, #8B0000, #5D0000);">🗑️ ОЧИСТИТЬ ЛОКАЛЬНЫЕ</button>
+        </div>
+
         <button class="menu-btn" id="restartBtn">ИГРАТЬ СНОВА</button>
     </div>
 
@@ -973,11 +981,12 @@
         class DatabaseManager {
             constructor() {
                 // ВНИМАНИЕ: Эти данные видны в браузере, но RLS защищает базу
-                this.supabaseUrl = 'https://YOUR_PROJECT_ID.supabase.co';
-                this.supabaseKey = 'YOUR_ANON_KEY'; // Анонимный ключ (только на запись)
+                this.supabaseUrl = 'https://qpbmtblatvtvwdpgbenn.supabase.co';
+                this.supabaseKey = 'sb_publishable_DYO3jI1gGsGOauDctyDH4g_I3lgVoFO'; // Анонимный ключ (только на запись)
                 this.supabase = null;
                 this.initialized = false;
-                
+                this.migrationDone = false;
+
                 // Проверяем, загружен ли Supabase
                 if (typeof supabase !== 'undefined') {
                     try {
@@ -1039,6 +1048,51 @@
                     return [];
                 }
             }
+
+            // Миграция локальных рекордов в Supabase
+            async migrateLocalScores(localScores) {
+                if (!this.initialized || this.migrationDone || localScores.length === 0) {
+                    return { migrated: 0, total: localScores.length };
+                }
+
+                this.migrationDone = true;
+                let migrated = 0;
+
+                try {
+                    // Проверяем, есть ли уже такие результаты в базе
+                    const { data: existingScores } = await this.getHighscores(100);
+                    const existingSet = new Set(existingScores.map(s => `${s.name}-${s.score}`));
+
+                    // Сохраняем только те, которых ещё нет в базе
+                    for (const score of localScores) {
+                        const key = `${score.name}-${score.score}`;
+                        if (!existingSet.has(key)) {
+                            const saved = await this.saveScore(score.name, score.score);
+                            if (saved) migrated++;
+                        }
+                    }
+
+                    console.log(`Migration complete: ${migrated}/${localScores.length} scores migrated`);
+                } catch (e) {
+                    console.error('Migration error:', e);
+                }
+
+                return { migrated, total: localScores.length };
+            }
+
+            // Проверка доступности Supabase
+            async checkConnection() {
+                if (!this.initialized) return false;
+                try {
+                    const { data, error } = await this.supabase
+                        .from('highscores')
+                        .select('count')
+                        .limit(1);
+                    return !error;
+                } catch (e) {
+                    return false;
+                }
+            }
         }
 
         /* ============================================
@@ -1060,11 +1114,13 @@
                 this.finalScoreEl = document.getElementById('finalScore');
                 this.playerNameEl = document.getElementById('playerName');
                 this.highscoreListOl = document.getElementById('highscoreListOl');
+                this.supabaseStatusEl = document.getElementById('supabaseStatus');
 
                 // Кнопки
                 this.startBtn = document.getElementById('startBtn');
                 this.restartBtn = document.getElementById('restartBtn');
                 this.saveScoreBtn = document.getElementById('saveScoreBtn');
+                this.clearLocalScoresBtn = document.getElementById('clearLocalScoresBtn');
 
                 // Настройки игры
                 this.ROUND_TIME = 90;
@@ -1100,18 +1156,51 @@
                 // Highscores
                 this.highscores = this.loadHighscores();
                 this.loadingScores = false;
+                this.supabaseConnected = false;
 
                 // Инициализация
                 this.resize();
                 this.setupEventListeners();
                 this.loadHighscores();
-                
+
+                // Миграция локальных рекордов в Supabase (при первом запуске)
+                this.migrateScoresIfNeeded();
+
                 // Запуск цикла
                 this.lastTime = 0;
                 this.spawnTimer = 0;
                 this.gameTimer = 0;
-                
+
                 requestAnimationFrame((t) => this.gameLoop(t));
+            }
+
+            async migrateScoresIfNeeded() {
+                const localScores = this.loadHighscores();
+                if (localScores.length > 0) {
+                    console.log(`Found ${localScores.length} local scores to migrate`);
+                    const result = await this.db.migrateLocalScores(localScores);
+                    if (result.migrated > 0) {
+                        console.log(`Migrated ${result.migrated} scores to Supabase`);
+                    }
+                }
+                // Проверяем подключение к Supabase
+                this.supabaseConnected = await this.db.checkConnection();
+                console.log('Supabase connected:', this.supabaseConnected);
+                
+                // Обновляем статус в UI
+                this.updateSupabaseStatus();
+            }
+
+            updateSupabaseStatus() {
+                if (this.supabaseStatusEl) {
+                    if (this.supabaseConnected) {
+                        this.supabaseStatusEl.textContent = '✅ Supabase подключён';
+                        this.supabaseStatusEl.style.color = '#32CD32';
+                    } else {
+                        this.supabaseStatusEl.textContent = '⚠️ Supabase не подключён (работает локально)';
+                        this.supabaseStatusEl.style.color = '#FF6347';
+                    }
+                }
             }
 
             resize() {
@@ -1145,13 +1234,29 @@
                 this.startBtn.addEventListener('click', () => this.startGame());
                 this.restartBtn.addEventListener('click', () => this.showMenu());
                 this.saveScoreBtn.addEventListener('click', () => this.saveHighscore());
-                
+                this.clearLocalScoresBtn.addEventListener('click', () => this.clearLocalScores());
+
                 // Enter для сохранения имени
                 this.playerNameEl.addEventListener('keypress', (e) => {
                     if (e.key === 'Enter') {
                         this.saveHighscore();
                     }
                 });
+            }
+
+            clearLocalScores() {
+                // Проверяем, подключены ли к Supabase
+                if (!this.supabaseConnected) {
+                    alert('⚠️ Сначала убедитесь, что Supabase подключен и результаты загружены в облако!\n\nНажмите ОК, если вы уже сохранили результат в этом сеансе.');
+                }
+
+                if (confirm('🗑️ Вы уверены, что хотите очистить локальные рекорды?\n\nЭта операция необратима. Убедитесь, что все важные результаты сохранены в Supabase.')) {
+                    localStorage.removeItem('crazyChickenHighscores');
+                    this.highscores = [];
+                    this.displayHighscores();
+                    alert('✅ Локальные рекорды очищены!');
+                    console.log('Local scores cleared');
+                }
             }
 
             startGame() {
@@ -1507,7 +1612,7 @@
                     ctx.arc(x, y - 250, 70, 0, Math.PI * 2);
                     ctx.fill();
                 } else {
-                    // Треугольная крона (в 4 раза больше оригинала)
+                    // Треугольная крона (в 4 р��за больше оригинала)
                     ctx.fillStyle = '#006400';
                     ctx.beginPath();
                     ctx.moveTo(x - 120, y);
@@ -1649,21 +1754,26 @@
 
             displayHighscores() {
                 this.highscoreListOl.innerHTML = '';
-                
+
                 // Если есть результаты из Supabase, показываем их
                 const scores = this.highscores.length > 0 ? this.highscores : [];
-                
+
                 for (const hs of scores) {
                     const li = document.createElement('li');
-                    li.textContent = `${hs.name} - ${hs.score} очков (${hs.date})`;
+                    // Добавляем метку "ONLINE" для результатов из Supabase
+                    const onlineMark = this.supabaseConnected ? ' 🌐' : '';
+                    li.textContent = `${hs.name} - ${hs.score} очков (${hs.date})${onlineMark}`;
                     this.highscoreListOl.appendChild(li);
                 }
-                
+
                 if (scores.length === 0) {
                     const li = document.createElement('li');
                     li.textContent = 'Пока нет результатов';
                     this.highscoreListOl.appendChild(li);
                 }
+
+                // Обновляем статус Supabase
+                this.updateSupabaseStatus();
             }
         }
 
