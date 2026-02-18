@@ -36,19 +36,6 @@
 - Web Audio API (синтезированные звуки)
 - CSS3
 
-## 🚀 Публикация на GitHub Pages
-
-1. Создайте репозиторий на GitHub
-2. Запушьте файлы:
-   ```bash
-   git add .
-   git commit -m "Initial commit"
-   git branch -M main
-   git remote add origin https://github.com/ВАШ_НИК/crazych.git
-   git push -u origin main
-   ```
-3. Включите GitHub Pages в настройках репозитория (Settings → Pages)
-
 ## 📝 Особенности
 
 - Процедурная графика (без внешних ассетов)
