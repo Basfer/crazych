@@ -94,6 +94,10 @@ body {
     padding: 20px 0;
 }
 
+#menu > *, #gameOver > * {
+    flex-shrink: 0;
+}
+
 #gameOver {
     display: none;
 }
