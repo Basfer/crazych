@@ -1,0 +1,60 @@
+{
+    "title": "Crazy Duck - MoorDuck Clone",
+    "game": {
+        "score": "PUNTUACIÓN",
+        "ammo": "MUNICIÓN",
+        "time": "TIEMPO",
+        "ducks": "PATOS",
+        "network": "RED"
+    },
+    "menu": {
+        "title": "🐥 CRAZY DUCK 🐥",
+        "subtitle": "Caza de Patos",
+        "startBtn": "INICIAR JUEGO",
+        "leaderboard": "🏆 TABLA DE LÍDERES",
+        "leaderboardToggle": "▼",
+        "instructions": "📜 INSTRUCCIONES",
+        "instructionsToggle": "▼",
+        "instructionItems": [
+            "🎯 <strong>Ratón</strong> - apuntar",
+            "🔫 <strong>Clic izquierdo</strong> - disparar",
+            "🐥 <strong>Pato normal</strong> - 10 puntos",
+            "⚡ <strong>Pato rápido</strong> - 20 puntos",
+            "🪂 <strong>Pato con paracaídas</strong> - 30 puntos",
+            "🛸 <strong>OVNI</strong> - 50 puntos"
+        ]
+    },
+    "gameOver": {
+        "title": "JUEGO TERMINADO",
+        "finalScore": "Puntuación: {score}",
+        "enterName": "Introduce tu nombre:",
+        "saveBtn": "GUARDAR",
+        "leaderboard": "🏆 TABLA DE LÍDERES",
+        "playAgainBtn": "JUGAR DE NUEVO"
+    },
+    "messages": {
+        "confirmClearScores": "🗑️ ¿Estás seguro de que quieres borrar las puntuaciones locales?\n\nTodos los resultados ya están guardados en Supabase y se cargarán en el próximo inicio.",
+        "scoresCleared": "✅ ¡Puntuaciones locales borradas!\n\nResultados actuales cargados desde Supabase.",
+        "warningNoConnection": "⚠️ ¡Guarda primero los resultados en la nube!\n\nActualmente estás en modo sin conexión. Conéctate a internet para guardar en la tabla global."
+    },
+    "languages": {
+        "ru": "Русский",
+        "ua": "Українська",
+        "en": "English",
+        "de": "Deutsch",
+        "es": "Español",
+        "ja": "日本語",
+        "zh": "中文",
+        "hi": "हिन्दी"
+    },
+    "flags": {
+        "ru": "🇷🇺",
+        "ua": "🇺🇦",
+        "en": "🇬🇧",
+        "de": "🇩🇪",
+        "es": "🇪🇸",
+        "ja": "🇯🇵",
+        "zh": "🇨🇳",
+        "hi": "🇮🇳"
+    }
+}

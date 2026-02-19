@@ -1,0 +1,60 @@
+{
+    "title": "Crazy Duck - MoorDuck Clone",
+    "game": {
+        "score": "得分",
+        "ammo": "弹药",
+        "time": "时间",
+        "ducks": "鸭子",
+        "network": "网络"
+    },
+    "menu": {
+        "title": "🐥 CRAZY DUCK 🐥",
+        "subtitle": "猎鸭游戏",
+        "startBtn": "开始游戏",
+        "leaderboard": "🏆 排行榜",
+        "leaderboardToggle": "▼",
+        "instructions": "📜 说明",
+        "instructionsToggle": "▼",
+        "instructionItems": [
+            "🎯 <strong>鼠标</strong> - 瞄准",
+            "🔫 <strong>左键</strong> - 射击",
+            "🐥 <strong>普通鸭子</strong> - 10 分",
+            "⚡ <strong>快鸭</strong> - 20 分",
+            "🪂 <strong>降落伞鸭子</strong> - 30 分",
+            "🛸 <strong>UFO</strong> - 50 分"
+        ]
+    },
+    "gameOver": {
+        "title": "游戏结束",
+        "finalScore": "得分：{score}",
+        "enterName": "输入你的名字：",
+        "saveBtn": "保存",
+        "leaderboard": "🏆 排行榜",
+        "playAgainBtn": "再玩一次"
+    },
+    "messages": {
+        "confirmClearScores": "🗑️ 你确定要清除本地分数吗？\n\n所有结果已保存到 Supabase，将在下次启动时加载。",
+        "scoresCleared": "✅ 本地分数已清除！\n\n已从 Supabase 加载最新结果。",
+        "warningNoConnection": "⚠️ 请先将结果保存到云端！\n\n您目前处于离线模式。连接到互联网以保存到全球排行榜。"
+    },
+    "languages": {
+        "ru": "Русский",
+        "ua": "Українська",
+        "en": "English",
+        "de": "Deutsch",
+        "es": "Español",
+        "ja": "日本語",
+        "zh": "中文",
+        "hi": "हिन्दी"
+    },
+    "flags": {
+        "ru": "🇷🇺",
+        "ua": "🇺🇦",
+        "en": "🇬🇧",
+        "de": "🇩🇪",
+        "es": "🇪🇸",
+        "ja": "🇯🇵",
+        "zh": "🇨🇳",
+        "hi": "🇮🇳"
+    }
+}

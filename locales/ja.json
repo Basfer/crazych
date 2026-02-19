@@ -1,0 +1,60 @@
+{
+    "title": "Crazy Duck - MoorDuck Clone",
+    "game": {
+        "score": "スコア",
+        "ammo": "弾薬",
+        "time": "時間",
+        "ducks": "カモ",
+        "network": "ネットワーク"
+    },
+    "menu": {
+        "title": "🐥 CRAZY DUCK 🐥",
+        "subtitle": "カモ狩り",
+        "startBtn": "ゲームスタート",
+        "leaderboard": "🏆 リーダーボード",
+        "leaderboardToggle": "▼",
+        "instructions": "📜 説明書",
+        "instructionsToggle": "▼",
+        "instructionItems": [
+            "🎯 <strong>マウス</strong> - 照準",
+            "🔫 <strong>左クリック</strong> - 発射",
+            "🐥 <strong>通常のカモ</strong> - 10 ポイント",
+            "⚡ <strong>速いカモ</strong> - 20 ポイント",
+            "🪂 <strong>パラシュートのカモ</strong> - 30 ポイント",
+            "🛸 <strong>UFO</strong> - 50 ポイント"
+        ]
+    },
+    "gameOver": {
+        "title": "ゲームオーバー",
+        "finalScore": "スコア：{score}",
+        "enterName": "名前を入力：",
+        "saveBtn": "保存",
+        "leaderboard": "🏆 リーダーボード",
+        "playAgainBtn": "もう一度プレイ"
+    },
+    "messages": {
+        "confirmClearScores": "🗑️ ローカルスコアをクリアしてもよろしいですか？\n\nすべての結果はすでに Supabase に保存されており、次回起動時に読み込まれます。",
+        "scoresCleared": "✅ ローカルスコアをクリアしました！\n\nSupabase から最新の結果を読み込みました。",
+        "warningNoConnection": "⚠️ まず結果をクラウドに保存してください！\n\n現在オフラインモードです。グローバルリーダーボードに保存するにはインターネットに接続してください。"
+    },
+    "languages": {
+        "ru": "Русский",
+        "ua": "Українська",
+        "en": "English",
+        "de": "Deutsch",
+        "es": "Español",
+        "ja": "日本語",
+        "zh": "中文",
+        "hi": "हिन्दी"
+    },
+    "flags": {
+        "ru": "🇷🇺",
+        "ua": "🇺🇦",
+        "en": "🇬🇧",
+        "de": "🇩🇪",
+        "es": "🇪🇸",
+        "ja": "🇯🇵",
+        "zh": "🇨🇳",
+        "hi": "🇮🇳"
+    }
+}
