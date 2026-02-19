@@ -1,0 +1,74 @@
+{
+    "title": "Crazy Duck - MoorDuck Clone",
+    "game": {
+        "score": "СЧЁТ",
+        "ammo": "ПАТРОНЫ",
+        "time": "ВРЕМЯ",
+        "ducks": "УТКИ",
+        "network": "СЕТЬ"
+    },
+    "menu": {
+        "title": "🐥 CRAZY DUCK 🐥",
+        "subtitle": "Утиная охота",
+        "startBtn": "НАЧАТЬ ИГРУ",
+        "leaderboard": "🏆 ТАБЛИЦА ЛИДЕРОВ",
+        "leaderboardToggle": "▼",
+        "instructions": "📜 ИНСТРУКЦИЯ",
+        "instructionsToggle": "▼",
+        "instructionItems": [
+            "🎯 <strong>Мышь</strong> - прицеливание",
+            "🔫 <strong>Левая кнопка мыши</strong> - выстрел",
+            "🐥 <strong>Обычная утка</strong> - 10 очков",
+            "⚡ <strong>Быстрая утка</strong> - 20 очков",
+            "🪂 <strong>Утка с парашютом</strong> - 30 очков",
+            "🛸 <strong>НЛО</strong> - 50 очков"
+        ]
+    },
+    "gameOver": {
+        "title": "ИГРА ОКОНЧЕНА",
+        "finalScore": "Счёт: {score}",
+        "enterName": "Введите ваше имя:",
+        "saveBtn": "СОХРАНИТЬ",
+        "leaderboard": "🏆 ТАБЛИЦА ЛИДЕРОВ",
+        "playAgainBtn": "ИГРАТЬ СНОВА"
+    },
+    "messages": {
+        "confirmClearScores": "🗑️ Вы уверены, что хотите очистить локальные рекорды?\n\nВсе результаты уже сохранены в Supabase и будут загружены при следующем запуске.",
+        "scoresCleared": "✅ Локальные рекорды очищены!\n\nЗагружены актуальные результаты из Supabase.",
+        "warningNoConnection": "⚠️ Сначала сохраните результаты в облако!\n\nСейчас вы работаете в локальном режиме. Подключите интернет для сохранения в глобальную таблицу."
+    },
+    "languages": {
+        "ru": "Русский",
+        "ua": "Українська",
+        "en": "English",
+        "de": "Deutsch",
+        "es": "Español",
+        "fr": "Français",
+        "it": "Italiano",
+        "nl": "Nederlands",
+        "el": "Ελληνικά",
+        "pl": "Polski",
+        "ar": "العربية",
+        "tr": "Türkçe",
+        "ja": "日本語",
+        "zh": "中文",
+        "hi": "हिन्दी"
+    },
+    "flags": {
+        "ru": "🇷🇺",
+        "ua": "🇺🇦",
+        "en": "🇬🇧",
+        "de": "🇩🇪",
+        "es": "🇪🇸",
+        "fr": "🇫🇷",
+        "it": "🇮🇹",
+        "nl": "🇳🇱",
+        "el": "🇬🇷",
+        "pl": "🇵🇱",
+        "ar": "🇸🇦",
+        "tr": "🇹🇷",
+        "ja": "🇯🇵",
+        "zh": "🇨🇳",
+        "hi": "🇮🇳"
+    }
+}

@@ -1,0 +1,74 @@
+{
+    "title": "Crazy Duck - MoorDuck Clone",
+    "game": {
+        "score": "ΣΚΟΡ",
+        "ammo": "ΠΥΡΟΜΑΧΙΚΑ",
+        "time": "ΧΡΟΝΟΣ",
+        "ducks": "ΠΑΠΙΕΣ",
+        "network": "ΔΙΚΤΥΟ"
+    },
+    "menu": {
+        "title": "🐥 CRAZY DUCK 🐥",
+        "subtitle": "Κυνήγι παπιών",
+        "startBtn": "ΕΝΑΡΞΗ",
+        "leaderboard": "🏆 ΚΑΤΑΤΑΞΗ",
+        "leaderboardToggle": "▼",
+        "instructions": "📜 ΟΔΗΓΙΕΣ",
+        "instructionsToggle": "▼",
+        "instructionItems": [
+            "🎯 <strong>Ποντίκι</strong> - στόχευση",
+            "🔫 <strong>Αριστερό κλικ</strong> - πυροβολισμός",
+            "🐥 <strong>Κανονική πάπια</strong> - 10 πόντοι",
+            "⚡ <strong>Γρήγορη πάπια</strong> - 20 πόντοι",
+            "🪂 <strong>Πάπια με αλεξίπτωτο</strong> - 30 πόντοι",
+            "🛸 <strong>ΑΤΙΑ</strong> - 50 πόντοι"
+        ]
+    },
+    "gameOver": {
+        "title": "ΤΕΛΟΣ ΠΑΙΧΝΙΔΙΟΥ",
+        "finalScore": "Σκορ: {score}",
+        "enterName": "Εισάγετε το όνομά σας:",
+        "saveBtn": "ΑΠΟΘΗΚΕΥΣΗ",
+        "leaderboard": "🏆 ΚΑΤΑΤΑΞΗ",
+        "playAgainBtn": "ΠΑΙΞΤΕ ΞΑΝΑ"
+    },
+    "messages": {
+        "confirmClearScores": "🗑️ Είστε σίγουροι ότι θέλετε να διαγράψετε τους τοπικούς βαθμούς;\n\nΌλα τα αποτελέσματα είναι ήδη αποθηκευμένα στο Supabase και θα φορτωθούν στην επόμενη εκκίνηση.",
+        "scoresCleared": "✅ Τοπικοί βαθμοί διαγράφηκαν!\n\nΤα τρέχοντα αποτελέσματα φορτώθηκαν από το Supabase.",
+        "warningNoConnection": "⚠️ Αποθηκεύστε πρώτα τα αποτελέσματα στο cloud!\n\nΕίστε αυτή τη στιγμή σε λειτουργία offline. Συνδεθείτε στο διαδίκτυο για αποθήκευση στην παγκόσμια κατάταξη."
+    },
+    "languages": {
+        "ru": "Русский",
+        "ua": "Українська",
+        "en": "English",
+        "de": "Deutsch",
+        "es": "Español",
+        "fr": "Français",
+        "it": "Italiano",
+        "nl": "Nederlands",
+        "el": "Ελληνικά",
+        "pl": "Polski",
+        "ar": "العربية",
+        "tr": "Türkçe",
+        "ja": "日本語",
+        "zh": "中文",
+        "hi": "हिन्दी"
+    },
+    "flags": {
+        "ru": "🇷🇺",
+        "ua": "🇺🇦",
+        "en": "🇬🇧",
+        "de": "🇩🇪",
+        "es": "🇪🇸",
+        "fr": "🇫🇷",
+        "it": "🇮🇹",
+        "nl": "🇳🇱",
+        "el": "🇬🇷",
+        "pl": "🇵🇱",
+        "ar": "🇸🇦",
+        "tr": "🇹🇷",
+        "ja": "🇯🇵",
+        "zh": "🇨🇳",
+        "hi": "🇮🇳"
+    }
+}

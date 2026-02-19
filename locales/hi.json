@@ -1,0 +1,74 @@
+{
+    "title": "Crazy Duck - MoorDuck Clone",
+    "game": {
+        "score": "स्कोर",
+        "ammo": "गोला-बारूद",
+        "time": "समय",
+        "ducks": "बतख",
+        "network": "नेटवर्क"
+    },
+    "menu": {
+        "title": "🐥 CRAZY DUCK 🐥",
+        "subtitle": "बतख शिकार",
+        "startBtn": "खेल शुरू करें",
+        "leaderboard": "🏆 लीडरबोर्ड",
+        "leaderboardToggle": "▼",
+        "instructions": "📜 निर्देश",
+        "instructionsToggle": "▼",
+        "instructionItems": [
+            "🎯 <strong>माउस</strong> - निशाना",
+            "🔫 <strong>बायाँ माउस बटन</strong> - गोली चलाएं",
+            "🐥 <strong>सामान्य बतख</strong> - 10 अंक",
+            "⚡ <strong>तेज बतख</strong> - 20 अंक",
+            "🪂 <strong>पैराशूट बतख</strong> - 30 अंक",
+            "🛸 <strong>यूएफओ</strong> - 50 अंक"
+        ]
+    },
+    "gameOver": {
+        "title": "खेल समाप्त",
+        "finalScore": "स्कोर: {score}",
+        "enterName": "अपना नाम दर्ज करें:",
+        "saveBtn": "सहेजें",
+        "leaderboard": "🏆 लीडरबोर्ड",
+        "playAgainBtn": "फिर से खेलें"
+    },
+    "messages": {
+        "confirmClearScores": "🗑️ क्या आप सुनिश्चित हैं कि आप स्थानीय स्कोर साफ़ करना चाहते हैं?\n\nसभी परिणाम पहले से ही Supabase में सहेजे गए हैं और अगली बार लोड हो जाएंगे।",
+        "scoresCleared": "✅ स्थानीय स्कोर साफ़!\n\nSupabase से वास्तविक परिणाम लोड किए गए।",
+        "warningNoConnection": "⚠️ पहले परिणामों को क्लाउड में सहेजें!\n\nआप वर्तमान में ऑफ़लाइन मोड में हैं। वैश्विक लीडरबोर्ड में सहेजने के लिए इंटरनेट से कनेक्ट करें।"
+    },
+    "languages": {
+        "ru": "Русский",
+        "ua": "Українська",
+        "en": "English",
+        "de": "Deutsch",
+        "es": "Español",
+        "fr": "Français",
+        "it": "Italiano",
+        "nl": "Nederlands",
+        "el": "Ελληνικά",
+        "pl": "Polski",
+        "ar": "العربية",
+        "tr": "Türkçe",
+        "ja": "日本語",
+        "zh": "中文",
+        "hi": "हिन्दी"
+    },
+    "flags": {
+        "ru": "🇷🇺",
+        "ua": "🇺🇦",
+        "en": "🇬🇧",
+        "de": "🇩🇪",
+        "es": "🇪🇸",
+        "fr": "🇫🇷",
+        "it": "🇮🇹",
+        "nl": "🇳🇱",
+        "el": "🇬🇷",
+        "pl": "🇵🇱",
+        "ar": "🇸🇦",
+        "tr": "🇹🇷",
+        "ja": "🇯🇵",
+        "zh": "🇨🇳",
+        "hi": "🇮🇳"
+    }
+}

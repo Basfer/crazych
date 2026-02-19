@@ -1,60 +1,91 @@
 # 🐔 Crazy Duck
 
-Браузерная игра "Утиная охота" на HTML5 Canvas и Vanilla JavaScript.
+Browser-based "Duck Hunting" game built with HTML5 Canvas and Vanilla JavaScript.
 
-## 🎮 Как играть
+## 🎮 How to Play
 
-1. Откройте `index.html` в любом современном браузере
-2. Нажмите **"НАЧАТЬ ИГРУ"**
-3. Прицеливайтесь мышью и стреляйте ЛКМ
-4. Наберите максимум очков за 90 секунд!
+1. Start a local HTTP server (required for language support):
+   ```bash
+   # Python 3
+   python -m http.server 8000
+   
+   # Python 2
+   python -m SimpleHTTPServer 8000
+   
+   # Node.js (npx)
+   npx http-server -p 8000
+   
+   # PHP
+   php -S localhost:8000
+   ```
+2. Open `http://localhost:8000` in any modern browser
+3. Click **"START GAME"**
+4. Aim with the mouse and shoot with the left mouse button
+5. Score as many points as possible in 90 seconds!
 
-## 🎯 Типы целей
+## 🎯 Target Types
 
-| Тип | Очки | Описание |
-|-----|------|----------|
-| 🐔 Обычная | 10 | Летит медленно по прямой |
-| ⚡ Быстрая | 20 | Летит быстро, зигзагом |
-| 🪂 Падающая | 30 | Падает с парашютом сверху |
-| 🛸 НЛО | 50 | Летит очень быстро |
+| Type | Points | Description |
+|------|--------|-------------|
+| 🐔 Normal | 10 | Flies slowly in a straight line |
+| ⚡ Fast | 20 | Flies quickly, zigzag pattern |
+| 🪂 Falling | 30 | Falls with parachute from top |
+| 🛸 UFO | 50 | Flies very fast |
 
-## 🎮 Управление
+## 🎮 Controls
 
-- **Мышь** — прицеливание
-- **ЛКМ** — выстрел
+- **Mouse** — aiming
+- **Left Mouse Button** — shoot
 
-## 📋 Параметры игры
+## 📋 Game Settings
 
-- **Время раунда:** 90 секунд
-- **Патроны:** 60 выстрелов
-- **Цель:** набрать максимум очков
+- **Round time:** 90 seconds
+- **Ammo:** 60 shots
+- **Goal:** score maximum points
 
-## 🛠️ Технологии
+## 🛠️ Technologies
 
 - HTML5 Canvas
 - Vanilla JavaScript (ES6+)
-- Web Audio API (синтезированные звуки)
+- Web Audio API (synthesized sounds)
 - CSS3
-- Supabase (онлайн-таблица лидеров)
+- Supabase (online leaderboard)
 
-## 🌐 Онлайн-таблица лидеров
+## 🌐 Online Leaderboard
 
-Игра поддерживает сохранение результатов в облачной базе Supabase. Для настройки:
+The game supports saving scores to Supabase cloud database. To set up:
 
-1. Создайте проект на https://supabase.com
-2. Выполните SQL-скрипт из файла `SUPABASE_SETUP.md`
-3. Вставьте ваши ключи в `index.html` (класс `DatabaseManager`)
+1. Create a project at https://supabase.com
+2. Run the SQL script from `SUPABASE_SETUP.md`
+3. Insert your keys in `index.html` (class `DatabaseManager`)
 
-Подробная инструкция в файле **SUPABASE_SETUP.md**
+Detailed instructions in **SUPABASE_SETUP.md**
 
-## 📝 Особенности
+## 📝 Features
 
-- Процедурная графика (без внешних ассетов)
-- Система частиц (перья при попадании)
-- Таблица лидеров (сохранение в localStorage)
-- Адаптивный дизайн (100% окна)
-- Звуковые эффекты через Web Audio API
+- Procedural graphics (no external assets)
+- Particle system (feathers on hit)
+- Leaderboard (localStorage backup)
+- Responsive design (100% window)
+- Sound effects via Web Audio API
 
-## 📄 Лицензия
+## 📄 License
 
 MIT
+
+## 🌍 Translations
+
+- [Deutsch](docs/README.de.md)
+- [Español](docs/README.es.md)
+- [Français](docs/README.fr.md)
+- [Italiano](docs/README.it.md)
+- [Nederlands](docs/README.nl.md)
+- [Русский](docs/README.ru.md)
+- [Українська](docs/README.ua.md)
+- [Polski](docs/README.pl.md)
+- [Ελληνικά](docs/README.el.md)
+- [العربية](docs/README.ar.md)
+- [Türkçe](docs/README.tr.md)
+- [日本語](docs/README.ja.md)
+- [中文](docs/README.zh.md)
+- [हिन्दी](docs/README.hi.md)

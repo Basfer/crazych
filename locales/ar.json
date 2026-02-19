@@ -1,0 +1,74 @@
+{
+    "title": "Crazy Duck - MoorDuck Clone",
+    "game": {
+        "score": "النقاط",
+        "ammo": "الذخيرة",
+        "time": "الوقت",
+        "ducks": "البط",
+        "network": "الشبكة"
+    },
+    "menu": {
+        "title": "🐥 CRAZY DUCK 🐥",
+        "subtitle": "صيد البط",
+        "startBtn": "ابدأ اللعبة",
+        "leaderboard": "🏆 لوحة المتصدرين",
+        "leaderboardToggle": "▼",
+        "instructions": "📜 التعليمات",
+        "instructionsToggle": "▼",
+        "instructionItems": [
+            "🎯 <strong>الفأرة</strong> - التصويب",
+            "🔫 <strong>الزر الأيسر</strong> - إطلاق النار",
+            "🐥 <strong>بطة عادية</strong> - 10 نقاط",
+            "⚡ <strong>بطة سريعة</strong> - 20 نقطة",
+            "🪂 <strong>بطة بمظلة</strong> - 30 نقطة",
+            "🛸 <strong>جسم طائر</strong> - 50 نقطة"
+        ]
+    },
+    "gameOver": {
+        "title": "انتهت اللعبة",
+        "finalScore": "النقاط: {score}",
+        "enterName": "أدخل اسمك:",
+        "saveBtn": "حفظ",
+        "leaderboard": "🏆 لوحة المتصدرين",
+        "playAgainBtn": "العب مرة أخرى"
+    },
+    "messages": {
+        "confirmClearScores": "🗑️ هل أنت متأكد أنك تريد مسح النقاط المحلية؟\n\nجميع النتائج محفوظة بالفعل في Supabase وسيتم تحميلها عند البدء التالي.",
+        "scoresCleared": "✅ تم مسح النقاط المحلية!\n\nتم تحميل النتائج الحالية من Supabase.",
+        "warningNoConnection": "⚠️ احفظ النتائج في السحابة أولاً!\n\nأنت حالياً في وضع عدم الاتصال. اتصل بالإنترنت للحفظ في لوحة المتصدرين العالمية."
+    },
+    "languages": {
+        "ru": "Русский",
+        "ua": "Українська",
+        "en": "English",
+        "de": "Deutsch",
+        "es": "Español",
+        "fr": "Français",
+        "it": "Italiano",
+        "nl": "Nederlands",
+        "el": "Ελληνικά",
+        "pl": "Polski",
+        "ar": "العربية",
+        "tr": "Türkçe",
+        "ja": "日本語",
+        "zh": "中文",
+        "hi": "हिन्दी"
+    },
+    "flags": {
+        "ru": "🇷🇺",
+        "ua": "🇺🇦",
+        "en": "🇬🇧",
+        "de": "🇩🇪",
+        "es": "🇪🇸",
+        "fr": "🇫🇷",
+        "it": "🇮🇹",
+        "nl": "🇳🇱",
+        "el": "🇬🇷",
+        "pl": "🇵🇱",
+        "ar": "🇸🇦",
+        "tr": "🇹🇷",
+        "ja": "🇯🇵",
+        "zh": "🇨🇳",
+        "hi": "🇮🇳"
+    }
+}

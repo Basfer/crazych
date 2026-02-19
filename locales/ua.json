@@ -1,0 +1,74 @@
+{
+    "title": "Crazy Duck - MoorDuck Clone",
+    "game": {
+        "score": "РАХУНОК",
+        "ammo": "НАБОЇ",
+        "time": "ЧАС",
+        "ducks": "КАЧКИ",
+        "network": "МЕРЕЖА"
+    },
+    "menu": {
+        "title": "🐥 CRAZY DUCK 🐥",
+        "subtitle": "Качине полювання",
+        "startBtn": "ПОЧАТИ ГРУ",
+        "leaderboard": "🏆 ТАБЛИЦЯ ЛІДЕРІВ",
+        "leaderboardToggle": "▼",
+        "instructions": "📜 ІНСТРУКЦІЯ",
+        "instructionsToggle": "▼",
+        "instructionItems": [
+            "🎯 <strong>Миша</strong> - прицілювання",
+            "🔫 <strong>Ліва кнопка миші</strong> - постріл",
+            "🐥 <strong>Звичайна качка</strong> - 10 очок",
+            "⚡ <strong>Швидка качка</strong> - 20 очок",
+            "🪂 <strong>Качка з парашутом</strong> - 30 очок",
+            "🛸 <strong>НЛО</strong> - 50 очок"
+        ]
+    },
+    "gameOver": {
+        "title": "ГРУ ЗАВЕРШЕНО",
+        "finalScore": "Рахунок: {score}",
+        "enterName": "Введіть ваше ім'я:",
+        "saveBtn": "ЗБЕРЕГТИ",
+        "leaderboard": "🏆 ТАБЛИЦЯ ЛІДЕРІВ",
+        "playAgainBtn": "ГРАТИ ЗНОВУ"
+    },
+    "messages": {
+        "confirmClearScores": "🗑️ Ви впевнені, що хочете очистити локальні рекорди?\n\nВсі результати вже збережені в Supabase і будуть завантажені при наступному запуску.",
+        "scoresCleared": "✅ Локальні рекорди очищені!\n\nЗавантажено актуальні результати з Supabase.",
+        "warningNoConnection": "⚠️ Спочатку збережіть результати в хмару!\n\nЗараз ви працюєте в локальному режимі. Підключіть інтернет для збереження в глобальну таблицю."
+    },
+    "languages": {
+        "ru": "Русский",
+        "ua": "Українська",
+        "en": "English",
+        "de": "Deutsch",
+        "es": "Español",
+        "fr": "Français",
+        "it": "Italiano",
+        "nl": "Nederlands",
+        "el": "Ελληνικά",
+        "pl": "Polski",
+        "ar": "العربية",
+        "tr": "Türkçe",
+        "ja": "日本語",
+        "zh": "中文",
+        "hi": "हिन्दी"
+    },
+    "flags": {
+        "ru": "🇷🇺",
+        "ua": "🇺🇦",
+        "en": "🇬🇧",
+        "de": "🇩🇪",
+        "es": "🇪🇸",
+        "fr": "🇫🇷",
+        "it": "🇮🇹",
+        "nl": "🇳🇱",
+        "el": "🇬🇷",
+        "pl": "🇵🇱",
+        "ar": "🇸🇦",
+        "tr": "🇹🇷",
+        "ja": "🇯🇵",
+        "zh": "🇨🇳",
+        "hi": "🇮🇳"
+    }
+}

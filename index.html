@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Crazy Duck - MoorDuck Clone</title>
     <link rel="stylesheet" href="styles.css">
+    <script src="locales/language-manager.js" defer></script>
 </head>
 <body>
     <!-- ============================================
@@ -21,40 +22,51 @@
     <div id="ui">
         <div id="topBar">
             <div class="stat-box">
-                <div class="stat-label">СЧЁТ</div>
+                <div class="stat-label" data-i18n="game.score">СЧЁТ</div>
                 <div class="stat-value" id="scoreValue">0</div>
             </div>
             <div class="stat-box">
-                <div class="stat-label">ПАТРОНЫ</div>
+                <div class="stat-label" data-i18n="game.ammo">ПАТРОНЫ</div>
                 <div class="stat-value" id="ammoValue">60</div>
             </div>
             <div class="stat-box">
-                <div class="stat-label">ВРЕМЯ</div>
+                <div class="stat-label" data-i18n="game.time">ВРЕМЯ</div>
                 <div class="stat-value" id="timeValue">90</div>
             </div>
             <div class="stat-box" style="min-width: 120px;">
-                <div class="stat-label">УТКИ</div>
+                <div class="stat-label" data-i18n="game.ducks">УТКИ</div>
                 <div class="stat-value" style="font-size: 18px;">
                     <span id="spawnedValue">0</span> / <span id="hitValue">0</span>
                 </div>
             </div>
             <div class="stat-box" style="min-width: 80px; padding: 10px 15px;">
-                <div class="stat-label">СЕТЬ</div>
+                <div class="stat-label" data-i18n="game.network">СЕТЬ</div>
                 <div id="networkIndicator" style="font-size: 24px;">🔄</div>
+            </div>
+        </div>
+        
+        <!-- Language Selector -->
+        <div id="languageSelector">
+            <button id="currentLanguageBtn">
+                <span id="currentFlag">En</span>
+                <span id="currentName">English</span>
+            </button>
+            <div class="language-dropdown" id="languageOptions">
+                <!-- Language options will be populated by JavaScript -->
             </div>
         </div>
     </div>
 
     <!-- Main Menu -->
     <div id="menu">
-        <h1 class="menu-title">🐥 CRAZY DUCK 🐥</h1>
-        <p class="menu-subtitle">Охота на уток</p>
-        <button class="menu-btn" id="startBtn">НАЧАТЬ ИГРУ</button>
+        <h1 class="menu-title" data-i18n="menu.title">🐥 CRAZY DUCK 🐥</h1>
+        <p class="menu-subtitle" data-i18n="menu.subtitle">Duck Hunting</p>
+        <button class="menu-btn" id="startBtn" data-i18n="menu.startBtn">START GAME</button>
 
         <!-- Leaderboard (collapsible) -->
         <div id="menuHighscores" style="margin: 20px 0; padding: 15px; background: rgba(139, 69, 19, 0.5); border-radius: 10px; max-width: 500px; width: 90%;">
-            <h3 id="menuHighscoresHeader" style="color: #FFD700; margin: 0; text-align: center; cursor: pointer; user-select: none;" title="Нажмите, чтобы свернуть/развернуть">
-                🏆 ТАБЛИЦА ЛИДЕРОВ <span id="menuHighscoresToggle">▼</span>
+            <h3 id="menuHighscoresHeader" style="color: #FFD700; margin: 0; text-align: center; cursor: pointer; user-select: none;" title="Click to collapse/expand">
+                <span data-i18n="menu.leaderboard">🏆 LEADERBOARD</span> <span id="menuHighscoresToggle" data-i18n="menu.leaderboardToggle">▼</span>
             </h3>
             <div id="menuHighscoresContent" style="margin-top: 10px;">
                 <ol id="menuHighscoreListOl" style="color: #DEB887; padding-left: 20px;"></ol>
@@ -66,17 +78,12 @@
 
         <!-- Instructions (collapsible) -->
         <div class="instructions" style="max-width: 500px; width: 90%;">
-            <h3 id="instructionsHeader" style="color: #FFD700; margin: 0; text-align: center; cursor: pointer; user-select: none;" title="Нажмите, чтобы свернуть/развернуть">
-                📜 ИНСТРУКЦИЯ <span id="instructionsToggle">▼</span>
+            <h3 id="instructionsHeader" style="color: #FFD700; margin: 0; text-align: center; cursor: pointer; user-select: none;" title="Click to collapse/expand">
+                <span data-i18n="menu.instructions">📜 INSTRUCTIONS</span> <span id="instructionsToggle" data-i18n="menu.instructionsToggle">▼</span>
             </h3>
             <div id="instructionsContent">
-                <ul>
-                    <li>🎯 <strong>Мышь</strong> - прицеливание</li>
-                    <li>🔫 <strong>ЛКМ</strong> - выстрел</li>
-                    <li>🐥 <strong>Обычная утка</strong> - 10 очков</li>
-                    <li>⚡ <strong>Быстрая утка</strong> - 20 очков</li>
-                    <li>🪂 <strong>Утка с парашютом</strong> - 30 очков</li>
-                    <li>🛸 <strong>НЛО</strong> - 50 очков</li>
+                <ul id="instructionList">
+                    <!-- Instructions will be populated by JavaScript -->
                 </ul>
             </div>
         </div>
@@ -84,19 +91,19 @@
 
     <!-- Game Over Screen -->
     <div id="gameOver">
-        <h1 class="menu-title" id="gameOverTitle">ИГРА ОКОНЧЕНА</h1>
-        <div id="finalScore">Счёт: 0</div>
+        <h1 class="menu-title" id="gameOverTitle" data-i18n="gameOver.title">GAME OVER</h1>
+        <div id="finalScore" data-i18n="gameOver.finalScore">Score: 0</div>
 
         <div id="highscoreForm">
-            <label style="color: #DEB887;">Введите ваше имя:</label>
-            <input type="text" id="playerName" maxlength="10" placeholder="Имя">
-            <button class="menu-btn" id="saveScoreBtn">СОХРАНИТЬ</button>
+            <label style="color: #DEB887;" data-i18n="gameOver.enterName">Enter your name:</label>
+            <input type="text" id="playerName" maxlength="10" data-i18n="gameOver.enterName" placeholder="Имя">
+            <button class="menu-btn" id="saveScoreBtn" data-i18n="gameOver.saveBtn">SAVE</button>
         </div>
 
         <!-- Using the same leaderboard as in the menu -->
         <div id="gameOverHighscores" style="margin: 20px 0; padding: 15px; background: rgba(139, 69, 19, 0.5); border-radius: 10px; max-width: 500px; width: 90%;">
-            <h3 id="gameOverHighscoresHeader" style="color: #FFD700; margin: 0; text-align: center; cursor: pointer; user-select: none;" title="Нажмите, чтобы свернуть/развернуть">
-                🏆 ТАБЛИЦА ЛИДЕРОВ <span id="gameOverHighscoresToggle">▼</span>
+            <h3 id="gameOverHighscoresHeader" style="color: #FFD700; margin: 0; text-align: center; cursor: pointer; user-select: none;" title="Click to collapse/expand">
+                <span data-i18n="gameOver.leaderboard">🏆 LEADERBOARD</span> <span id="gameOverHighscoresToggle" data-i18n="menu.leaderboardToggle">▼</span>
             </h3>
             <div id="gameOverHighscoresContent" style="margin-top: 10px;">
                 <ol id="gameOverHighscoreListOl" style="color: #DEB887; padding-left: 20px;"></ol>
@@ -106,7 +113,7 @@
             </div>
         </div>
 
-        <button class="menu-btn" id="restartBtn">ИГРАТЬ СНОВА</button>
+        <button class="menu-btn" id="restartBtn" data-i18n="gameOver.playAgainBtn">PLAY AGAIN</button>
     </div>
 
     <script>
@@ -986,6 +993,9 @@
                 // Database
                 this.db = new DatabaseManager();
 
+                // Language Manager
+                this.languageManager = window.languageManager;
+
                 // Highscores
                 this.highscores = [];
                 this.loadingScores = false;
@@ -993,7 +1003,14 @@
 
                 // Initialization
                 this.resize();
+
+                // Set up language change listeners
+                this.initLanguage();
+
                 this.setupEventListeners();
+
+                // Update instructions after translations are loaded (with small delay)
+                setTimeout(() => this.updateInstructions(), 100);
 
                 // IMMEDIATELY load records from Supabase and migrate local ones
                 // First load local for instant display
@@ -1104,6 +1121,27 @@
 
                 // Collapse/expand leaderboard and instructions
                 this.setupCollapsibleSections();
+                
+                // Language selector
+                this.setupLanguageSelector();
+            }
+
+            setupLanguageSelector() {
+                const languageSelector = document.getElementById('languageSelector');
+                const currentLanguageBtn = document.getElementById('currentLanguageBtn');
+
+                if (!languageSelector || !currentLanguageBtn) return;
+
+                // Toggle dropdown on button click
+                currentLanguageBtn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    languageSelector.classList.toggle('open');
+                });
+
+                // Close dropdown when clicking outside
+                document.addEventListener('click', () => {
+                    languageSelector.classList.remove('open');
+                });
             }
 
             setupCollapsibleSections() {
@@ -1135,15 +1173,42 @@
             toggleSection(contentId, toggleId) {
                 const content = document.getElementById(contentId);
                 const toggle = document.getElementById(toggleId);
-                
+
                 if (content && toggle) {
-                    if (content.style.display === 'none') {
-                        content.style.display = 'block';
-                        toggle.textContent = '▼';
-                    } else {
+                    const isVisible = window.getComputedStyle(content).display !== 'none';
+
+                    if (isVisible) {
                         content.style.display = 'none';
                         toggle.textContent = '▲';
+                    } else {
+                        content.style.display = 'block';
+                        toggle.textContent = '▼';
                     }
+                }
+            }
+
+            // Initialize language manager (already initialized, just set up listeners)
+            initLanguage() {
+                if (this.languageManager) {
+                    // Listen for language changes
+                    window.addEventListener('languageChanged', () => {
+                        this.updateInstructions();
+                        // Update game over score if visible
+                        if (this.state === 'GAME_OVER') {
+                            this.finalScoreEl.textContent = this.languageManager.t('gameOver.finalScore', { score: this.score });
+                        }
+                    });
+                }
+            }
+
+            // Update instructions list with current language
+            updateInstructions() {
+                const instructionList = document.getElementById('instructionList');
+                if (!instructionList || !this.languageManager) return;
+
+                const items = this.languageManager.t('menu.instructionItems');
+                if (items && Array.isArray(items) && items.length > 0) {
+                    instructionList.innerHTML = items.map(item => `<li>${item}</li>`).join('');
                 }
             }
 
@@ -1171,16 +1236,16 @@
             clearLocalScores() {
                 // Check Supabase connection
                 if (!this.supabaseConnected) {
-                    alert('⚠️ Сначала сохраните результаты в облако!\n\nСейчас вы работаете в локальном режиме. Подключите интернет для сохранения в глобальную таблицу.');
+                    alert(this.languageManager?.t('messages.warningNoConnection') || '⚠️ Save results to cloud first!');
                     return;
                 }
 
-                if (confirm('🗑️ Вы уверены, что хотите очистить локальные рекорды?\n\nВсе результаты уже сохранены в Supabase и будут загружены при следующем запуске.')) {
+                if (confirm(this.languageManager?.t('messages.confirmClearScores') || '🗑️ Are you sure you want to clear local scores?')) {
                     localStorage.removeItem('crazyChickenHighscores');
                     // Load from Supabase
                     this.loadActiveHighscores();
                     this.displayHighscores();
-                    alert('✅ Локальные рекорды очищены!\n\nЗагружены актуальные результаты из Supabase.');
+                    alert(this.languageManager?.t('messages.scoresCleared') || '✅ Local scores cleared!');
                     console.log('Local scores cleared');
                 }
             }
@@ -1236,7 +1301,7 @@
                 this.state = 'GAME_OVER';
                 this.soundManager.playGameOver();
 
-                this.finalScoreEl.textContent = `Счёт: ${this.score}`;
+                this.finalScoreEl.textContent = this.languageManager?.t('gameOver.finalScore', { score: this.score }) || `Score: ${this.score}`;
                 this.gameOverEl.style.display = 'flex';
                 document.body.classList.remove('playing');
                 document.body.classList.add('menu');
@@ -1804,6 +1869,12 @@
         // GAME START
         // ============================================
         window.addEventListener('DOMContentLoaded', () => {
+            // Initialize language manager (non-blocking)
+            if (window.languageManager) {
+                window.languageManager.init().catch(err => {
+                    console.warn('Language initialization failed:', err);
+                });
+            }
             const game = new GameManager();
         });
     </script>

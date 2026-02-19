@@ -1,0 +1,74 @@
+{
+    "title": "Crazy Duck - MoorDuck Clone",
+    "game": {
+        "score": "SCORE",
+        "ammo": "MUNITIE",
+        "time": "TIJD",
+        "ducks": "EENDEN",
+        "network": "NETWERK"
+    },
+    "menu": {
+        "title": "🐥 CRAZY DUCK 🐥",
+        "subtitle": "Eendenjacht",
+        "startBtn": "START SPEL",
+        "leaderboard": "🏆 RANGLIJST",
+        "leaderboardToggle": "▼",
+        "instructions": "📜 INSTRUCTIES",
+        "instructionsToggle": "▼",
+        "instructionItems": [
+            "🎯 <strong>Muis</strong> - richten",
+            "🔫 <strong>Linkermuisknop</strong> - schieten",
+            "🐥 <strong>Normale eend</strong> - 10 punten",
+            "⚡ <strong>Snelle eend</strong> - 20 punten",
+            "🪂 <strong>Eend met parachute</strong> - 30 punten",
+            "🛸 <strong>UFO</strong> - 50 punten"
+        ]
+    },
+    "gameOver": {
+        "title": "SPEL VOORBIJ",
+        "finalScore": "Score: {score}",
+        "enterName": "Voer je naam in:",
+        "saveBtn": "OPSLAAN",
+        "leaderboard": "🏆 RANGLIJST",
+        "playAgainBtn": "OPNIEUW SPELEN"
+    },
+    "messages": {
+        "confirmClearScores": "🗑️ Weet je zeker dat je lokale scores wilt wissen?\n\nAlle resultaten zijn al opgeslagen in Supabase en worden bij de volgende start geladen.",
+        "scoresCleared": "✅ Lokale scores gewist!\n\nHuidige resultaten geladen van Supabase.",
+        "warningNoConnection": "⚠️ Sla eerst resultaten op in de cloud!\n\nJe bent momenteel offline. Verbind met internet om op te slaan in de wereldwijde ranglijst."
+    },
+    "languages": {
+        "ru": "Русский",
+        "ua": "Українська",
+        "en": "English",
+        "de": "Deutsch",
+        "es": "Español",
+        "fr": "Français",
+        "it": "Italiano",
+        "nl": "Nederlands",
+        "el": "Ελληνικά",
+        "pl": "Polski",
+        "ar": "العربية",
+        "tr": "Türkçe",
+        "ja": "日本語",
+        "zh": "中文",
+        "hi": "हिन्दी"
+    },
+    "flags": {
+        "ru": "🇷🇺",
+        "ua": "🇺🇦",
+        "en": "🇬🇧",
+        "de": "🇩🇪",
+        "es": "🇪🇸",
+        "fr": "🇫🇷",
+        "it": "🇮🇹",
+        "nl": "🇳🇱",
+        "el": "🇬🇷",
+        "pl": "🇵🇱",
+        "ar": "🇸🇦",
+        "tr": "🇹🇷",
+        "ja": "🇯🇵",
+        "zh": "🇨🇳",
+        "hi": "🇮🇳"
+    }
+}
