@@ -100,12 +100,32 @@ class LanguageManager {
 
     // Get flag emoji for language
     getFlag(langCode) {
-        return this.translations[this.currentLanguage]?.flags?.[langCode] || '🌐';
+        const flags = {
+            'ru': '🇷🇺',
+            'ua': '🇺🇦',
+            'en': '🇬🇧',
+            'de': '🇩🇪',
+            'es': '🇪🇸',
+            'ja': '🇯🇵',
+            'zh': '🇨🇳',
+            'hi': '🇮🇳'
+        };
+        return flags[langCode] || '🌐';
     }
 
     // Get language name in native language
     getLanguageName(langCode) {
-        return this.translations[this.currentLanguage]?.languages?.[langCode] || langCode;
+        const names = {
+            'ru': 'Русский',
+            'ua': 'Українська',
+            'en': 'English',
+            'de': 'Deutsch',
+            'es': 'Español',
+            'ja': '日本語',
+            'zh': '中文',
+            'hi': 'हिन्दी'
+        };
+        return names[langCode] || langCode;
     }
 
     // Change current language
@@ -169,12 +189,20 @@ class LanguageManager {
     // Update language selector UI
     updateLanguageSelector() {
         const selector = document.getElementById('languageSelector');
-        if (!selector) return;
+        console.log('updateLanguageSelector called, selector exists:', !!selector);
+        
+        if (!selector) {
+            console.warn('Language selector not found in DOM');
+            return;
+        }
 
         // Update current language display
         const currentFlag = document.getElementById('currentFlag');
         const currentName = document.getElementById('currentName');
+        const optionsList = document.getElementById('languageOptions');
         
+        console.log('currentFlag:', !!currentFlag, 'currentName:', !!currentName, 'optionsList:', !!optionsList);
+
         if (currentFlag) {
             currentFlag.textContent = this.getFlag(this.currentLanguage);
         }
@@ -183,30 +211,32 @@ class LanguageManager {
         }
 
         // Update language options
-        const optionsList = document.getElementById('languageOptions');
         if (optionsList) {
             optionsList.innerHTML = '';
-            
+            console.log('Populating language options, count:', this.supportedLanguages.length);
+
             this.supportedLanguages.forEach(langCode => {
                 const option = document.createElement('div');
                 option.className = 'language-option';
                 option.dataset.lang = langCode;
-                
+
                 if (langCode === this.currentLanguage) {
                     option.classList.add('active');
                 }
-                
+
                 option.innerHTML = `
                     <span class="lang-flag">${this.getFlag(langCode)}</span>
                     <span class="lang-name">${this.getLanguageName(langCode)}</span>
                 `;
-                
+
                 option.addEventListener('click', () => {
                     this.setLanguage(langCode);
                 });
-                
+
                 optionsList.appendChild(option);
             });
+            
+            console.log('Language options populated, child count:', optionsList.children.length);
         }
     }
 
@@ -222,3 +252,4 @@ class LanguageManager {
 
 // Create global instance
 const languageManager = new LanguageManager();
+console.log('LanguageManager created, global instance available');
