@@ -1,6 +1,8 @@
 /* ============================================
    LANGUAGE MANAGER - Localization System
    ============================================ */
+console.log('language-manager.js loaded');
+
 class LanguageManager {
     constructor() {
         this.currentLanguage = 'ru';
@@ -163,11 +165,13 @@ class LanguageManager {
 
     // Apply translations to all elements with data-i18n attribute
     applyTranslations() {
+        console.log('applyTranslations called');
+        
         // Translate elements with data-i18n attribute
         document.querySelectorAll('[data-i18n]').forEach(element => {
             const key = element.getAttribute('data-i18n');
             const translation = this.t(key);
-            
+
             if (element.tagName === 'INPUT' || element.tagName === 'TEXTAREA') {
                 if (element.getAttribute('placeholder')) {
                     element.placeholder = translation;
@@ -188,12 +192,21 @@ class LanguageManager {
 
     // Update language selector UI
     updateLanguageSelector() {
+        console.log('updateLanguageSelector called');
+        
         const selector = document.getElementById('languageSelector');
-        if (!selector) return;
+        console.log('selector element:', selector);
+        
+        if (!selector) {
+            console.warn('languageSelector not found in DOM');
+            return;
+        }
 
         // Update current language display
         const currentFlag = document.getElementById('currentFlag');
         const currentName = document.getElementById('currentName');
+        
+        console.log('currentFlag:', currentFlag, 'currentName:', currentName);
 
         if (currentFlag) {
             currentFlag.textContent = this.getFlag(this.currentLanguage);
@@ -206,6 +219,7 @@ class LanguageManager {
         const optionsList = document.getElementById('languageOptions');
         if (optionsList) {
             optionsList.innerHTML = '';
+            console.log('Creating language options...');
 
             this.supportedLanguages.forEach(langCode => {
                 const option = document.createElement('div');
@@ -227,6 +241,10 @@ class LanguageManager {
 
                 optionsList.appendChild(option);
             });
+            
+            console.log('Language options created:', optionsList.children.length);
+        } else {
+            console.warn('languageOptions element not found');
         }
     }
 
@@ -242,3 +260,4 @@ class LanguageManager {
 
 // Create global instance
 const languageManager = new LanguageManager();
+console.log('languageManager created:', languageManager);
