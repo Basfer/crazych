@@ -1477,7 +1477,7 @@
                 this.ammo--;
                 this.soundManager.playShoot();
 
-                // Проверка попадания в дерево (преграда)
+                // Check tree hit (obstacle)
                 let hitTree = false;
                 const ch = this.canvas.height;
                 const trees = [
