@@ -65,8 +65,8 @@
 
         <!-- Leaderboard (collapsible) -->
         <div id="menuHighscores" style="margin: 20px 0; padding: 15px; background: rgba(139, 69, 19, 0.5); border-radius: 10px; max-width: 500px; width: 90%;">
-            <h3 id="menuHighscoresHeader" style="color: #FFD700; margin: 0; text-align: center; cursor: pointer; user-select: none;" data-i18n="menu.leaderboard" title="Click to collapse/expand">
-                🏆 ТАБЛИЦА ЛИДЕРОВ <span id="menuHighscoresToggle" data-i18n="menu.leaderboardToggle">▼</span>
+            <h3 id="menuHighscoresHeader" style="color: #FFD700; margin: 0; text-align: center; cursor: pointer; user-select: none;" title="Click to collapse/expand">
+                <span data-i18n="menu.leaderboard">🏆 ТАБЛИЦА ЛИДЕРОВ</span> <span id="menuHighscoresToggle" data-i18n="menu.leaderboardToggle">▼</span>
             </h3>
             <div id="menuHighscoresContent" style="margin-top: 10px;">
                 <ol id="menuHighscoreListOl" style="color: #DEB887; padding-left: 20px;"></ol>
@@ -78,8 +78,8 @@
 
         <!-- Instructions (collapsible) -->
         <div class="instructions" style="max-width: 500px; width: 90%;">
-            <h3 id="instructionsHeader" style="color: #FFD700; margin: 0; text-align: center; cursor: pointer; user-select: none;" data-i18n="menu.instructions" title="Click to collapse/expand">
-                📜 ИНСТРУКЦИЯ <span id="instructionsToggle" data-i18n="menu.instructionsToggle">▼</span>
+            <h3 id="instructionsHeader" style="color: #FFD700; margin: 0; text-align: center; cursor: pointer; user-select: none;" title="Click to collapse/expand">
+                <span data-i18n="menu.instructions">📜 ИНСТРУКЦИЯ</span> <span id="instructionsToggle" data-i18n="menu.instructionsToggle">▼</span>
             </h3>
             <div id="instructionsContent">
                 <ul id="instructionList">
@@ -102,8 +102,8 @@
 
         <!-- Using the same leaderboard as in the menu -->
         <div id="gameOverHighscores" style="margin: 20px 0; padding: 15px; background: rgba(139, 69, 19, 0.5); border-radius: 10px; max-width: 500px; width: 90%;">
-            <h3 id="gameOverHighscoresHeader" style="color: #FFD700; margin: 0; text-align: center; cursor: pointer; user-select: none;" data-i18n="gameOver.leaderboard" title="Click to collapse/expand">
-                🏆 ТАБЛИЦА ЛИДЕРОВ <span id="gameOverHighscoresToggle" data-i18n="menu.leaderboardToggle">▼</span>
+            <h3 id="gameOverHighscoresHeader" style="color: #FFD700; margin: 0; text-align: center; cursor: pointer; user-select: none;" title="Click to collapse/expand">
+                <span data-i18n="gameOver.leaderboard">🏆 ТАБЛИЦА ЛИДЕРОВ</span> <span id="gameOverHighscoresToggle" data-i18n="menu.leaderboardToggle">▼</span>
             </h3>
             <div id="gameOverHighscoresContent" style="margin-top: 10px;">
                 <ol id="gameOverHighscoreListOl" style="color: #DEB887; padding-left: 20px;"></ol>
@@ -995,7 +995,6 @@
 
                 // Language Manager
                 this.languageManager = window.languageManager;
-                console.log(window.languageManager);
 
                 // Highscores
                 this.highscores = [];
@@ -1005,13 +1004,14 @@
                 // Initialization
                 this.resize();
 
-                // Language manager already initialized before GameManager creation
-                this.updateInstructions();
-                
                 // Set up language change listeners
                 this.initLanguage();
 
                 this.setupEventListeners();
+
+                // Language manager already initialized before GameManager creation
+                // Update instructions after translations are loaded
+                setTimeout(() => this.updateInstructions(), 0);
 
                 // IMMEDIATELY load records from Supabase and migrate local ones
                 // First load local for instant display
@@ -1177,7 +1177,7 @@
 
                 if (content && toggle) {
                     const isVisible = window.getComputedStyle(content).display !== 'none';
-                    
+
                     if (isVisible) {
                         content.style.display = 'none';
                         toggle.textContent = '▲';
@@ -1190,7 +1190,6 @@
 
             // Initialize language manager (already initialized, just set up listeners)
             initLanguage() {
-                console.log(this.languageManager);
                 if (this.languageManager) {
                     // Listen for language changes
                     window.addEventListener('languageChanged', () => {
@@ -1871,11 +1870,8 @@
         // GAME START
         // ============================================
         window.addEventListener('DOMContentLoaded', () => {
-            console.log('DOMContentLoaded fired, languageManager exists:', !!window.languageManager);
-            
             // Initialize language manager (non-blocking)
             if (window.languageManager) {
-                console.log('Calling languageManager.init()...');
                 window.languageManager.init().catch(err => {
                     console.warn('Language initialization failed:', err);
                 });

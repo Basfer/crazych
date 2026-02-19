@@ -1,8 +1,6 @@
 /* ============================================
    LANGUAGE MANAGER - Localization System
    ============================================ */
-console.log('language-manager.js loaded');
-
 class LanguageManager {
     constructor() {
         this.currentLanguage = 'ru';
@@ -52,7 +50,6 @@ class LanguageManager {
     // Load language file
     async loadLanguage(langCode) {
         if (!this.supportedLanguages.includes(langCode)) {
-            console.warn(`Language ${langCode} is not supported`);
             return false;
         }
 
@@ -65,13 +62,11 @@ class LanguageManager {
             if (!response.ok) {
                 throw new Error(`Failed to load language: ${langCode}`);
             }
-            
+
             this.translations[langCode] = await response.json();
             this.loadedLanguages.add(langCode);
-            console.log(`Language loaded: ${langCode}`);
             return true;
         } catch (error) {
-            console.error(`Error loading language ${langCode}:`, error);
             return false;
         }
     }
@@ -85,7 +80,6 @@ class LanguageManager {
             if (value && typeof value === 'object' && key in value) {
                 value = value[key];
             } else {
-                console.warn(`Translation not found: ${keyPath}`);
                 return keyPath;
             }
         }
@@ -155,18 +149,15 @@ class LanguageManager {
         
         // Apply translations to UI
         this.applyTranslations();
-        
+
         // Dispatch event for other components
         window.dispatchEvent(new CustomEvent('languageChanged', { detail: { language: langCode } }));
-        
-        console.log(`Language changed to: ${langCode}`);
+
         return true;
     }
 
     // Apply translations to all elements with data-i18n attribute
     applyTranslations() {
-        console.log('applyTranslations called');
-        
         // Translate elements with data-i18n attribute
         document.querySelectorAll('[data-i18n]').forEach(element => {
             const key = element.getAttribute('data-i18n');
@@ -192,21 +183,12 @@ class LanguageManager {
 
     // Update language selector UI
     updateLanguageSelector() {
-        console.log('updateLanguageSelector called');
-        
         const selector = document.getElementById('languageSelector');
-        console.log('selector element:', selector);
-        
-        if (!selector) {
-            console.warn('languageSelector not found in DOM');
-            return;
-        }
+        if (!selector) return;
 
         // Update current language display
         const currentFlag = document.getElementById('currentFlag');
         const currentName = document.getElementById('currentName');
-        
-        console.log('currentFlag:', currentFlag, 'currentName:', currentName);
 
         if (currentFlag) {
             currentFlag.textContent = this.getFlag(this.currentLanguage);
@@ -219,7 +201,6 @@ class LanguageManager {
         const optionsList = document.getElementById('languageOptions');
         if (optionsList) {
             optionsList.innerHTML = '';
-            console.log('Creating language options...');
 
             this.supportedLanguages.forEach(langCode => {
                 const option = document.createElement('div');
@@ -241,10 +222,6 @@ class LanguageManager {
 
                 optionsList.appendChild(option);
             });
-            
-            console.log('Language options created:', optionsList.children.length);
-        } else {
-            console.warn('languageOptions element not found');
         }
     }
 
@@ -261,4 +238,3 @@ class LanguageManager {
 // Create global instance
 const languageManager = new LanguageManager();
 window.languageManager = languageManager;
-console.log('languageManager created and assigned to window:', window.languageManager);
