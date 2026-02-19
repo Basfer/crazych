@@ -1875,10 +1875,12 @@
         // ============================================
         // GAME START
         // ============================================
-        window.addEventListener('DOMContentLoaded', async () => {
-            // Wait for languageManager to be available
+        window.addEventListener('DOMContentLoaded', () => {
+            // Initialize language manager (non-blocking)
             if (window.languageManager) {
-                await window.languageManager.init();
+                window.languageManager.init().catch(err => {
+                    console.warn('Language initialization failed:', err);
+                });
             }
             const game = new GameManager();
         });
