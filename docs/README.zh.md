@@ -4,10 +4,24 @@
 
 ## 🎮 如何游玩
 
-1. 在任何现代浏览器中打开 `index.html`
-2. 点击 **"开始游戏"**
-3. 用鼠标瞄准，左键射击
-4. 在 90 秒内获得最高分！
+1. 启动本地 HTTP 服务器（语言支持所需）:
+   ```bash
+   # Python 3
+   python -m http.server 8000
+   
+   # Python 2
+   python -m SimpleHTTPServer 8000
+   
+   # Node.js (npx)
+   npx http-server -p 8000
+   
+   # PHP
+   php -S localhost:8000
+   ```
+2. 在浏览器中打开 `http://localhost:8000`
+3. 点击 **"开始游戏"**
+4. 用鼠标瞄准，左键射击
+5. 在 90 秒内获得最高分！
 
 ## 🎯 目标类型
 
@@ -62,15 +76,15 @@ MIT
 ## 🌍 翻译
 
 - [English](../README.md)
-- [Русский](README.ru.md)
-- [Українська](README.ua.md)
 - [Deutsch](README.de.md)
 - [Español](README.es.md)
 - [Français](README.fr.md)
 - [Italiano](README.it.md)
 - [Nederlands](README.nl.md)
-- [Ελληνικά](README.el.md)
+- [Русский](README.ru.md)
+- [Українська](README.ua.md)
 - [Polski](README.pl.md)
+- [Ελληνικά](README.el.md)
 - [العربية](README.ar.md)
 - [Türkçe](README.tr.md)
 - [日本語](README.ja.md)

@@ -4,10 +4,24 @@ Browser-based "Duck Hunting" game built with HTML5 Canvas and Vanilla JavaScript
 
 ## 🎮 How to Play
 
-1. Open `index.html` in any modern browser
-2. Click **"START GAME"**
-3. Aim with the mouse and shoot with the left mouse button
-4. Score as many points as possible in 90 seconds!
+1. Start a local HTTP server (required for language support):
+   ```bash
+   # Python 3
+   python -m http.server 8000
+   
+   # Python 2
+   python -m SimpleHTTPServer 8000
+   
+   # Node.js (npx)
+   npx http-server -p 8000
+   
+   # PHP
+   php -S localhost:8000
+   ```
+2. Open `http://localhost:8000` in any modern browser
+3. Click **"START GAME"**
+4. Aim with the mouse and shoot with the left mouse button
+5. Score as many points as possible in 90 seconds!
 
 ## 🎯 Target Types
 
@@ -61,15 +75,15 @@ MIT
 
 ## 🌍 Translations
 
-- [Русский](docs/README.ru.md)
-- [Українська](docs/README.ua.md)
 - [Deutsch](docs/README.de.md)
 - [Español](docs/README.es.md)
 - [Français](docs/README.fr.md)
 - [Italiano](docs/README.it.md)
 - [Nederlands](docs/README.nl.md)
-- [Ελληνικά](docs/README.el.md)
+- [Русский](docs/README.ru.md)
+- [Українська](docs/README.ua.md)
 - [Polski](docs/README.pl.md)
+- [Ελληνικά](docs/README.el.md)
 - [العربية](docs/README.ar.md)
 - [Türkçe](docs/README.tr.md)
 - [日本語](docs/README.ja.md)

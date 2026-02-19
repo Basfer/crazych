@@ -4,10 +4,24 @@ Browser-basiertes "Entenjagd"-Spiel mit HTML5 Canvas und Vanilla JavaScript.
 
 ## 🎮 Spielanleitung
 
-1. Öffnen Sie `index.html` in einem modernen Browser
-2. Klicken Sie auf **"SPIEL STARTEN"**
-3. Zielen Sie mit der Maus und schießen Sie mit der linken Maustaste
-4. Sammeln Sie so viele Punkte wie möglich in 90 Sekunden!
+1. Starten Sie einen lokalen HTTP-Server (erforderlich für Sprachunterstützung):
+   ```bash
+   # Python 3
+   python -m http.server 8000
+   
+   # Python 2
+   python -m SimpleHTTPServer 8000
+   
+   # Node.js (npx)
+   npx http-server -p 8000
+   
+   # PHP
+   php -S localhost:8000
+   ```
+2. Öffnen Sie `http://localhost:8000` in einem modernen Browser
+3. Klicken Sie auf **"SPIEL STARTEN"**
+4. Zielen Sie mit der Maus und schießen Sie mit der linken Maustaste
+5. Sammeln Sie so viele Punkte wie möglich in 90 Sekunden!
 
 ## 🎯 Zieltypen
 
@@ -62,14 +76,14 @@ MIT
 ## 🌍 Übersetzungen
 
 - [English](../README.md)
-- [Русский](README.ru.md)
-- [Українська](README.ua.md)
 - [Español](README.es.md)
 - [Français](README.fr.md)
 - [Italiano](README.it.md)
 - [Nederlands](README.nl.md)
-- [Ελληνικά](README.el.md)
+- [Русский](README.ru.md)
+- [Українська](README.ua.md)
 - [Polski](README.pl.md)
+- [Ελληνικά](README.el.md)
 - [العربية](README.ar.md)
 - [Türkçe](README.tr.md)
 - [日本語](README.ja.md)

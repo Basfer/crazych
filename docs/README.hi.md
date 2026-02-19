@@ -4,10 +4,24 @@ HTML5 Canvas और Vanilla JavaScript के साथ बनाया गय�
 
 ## 🎮 कैसे खेलें
 
-1. किसी भी आधुनिक ब्राउज़र में `index.html` खोलें
-2. **"खेल शुरू करें"** पर क्लिक करें
-3. माउस से निशाना लगाएं और बाएं बटन से गोली चलाएं
-4. 90 सेकंड में अधिकतम अंक प्राप्त करें!
+1. स्थानीय HTTP सर्वर शुरू करें (भाषा समर्थन के लिए आवश्यक):
+   ```bash
+   # Python 3
+   python -m http.server 8000
+   
+   # Python 2
+   python -m SimpleHTTPServer 8000
+   
+   # Node.js (npx)
+   npx http-server -p 8000
+   
+   # PHP
+   php -S localhost:8000
+   ```
+2. `http://localhost:8000` को किसी भी आधुनिक ब्राउज़र में खोलें
+3. **"खेल शुरू करें"** पर क्लिक करें
+4. माउस से निशाना लगाएं और बाएं बटन से गोली चलाएं
+5. 90 सेकंड में अधिकतम अंक प्राप्त करें!
 
 ## 🎯 लक्ष्य के प्रकार
 
@@ -62,15 +76,15 @@ MIT
 ## 🌍 अनुवाद
 
 - [English](../README.md)
-- [Русский](README.ru.md)
-- [Українська](README.ua.md)
 - [Deutsch](README.de.md)
 - [Español](README.es.md)
 - [Français](README.fr.md)
 - [Italiano](README.it.md)
 - [Nederlands](README.nl.md)
-- [Ελληνικά](README.el.md)
+- [Русский](README.ru.md)
+- [Українська](README.ua.md)
 - [Polski](README.pl.md)
+- [Ελληνικά](README.el.md)
 - [العربية](README.ar.md)
 - [Türkçe](README.tr.md)
 - [日本語](README.ja.md)

@@ -4,10 +4,24 @@
 
 ## 🎮 كيفية اللعب
 
-1. افتح `index.html` في أي متصفح حديث
-2. انقر على **"ابدأ اللعبة"**
-3. صوب بالماوس وأطلق النار بالزر الأيسر
-4. سجل أكبر عدد من النقاط في 90 ثانية!
+1. قم بتشغيل خادم HTTP محلي (مطلوب لدعم اللغات):
+   ```bash
+   # Python 3
+   python -m http.server 8000
+   
+   # Python 2
+   python -m SimpleHTTPServer 8000
+   
+   # Node.js (npx)
+   npx http-server -p 8000
+   
+   # PHP
+   php -S localhost:8000
+   ```
+2. افتح `http://localhost:8000` في أي متصفح حديث
+3. انقر على **"ابدأ اللعبة"**
+4. صوب بالماوس وأطلق النار بالزر الأيسر
+5. سجل أكبر عدد من النقاط في 90 ثانية!
 
 ## 🎯 أنواع الأهداف
 
@@ -62,15 +76,15 @@ MIT
 ## 🌍 الترجمات
 
 - [English](../README.md)
-- [Русский](README.ru.md)
-- [Українська](README.ua.md)
 - [Deutsch](README.de.md)
 - [Español](README.es.md)
 - [Français](README.fr.md)
 - [Italiano](README.it.md)
 - [Nederlands](README.nl.md)
-- [Ελληνικά](README.el.md)
+- [Русский](README.ru.md)
+- [Українська](README.ua.md)
 - [Polski](README.pl.md)
+- [Ελληνικά](README.el.md)
 - [Türkçe](README.tr.md)
 - [日本語](README.ja.md)
 - [中文](README.zh.md)

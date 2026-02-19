@@ -4,10 +4,24 @@
 
 ## 🎮 Πώς να παίξετε
 
-1. Ανοίξτε το `index.html` σε οποιοδήποτε σύγχρονο πρόγραμμα περιήγησης
-2. Κάντε κλικ στο **"ΕΝΑΡΞΗ"**
-3. Στοχεύστε με το ποντίκι και πυροβολήστε με το αριστερό κλικ
-4. Συγκεντρώστε τους περισσότερους πόντους σε 90 δευτερόλεπτα!
+1. Εκκινήστε έναν τοπικό διακομιστή HTTP (απαιτείται για υποστήριξη γλωσσών):
+   ```bash
+   # Python 3
+   python -m http.server 8000
+   
+   # Python 2
+   python -m SimpleHTTPServer 8000
+   
+   # Node.js (npx)
+   npx http-server -p 8000
+   
+   # PHP
+   php -S localhost:8000
+   ```
+2. Ανοίξτε το `http://localhost:8000` σε οποιοδήποτε σύγχρονο πρόγραμμα περιήγησης
+3. Κάντε κλικ στο **"ΕΝΑΡΞΗ"**
+4. Στοχεύστε με το ποντίκι και πυροβολήστε με το αριστερό κλικ
+5. Συγκεντρώστε τους περισσότερους πόντους σε 90 δευτερόλεπτα!
 
 ## 🎯 Τύποι στόχων
 
@@ -61,14 +75,14 @@ MIT
 
 ## 🌍 Μεταφράσεις
 
-- [English](../README.md)
-- [Русский](README.ru.md)
 - [Українська](README.ua.md)
 - [Deutsch](README.de.md)
 - [Español](README.es.md)
 - [Français](README.fr.md)
 - [Italiano](README.it.md)
 - [Nederlands](README.nl.md)
+- [English](../README.md)
+- [Русский](README.ru.md)
 - [Polski](README.pl.md)
 - [العربية](README.ar.md)
 - [Türkçe](README.tr.md)

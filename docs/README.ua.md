@@ -4,10 +4,24 @@
 
 ## 🎮 Як грати
 
-1. Відкрийте `index.html` у будь-якому сучасному браузері
-2. Натисніть **"ПОЧАТИ ГРУ"**
-3. Прицілюйтеся мишею та стріляйте лівою кнопкою миші
-4. Наберіть максимум очок за 90 секунд!
+1. Запустіть локальний HTTP-сервер (потрібно для підтримки мов):
+   ```bash
+   # Python 3
+   python -m http.server 8000
+   
+   # Python 2
+   python -m SimpleHTTPServer 8000
+   
+   # Node.js (npx)
+   npx http-server -p 8000
+   
+   # PHP
+   php -S localhost:8000
+   ```
+2. Відкрийте `http://localhost:8000` у будь-якому сучасному браузері
+3. Натисніть **"ПОЧАТИ ГРУ"**
+4. Прицілюйтеся мишею та стріляйте лівою кнопкою миші
+5. Наберіть максимум очок за 90 секунд!
 
 ## 🎯 Типи цілей
 
@@ -62,14 +76,14 @@ MIT
 ## 🌍 Переклади
 
 - [English](../README.md)
-- [Русский](README.ru.md)
 - [Deutsch](README.de.md)
 - [Español](README.es.md)
 - [Français](README.fr.md)
 - [Italiano](README.it.md)
 - [Nederlands](README.nl.md)
-- [Ελληνικά](README.el.md)
+- [Русский](README.ru.md)
 - [Polski](README.pl.md)
+- [Ελληνικά](README.el.md)
 - [العربية](README.ar.md)
 - [Türkçe](README.tr.md)
 - [日本語](README.ja.md)

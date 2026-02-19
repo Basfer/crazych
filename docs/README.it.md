@@ -4,10 +4,24 @@ Gioco di "Caccia alle anatre" nel browser con HTML5 Canvas e Vanilla JavaScript.
 
 ## 🎮 Come giocare
 
-1. Apri `index.html` in un browser moderno
-2. Clicca su **"INIZIA PARTITA"**
-3. Mira con il mouse e spara con il pulsante sinistro
-4. Fai il punteggio massimo in 90 secondi!
+1. Avvia un server HTTP locale (richiesto per il supporto delle lingue):
+   ```bash
+   # Python 3
+   python -m http.server 8000
+   
+   # Python 2
+   python -m SimpleHTTPServer 8000
+   
+   # Node.js (npx)
+   npx http-server -p 8000
+   
+   # PHP
+   php -S localhost:8000
+   ```
+2. Apri `http://localhost:8000` in un browser moderno
+3. Clicca su **"INIZIA PARTITA"**
+4. Mira con il mouse e spara con il pulsante sinistro
+5. Fai il punteggio massimo in 90 secondi!
 
 ## 🎯 Tipi di bersagli
 
@@ -62,14 +76,14 @@ MIT
 ## 🌍 Traduzioni
 
 - [English](../README.md)
-- [Русский](README.ru.md)
-- [Українська](README.ua.md)
 - [Deutsch](README.de.md)
 - [Español](README.es.md)
 - [Français](README.fr.md)
 - [Nederlands](README.nl.md)
-- [Ελληνικά](README.el.md)
+- [Русский](README.ru.md)
+- [Українська](README.ua.md)
 - [Polski](README.pl.md)
+- [Ελληνικά](README.el.md)
 - [العربية](README.ar.md)
 - [Türkçe](README.tr.md)
 - [日本語](README.ja.md)

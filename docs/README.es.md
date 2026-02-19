@@ -4,10 +4,24 @@ Juego de "Caza de Patos" en navegador con HTML5 Canvas y Vanilla JavaScript.
 
 ## 🎮 Cómo jugar
 
-1. Abre `index.html` en cualquier navegador moderno
-2. Haz clic en **"INICIAR JUEGO"**
-3. Apunta con el ratón y dispara con el botón izquierdo
-4. ¡Consigue la máxima puntuación en 90 segundos!
+1. Inicia un servidor HTTP local (requerido para soporte de idiomas):
+   ```bash
+   # Python 3
+   python -m http.server 8000
+   
+   # Python 2
+   python -m SimpleHTTPServer 8000
+   
+   # Node.js (npx)
+   npx http-server -p 8000
+   
+   # PHP
+   php -S localhost:8000
+   ```
+2. Abre `http://localhost:8000` en cualquier navegador moderno
+3. Haz clic en **"INICIAR JUEGO"**
+4. Apunta con el ratón y dispara con el botón izquierdo
+5. ¡Consigue la máxima puntuación en 90 segundos!
 
 ## 🎯 Tipos de objetivos
 
@@ -62,14 +76,14 @@ MIT
 ## 🌍 Traducciones
 
 - [English](../README.md)
-- [Русский](README.ru.md)
-- [Українська](README.ua.md)
 - [Deutsch](README.de.md)
 - [Français](README.fr.md)
 - [Italiano](README.it.md)
 - [Nederlands](README.nl.md)
-- [Ελληνικά](README.el.md)
+- [Русский](README.ru.md)
+- [Українська](README.ua.md)
 - [Polski](README.pl.md)
+- [Ελληνικά](README.el.md)
 - [العربية](README.ar.md)
 - [Türkçe](README.tr.md)
 - [日本語](README.ja.md)

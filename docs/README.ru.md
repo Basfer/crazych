@@ -4,10 +4,24 @@
 
 ## 🎮 Как играть
 
-1. Откройте `index.html` в любом современном браузере
-2. Нажмите **"НАЧАТЬ ИГРУ"**
-3. Прицеливайтесь мышью и стреляйте левой кнопкой мыши
-4. Наберите максимум очков за 90 секунд!
+1. Запустите локальный HTTP-сервер (требуется для поддержки языков):
+   ```bash
+   # Python 3
+   python -m http.server 8000
+   
+   # Python 2
+   python -m SimpleHTTPServer 8000
+   
+   # Node.js (npx)
+   npx http-server -p 8000
+   
+   # PHP
+   php -S localhost:8000
+   ```
+2. Откройте `http://localhost:8000` в любом современном браузере
+3. Нажмите **"НАЧАТЬ ИГРУ"**
+4. Прицеливайтесь мышью и стреляйте левой кнопкой мыши
+5. Наберите максимум очков за 90 секунд!
 
 ## 🎯 Типы целей
 
@@ -62,14 +76,14 @@ MIT
 ## 🌍 Переводы
 
 - [English](../README.md)
-- [Українська](README.ua.md)
 - [Deutsch](README.de.md)
 - [Español](README.es.md)
 - [Français](README.fr.md)
 - [Italiano](README.it.md)
 - [Nederlands](README.nl.md)
-- [Ελληνικά](README.el.md)
+- [Українська](README.ua.md)
 - [Polski](README.pl.md)
+- [Ελληνικά](README.el.md)
 - [العربية](README.ar.md)
 - [Türkçe](README.tr.md)
 - [日本語](README.ja.md)

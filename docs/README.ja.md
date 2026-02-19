@@ -4,10 +4,24 @@ HTML5 Canvas と Vanilla JavaScript を使用したブラウザベースの「�
 
 ## 🎮 遊び方
 
-1. 最新のブラウザで `index.html` を開きます
-2. **「ゲームスタート」**をクリック
-3. マウスで照準を合わせ、左クリックで発射
-4. 90 秒で最大得点を獲得！
+1. ローカル HTTP サーバーを起動します（言語サポートに必要）:
+   ```bash
+   # Python 3
+   python -m http.server 8000
+   
+   # Python 2
+   python -m SimpleHTTPServer 8000
+   
+   # Node.js (npx)
+   npx http-server -p 8000
+   
+   # PHP
+   php -S localhost:8000
+   ```
+2. `http://localhost:8000` を最新のブラウザで開きます
+3. **「ゲームスタート」**をクリック
+4. マウスで照準を合わせ、左クリックで発射
+5. 90 秒で最大得点を獲得！
 
 ## 🎯 標的の種類
 
@@ -62,15 +76,15 @@ MIT
 ## 🌍 翻訳
 
 - [English](../README.md)
-- [Русский](README.ru.md)
-- [Українська](README.ua.md)
 - [Deutsch](README.de.md)
 - [Español](README.es.md)
 - [Français](README.fr.md)
 - [Italiano](README.it.md)
 - [Nederlands](README.nl.md)
-- [Ελληνικά](README.el.md)
+- [Русский](README.ru.md)
+- [Українська](README.ua.md)
 - [Polski](README.pl.md)
+- [Ελληνικά](README.el.md)
 - [العربية](README.ar.md)
 - [Türkçe](README.tr.md)
 - [中文](README.zh.md)

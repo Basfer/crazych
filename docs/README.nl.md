@@ -4,10 +4,24 @@ Browsergebaseerd "Eendenjacht"-spel met HTML5 Canvas en Vanilla JavaScript.
 
 ## 🎮 Hoe te spelen
 
-1. Open `index.html` in een moderne browser
-2. Klik op **"START SPEL"**
-3. Richt met de muis en schiet met de linkermuisknop
-4. Scoor zoveel mogelijk punten in 90 seconden!
+1. Start een lokale HTTP-server (vereist voor taalondersteuning):
+   ```bash
+   # Python 3
+   python -m http.server 8000
+   
+   # Python 2
+   python -m SimpleHTTPServer 8000
+   
+   # Node.js (npx)
+   npx http-server -p 8000
+   
+   # PHP
+   php -S localhost:8000
+   ```
+2. Open `http://localhost:8000` in een moderne browser
+3. Klik op **"START SPEL"**
+4. Richt met de muis en schiet met de linkermuisknop
+5. Scoor zoveel mogelijk punten in 90 seconden!
 
 ## 🎯 Doeltypen
 
@@ -62,14 +76,14 @@ MIT
 ## 🌍 Vertalingen
 
 - [English](../README.md)
-- [Русский](README.ru.md)
-- [Українська](README.ua.md)
 - [Deutsch](README.de.md)
 - [Español](README.es.md)
 - [Français](README.fr.md)
 - [Italiano](README.it.md)
-- [Ελληνικά](README.el.md)
+- [Русский](README.ru.md)
+- [Українська](README.ua.md)
 - [Polski](README.pl.md)
+- [Ελληνικά](README.el.md)
 - [العربية](README.ar.md)
 - [Türkçe](README.tr.md)
 - [日本語](README.ja.md)

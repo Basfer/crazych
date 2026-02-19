@@ -4,10 +4,24 @@ HTML5 Canvas ve Vanilla JavaScript ile tarayıcı tabanlı "Ördek Avı" oyunu.
 
 ## 🎮 Nasıl oynanır
 
-1. `index.html` dosyasını modern bir tarayıcıda açın
-2. **"OYUNU BAŞLAT"** düğmesine tıklayın
-3. Fare ile nişan alın ve sol tıkla ateş edin
-4. 90 saniyede maksimum puanı toplayın!
+1. Yerel bir HTTP sunucusu başlatın (dil desteği için gerekli):
+   ```bash
+   # Python 3
+   python -m http.server 8000
+   
+   # Python 2
+   python -m SimpleHTTPServer 8000
+   
+   # Node.js (npx)
+   npx http-server -p 8000
+   
+   # PHP
+   php -S localhost:8000
+   ```
+2. `http://localhost:8000` adresini modern bir tarayıcıda açın
+3. **"OYUNU BAŞLAT"** düğmesine tıklayın
+4. Fare ile nişan alın ve sol tıkla ateş edin
+5. 90 saniyede maksimum puanı toplayın!
 
 ## 🎯 Hedef türleri
 
@@ -62,15 +76,15 @@ MIT
 ## 🌍 Çeviriler
 
 - [English](../README.md)
-- [Русский](README.ru.md)
-- [Українська](README.ua.md)
 - [Deutsch](README.de.md)
 - [Español](README.es.md)
 - [Français](README.fr.md)
 - [Italiano](README.it.md)
 - [Nederlands](README.nl.md)
-- [Ελληνικά](README.el.md)
+- [Русский](README.ru.md)
+- [Українська](README.ua.md)
 - [Polski](README.pl.md)
+- [Ελληνικά](README.el.md)
 - [العربية](README.ar.md)
 - [日本語](README.ja.md)
 - [中文](README.zh.md)

@@ -4,10 +4,24 @@ Przeglądarkowa gra "Polowanie na kaczki" zbudowana z HTML5 Canvas i Vanilla Jav
 
 ## 🎮 Jak grać
 
-1. Otwórz `index.html` w dowolnej nowoczesnej przeglądarce
-2. Kliknij **"ROZPOCZNIJ"**
-3. Celuj myszką i strzelaj lewym przyciskiem
-4. Zdobądź jak najwięcej punktów w 90 sekund!
+1. Uruchom lokalny serwer HTTP (wymagane dla obsługi języków):
+   ```bash
+   # Python 3
+   python -m http.server 8000
+   
+   # Python 2
+   python -m SimpleHTTPServer 8000
+   
+   # Node.js (npx)
+   npx http-server -p 8000
+   
+   # PHP
+   php -S localhost:8000
+   ```
+2. Otwórz `http://localhost:8000` w dowolnej nowoczesnej przeglądarce
+3. Kliknij **"ROZPOCZNIJ"**
+4. Celuj myszką i strzelaj lewym przyciskiem
+5. Zdobądź jak najwięcej punktów w 90 sekund!
 
 ## 🎯 Typy celów
 
@@ -62,13 +76,13 @@ MIT
 ## 🌍 Tłumaczenia
 
 - [English](../README.md)
-- [Русский](README.ru.md)
-- [Українська](README.ua.md)
 - [Deutsch](README.de.md)
 - [Español](README.es.md)
 - [Français](README.fr.md)
 - [Italiano](README.it.md)
 - [Nederlands](README.nl.md)
+- [Русский](README.ru.md)
+- [Українська](README.ua.md)
 - [Ελληνικά](README.el.md)
 - [العربية](README.ar.md)
 - [Türkçe](README.tr.md)
