@@ -3,8 +3,8 @@
    ============================================ */
 class LanguageManager {
     constructor() {
-        this.currentLanguage = 'ru';
-        this.supportedLanguages = ['ru', 'ua', 'en', 'de', 'es', 'fr', 'it', 'nl', 'el', 'pl', 'ar', 'tr', 'ja', 'zh', 'hi'];
+        this.currentLanguage = 'en';
+        this.supportedLanguages = ['en', 'de', 'es', 'fr', 'it', 'nl', 'ru', 'ua', 'pl', 'el', 'ar', 'tr', 'ja', 'zh', 'hi'];
         this.translations = {};
         this.loadedLanguages = new Set();
         this.STORAGE_KEY = 'crazyDuckLanguage';
@@ -97,14 +97,14 @@ class LanguageManager {
     // Get flag emoji for language
     getFlag(langCode) {
         const flags = {
-            'ru': '🇷🇺',
-            'ua': '🇺🇦',
             'en': '🇬🇧',
             'de': '🇩🇪',
             'es': '🇪🇸',
             'fr': '🇫🇷',
             'it': '🇮🇹',
             'nl': '🇳🇱',
+            'ru': '🇷🇺',
+            'ua': '🇺🇦',
             'el': '🇬🇷',
             'pl': '🇵🇱',
             'ar': '🇸🇦',
@@ -119,14 +119,14 @@ class LanguageManager {
     // Get language name in native language
     getLanguageName(langCode) {
         const names = {
-            'ru': 'Русский',
-            'ua': 'Українська',
             'en': 'English',
             'de': 'Deutsch',
             'es': 'Español',
             'fr': 'Français',
             'it': 'Italiano',
             'nl': 'Nederlands',
+            'ru': 'Русский',
+            'ua': 'Українська',
             'el': 'Ελληνικά',
             'pl': 'Polski',
             'ar': 'العربية',
