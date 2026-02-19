@@ -1,0 +1,74 @@
+{
+    "title": "Crazy Duck - MoorDuck Clone",
+    "game": {
+        "score": "PUAN",
+        "ammo": "MERMİ",
+        "time": "SÜRE",
+        "ducks": "ÖRDEKLER",
+        "network": "AĞ"
+    },
+    "menu": {
+        "title": "🐥 CRAZY DUCK 🐥",
+        "subtitle": "Ördek Avı",
+        "startBtn": "OYUNU BAŞLAT",
+        "leaderboard": "🏆 LİDER TABLOSU",
+        "leaderboardToggle": "▼",
+        "instructions": "📜 TALİMATLAR",
+        "instructionsToggle": "▼",
+        "instructionItems": [
+            "🎯 <strong>Fare</strong> - nişan al",
+            "🔫 <strong>Sol tık</strong> - ateş et",
+            "🐥 <strong>Normal ördek</strong> - 10 puan",
+            "⚡ <strong>Hızlı ördek</strong> - 20 puan",
+            "🪂 <strong>Paraşütlü ördek</strong> - 30 puan",
+            "🛸 <strong>UFO</strong> - 50 puan"
+        ]
+    },
+    "gameOver": {
+        "title": "OYUN BİTTİ",
+        "finalScore": "Puan: {score}",
+        "enterName": "Adınızı girin:",
+        "saveBtn": "KAYDET",
+        "leaderboard": "🏆 LİDER TABLOSU",
+        "playAgainBtn": "TEKRAR OYNA"
+    },
+    "messages": {
+        "confirmClearScores": "🗑️ Yerel puanları silmek istediğinizden emin misiniz?\n\nTüm sonuçlar zaten Supabase'e kaydedildi ve bir sonraki başlangıçta yüklenecek.",
+        "scoresCleared": "✅ Yerel puanlar silindi!\n\nGüncel sonuçlar Supabase'den yüklendi.",
+        "warningNoConnection": "⚠️ Önce sonuçları buluta kaydedin!\n\nŞu anda çevrimdışı moddasınız. Küresel lider tablosuna kaydetmek için internete bağlanın."
+    },
+    "languages": {
+        "ru": "Русский",
+        "ua": "Українська",
+        "en": "English",
+        "de": "Deutsch",
+        "es": "Español",
+        "fr": "Français",
+        "it": "Italiano",
+        "nl": "Nederlands",
+        "el": "Ελληνικά",
+        "pl": "Polski",
+        "ar": "العربية",
+        "tr": "Türkçe",
+        "ja": "日本語",
+        "zh": "中文",
+        "hi": "हिन्दी"
+    },
+    "flags": {
+        "ru": "🇷🇺",
+        "ua": "🇺🇦",
+        "en": "🇬🇧",
+        "de": "🇩🇪",
+        "es": "🇪🇸",
+        "fr": "🇫🇷",
+        "it": "🇮🇹",
+        "nl": "🇳🇱",
+        "el": "🇬🇷",
+        "pl": "🇵🇱",
+        "ar": "🇸🇦",
+        "tr": "🇹🇷",
+        "ja": "🇯🇵",
+        "zh": "🇨🇳",
+        "hi": "🇮🇳"
+    }
+}

@@ -4,7 +4,7 @@
 class LanguageManager {
     constructor() {
         this.currentLanguage = 'ru';
-        this.supportedLanguages = ['ru', 'ua', 'en', 'de', 'es', 'ja', 'zh', 'hi'];
+        this.supportedLanguages = ['ru', 'ua', 'en', 'de', 'es', 'fr', 'it', 'nl', 'el', 'pl', 'ar', 'tr', 'ja', 'zh', 'hi'];
         this.translations = {};
         this.loadedLanguages = new Set();
         this.STORAGE_KEY = 'crazyDuckLanguage';
@@ -102,6 +102,13 @@ class LanguageManager {
             'en': '🇬🇧',
             'de': '🇩🇪',
             'es': '🇪🇸',
+            'fr': '🇫🇷',
+            'it': '🇮🇹',
+            'nl': '🇳🇱',
+            'el': '🇬🇷',
+            'pl': '🇵🇱',
+            'ar': '🇸🇦',
+            'tr': '🇹🇷',
             'ja': '🇯🇵',
             'zh': '🇨🇳',
             'hi': '🇮🇳'
@@ -117,6 +124,13 @@ class LanguageManager {
             'en': 'English',
             'de': 'Deutsch',
             'es': 'Español',
+            'fr': 'Français',
+            'it': 'Italiano',
+            'nl': 'Nederlands',
+            'el': 'Ελληνικά',
+            'pl': 'Polski',
+            'ar': 'العربية',
+            'tr': 'Türkçe',
             'ja': '日本語',
             'zh': '中文',
             'hi': 'हिन्दी'

@@ -1,0 +1,74 @@
+{
+    "title": "Crazy Duck - MoorDuck Clone",
+    "game": {
+        "score": "SCORE",
+        "ammo": "MUNITIONS",
+        "time": "TEMPS",
+        "ducks": "CANARDS",
+        "network": "RÉSEAU"
+    },
+    "menu": {
+        "title": "🐥 CRAZY DUCK 🐥",
+        "subtitle": "Chasse aux canards",
+        "startBtn": "COMMENCER",
+        "leaderboard": "🏆 CLASSEMENT",
+        "leaderboardToggle": "▼",
+        "instructions": "📜 INSTRUCTIONS",
+        "instructionsToggle": "▼",
+        "instructionItems": [
+            "🎯 <strong>Souris</strong> - viser",
+            "🔫 <strong>Clic gauche</strong> - tirer",
+            "🐥 <strong>Canard normal</strong> - 10 points",
+            "⚡ <strong>Canard rapide</strong> - 20 points",
+            "🪂 <strong>Canard en parachute</strong> - 30 points",
+            "🛸 <strong>OVNI</strong> - 50 points"
+        ]
+    },
+    "gameOver": {
+        "title": "PARTIE TERMINÉE",
+        "finalScore": "Score: {score}",
+        "enterName": "Entrez votre nom:",
+        "saveBtn": "SAUVEGARDER",
+        "leaderboard": "🏆 CLASSEMENT",
+        "playAgainBtn": "REJOUER"
+    },
+    "messages": {
+        "confirmClearScores": "🗑️ Êtes-vous sûr de vouloir effacer les scores locaux?\n\nTous les résultats sont déjà sauvegardés dans Supabase et seront chargés au prochain démarrage.",
+        "scoresCleared": "✅ Scores locaux effacés!\n\nRésultats actuels chargés depuis Supabase.",
+        "warningNoConnection": "⚠️ Sauvegardez d'abord les résultats dans le cloud!\n\nVous êtes actuellement en mode hors ligne. Connectez-vous à Internet pour sauvegarder dans le classement mondial."
+    },
+    "languages": {
+        "ru": "Русский",
+        "ua": "Українська",
+        "en": "English",
+        "de": "Deutsch",
+        "es": "Español",
+        "fr": "Français",
+        "it": "Italiano",
+        "nl": "Nederlands",
+        "el": "Ελληνικά",
+        "pl": "Polski",
+        "ar": "العربية",
+        "tr": "Türkçe",
+        "ja": "日本語",
+        "zh": "中文",
+        "hi": "हिन्दी"
+    },
+    "flags": {
+        "ru": "🇷🇺",
+        "ua": "🇺🇦",
+        "en": "🇬🇧",
+        "de": "🇩🇪",
+        "es": "🇪🇸",
+        "fr": "🇫🇷",
+        "it": "🇮🇹",
+        "nl": "🇳🇱",
+        "el": "🇬🇷",
+        "pl": "🇵🇱",
+        "ar": "🇸🇦",
+        "tr": "🇹🇷",
+        "ja": "🇯🇵",
+        "zh": "🇨🇳",
+        "hi": "🇮🇳"
+    }
+}
