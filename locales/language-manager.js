@@ -12,15 +12,23 @@ class LanguageManager {
 
     // Initialize language manager
     async init() {
+        console.log('LanguageManager.init() started');
+        
         // Load saved language or detect default
-        this.currentLanguage = this.getSavedLanguage() || this.detectDefaultLanguage();
+        const savedLang = this.getSavedLanguage();
+        const detectedLang = this.detectDefaultLanguage();
+        this.currentLanguage = savedLang || detectedLang;
         
+        console.log('LanguageManager: saved=', savedLang, 'detected=', detectedLang, 'using=', this.currentLanguage);
+
         // Load current language translations
-        await this.loadLanguage(this.currentLanguage);
-        
+        const loaded = await this.loadLanguage(this.currentLanguage);
+        console.log('LanguageManager: language loaded=', loaded);
+
         // Apply translations to UI
         this.applyTranslations();
-        
+        console.log('LanguageManager: translations applied');
+
         console.log(`LanguageManager initialized with: ${this.currentLanguage}`);
     }
 

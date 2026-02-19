@@ -1005,10 +1005,12 @@
 
                 // Initialization
                 this.resize();
-                
-                // Initialize language manager first
-                this.initLanguage();
-                
+
+                // Initialize language manager first (await to ensure translations are loaded)
+                this.initLanguage().then(() => {
+                    // Language initialized, translations applied
+                });
+
                 this.setupEventListeners();
 
                 // IMMEDIATELY load records from Supabase and migrate local ones
