@@ -997,7 +997,6 @@
 
                 // Language Manager
                 this.languageManager = window.languageManager;
-                console.log('GameManager constructor: languageManager =', this.languageManager, 'window.languageManager =', window.languageManager);
 
                 // Highscores
                 this.highscores = [];
@@ -1196,12 +1195,10 @@
 
             // Initialize language manager
             async initLanguage() {
-                console.log('initLanguage called, languageManager exists:', !!this.languageManager);
-                
                 if (this.languageManager) {
                     await this.languageManager.init();
                     this.updateInstructions();
-
+                    
                     // Listen for language changes
                     window.addEventListener('languageChanged', () => {
                         this.updateInstructions();
@@ -1210,8 +1207,6 @@
                             this.finalScoreEl.textContent = this.languageManager.t('gameOver.finalScore', { score: this.score });
                         }
                     });
-                } else {
-                    console.error('languageManager is not available!');
                 }
             }
 
