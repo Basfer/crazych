@@ -1,9 +1,9 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Crazy Chicken - Moorhuhn Clone</title>
+    <title>Crazy Duck - MoorDuck Clone</title>
     <style>
         /* ============================================
            CSS - Стили игры
@@ -257,7 +257,7 @@
                 <div class="stat-value" id="timeValue">90</div>
             </div>
             <div class="stat-box" style="min-width: 120px;">
-                <div class="stat-label">КУРИЦЫ</div>
+                <div class="stat-label">УТКИ</div>
                 <div class="stat-value" style="font-size: 18px;">
                     <span id="spawnedValue">0</span> / <span id="hitValue">0</span>
                 </div>
@@ -271,8 +271,8 @@
 
     <!-- Главное меню -->
     <div id="menu">
-        <h1 class="menu-title">🐔 CRAZY CHICKEN 🐔</h1>
-        <p class="menu-subtitle">Охота на куропаток</p>
+        <h1 class="menu-title">🐥 CRAZY DUCK 🐥</h1>
+        <p class="menu-subtitle">Охота на уток</p>
         <button class="menu-btn" id="startBtn">НАЧАТЬ ИГРУ</button>
 
         <!-- Таблица лидеров (схлопывающаяся) -->
@@ -297,9 +297,9 @@
                 <ul>
                     <li>🎯 <strong>Мышь</strong> - прицеливание</li>
                     <li>🔫 <strong>ЛКМ</strong> - выстрел</li>
-                    <li>🐔 <strong>Обычная курица</strong> - 10 очков</li>
-                    <li>⚡ <strong>Быстрая курица</strong> - 20 очков</li>
-                    <li>🪂 <strong>Курица с парашютом</strong> - 30 очков</li>
+                    <li>🐥 <strong>Обычная утка</strong> - 10 очков</li>
+                    <li>⚡ <strong>Быстрая утка</strong> - 20 очков</li>
+                    <li>🪂 <strong>Утка с парашютом</strong> - 30 очков</li>
                     <li>🛸 <strong>НЛО</strong> - 50 очков</li>
                 </ul>
             </div>
@@ -392,13 +392,13 @@
                 noise.start();
             }
 
-            // Звук попадания (крик курицы)
+            // Звук попадания (крик утки)
             playHit() {
                 if (!this.initialized) return;
 
                 const ctx = this.audioContext;
 
-                // Создаем "крик курицы" с помощью частотной модуляции
+                // Создаем "крик утки" с помощью частотной модуляции
                 // Куриный крик имеет характерные быстрые изменения частоты
 
                 const oscillator = ctx.createOscillator();
@@ -505,7 +505,7 @@
                 });
             }
 
-            // Звук спавна курицы
+            // Звук спавна утки
             playSpawn() {
                 if (!this.initialized) return;
                 
@@ -567,18 +567,18 @@
         }
 
         /* ============================================
-           CHICKEN - Класс курицы
+           CHICKEN - Класс утки
            ============================================ */
         class Chicken {
             constructor(canvasWidth, canvasHeight) {
                 this.canvasWidth = canvasWidth;
                 this.canvasHeight = canvasHeight;
                 
-                // Типы куриц
+                // Типы уток
                 const types = [
-                    { name: 'normal', points: 10, speed: 2, color: '#8B4513', probability: 0.5 },
-                    { name: 'fast', points: 20, speed: 4, color: '#DC143C', probability: 0.25 },
-                    { name: 'falling', points: 30, speed: 1.5, color: '#DAA520', probability: 0.15 },
+                    { name: 'normal', points: 10, speed: 2, color: '#808080', probability: 0.5 },
+                    { name: 'fast', points: 20, speed: 4, color: '#F5F5F5', probability: 0.25 },
+                    { name: 'falling', points: 30, speed: 1.5, color: '#A9A9A9', probability: 0.15 },
                     { name: 'ufo', points: 50, speed: 6, color: '#32CD32', probability: 0.1 }
                 ];
                 
@@ -607,7 +607,7 @@
                 this.direction = Math.random() < 0.5 ? 1 : -1;
                 this.startPosition();
 
-                // Для зигзага (быстрая курица)
+                // Для зигзага (быстрая утка)
                 this.zigzagOffset = Math.random() * Math.PI * 2;
 
                 // Состояние
@@ -621,13 +621,13 @@
                 const ch = this.canvasHeight || 1080;
 
                 if (this.type.name === 'falling') {
-                    // Падающая курица начинается сверху в случайной позиции по X
+                    // Падающая утка начинается сверху в случайной позиции по X
                     this.x = this.size * 2 + Math.random() * (cw - this.size * 4);
                     this.y = -this.size * 2;
                     this.vx = (Math.random() - 0.5) * 2;
                     this.vy = this.speed;
                 } else {
-                    // Обычные курицы летят сбоку
+                    // Обычные утки летят сбоку
                     if (this.direction === 1) {
                         // Летит слева направо — появляется за левым краем
                         this.x = -this.size * 2;
@@ -679,12 +679,12 @@
                     this.x += this.vx;
                     this.y += Math.sin(Date.now() / 100) * 2;
                 } else {
-                    // Обычная курица - прямая траектория
+                    // Обычная утка - прямая траектория
                     this.x += this.vx;
                 }
-                
-                // Анимация крыльев
-                this.wingAngle = Math.sin(Date.now() / 100 * this.wingSpeed * 10) * 0.5;
+
+                // Анимация крыльев (в 2 раза реже, большая амплитуда)
+                this.wingAngle = Math.sin(Date.now() / 100 * this.wingSpeed * 5) * 1.2;
             }
 
             draw(ctx) {
@@ -702,14 +702,14 @@
                     // Рисуем НЛО
                     this.drawUFO(ctx, s);
                 } else if (this.type.name === 'falling') {
-                    // Рисуем курицу с парашютом
+                    // Рисуем утку с парашютом
                     this.drawFallingChicken(ctx, s);
                 } else {
-                    // Рисуем обычную курицу
+                    // Рисуем обычную утку
                     this.drawChicken(ctx, s);
                 }
 
-                // Отладка: точка в центре курицы
+                // Отладка: точка в центре утки
                 ctx.fillStyle = '#FF00FF';
                 ctx.beginPath();
                 ctx.arc(0, 0, 3, 0, Math.PI * 2);
@@ -719,65 +719,61 @@
             }
 
             drawChicken(ctx, s) {
-                // Тело
+                // Тело (более вытянутое, утиное)
                 ctx.fillStyle = this.color;
                 ctx.beginPath();
-                ctx.ellipse(0, 0, 25 * s, 18 * s, 0, 0, Math.PI * 2);
+                ctx.ellipse(0, 0, 28 * s, 15 * s, 0, 0, Math.PI * 2);
                 ctx.fill();
-                
-                // Голова
+
+                // Голова (более круглая)
                 ctx.beginPath();
-                ctx.arc(20 * s, -10 * s, 12 * s, 0, Math.PI * 2);
+                ctx.arc(22 * s, -8 * s, 11 * s, 0, Math.PI * 2);
                 ctx.fill();
-                
-                // Клюв
-                ctx.fillStyle = '#FFD700';
+
+                // Клюв (плоский, утиный)
+                ctx.fillStyle = '#FFA500';
                 ctx.beginPath();
-                ctx.moveTo(28 * s, -10 * s);
-                ctx.lineTo(38 * s, -7 * s);
-                ctx.lineTo(28 * s, -4 * s);
+                ctx.ellipse(32 * s, -6 * s, 8 * s, 5 * s, 0, 0, Math.PI * 2);
                 ctx.fill();
-                
+
                 // Глаз
                 ctx.fillStyle = '#FFF';
                 ctx.beginPath();
-                ctx.arc(23 * s, -13 * s, 4 * s, 0, Math.PI * 2);
+                ctx.arc(24 * s, -11 * s, 4 * s, 0, Math.PI * 2);
                 ctx.fill();
                 ctx.fillStyle = '#000';
                 ctx.beginPath();
-                ctx.arc(24 * s, -13 * s, 2 * s, 0, Math.PI * 2);
+                ctx.arc(25 * s, -11 * s, 2 * s, 0, Math.PI * 2);
                 ctx.fill();
-                
-                // Гребень
-                ctx.fillStyle = '#DC143C';
+
+                // Шея (немного изогнутая)
+                ctx.fillStyle = this.color;
                 ctx.beginPath();
-                ctx.arc(18 * s, -20 * s, 5 * s, 0, Math.PI * 2);
-                ctx.arc(23 * s, -23 * s, 5 * s, 0, Math.PI * 2);
-                ctx.arc(28 * s, -20 * s, 5 * s, 0, Math.PI * 2);
+                ctx.ellipse(15 * s, -2 * s, 8 * s, 10 * s, 0.2, 0, Math.PI * 2);
                 ctx.fill();
-                
+
                 // Крылья (анимация)
                 ctx.fillStyle = this.color;
                 ctx.save();
                 ctx.rotate(this.wingAngle);
                 ctx.beginPath();
-                ctx.ellipse(-5 * s, 5 * s, 15 * s, 8 * s, -0.3, 0, Math.PI * 2);
+                ctx.ellipse(-8 * s, 3 * s, 18 * s, 9 * s, -0.2, 0, Math.PI * 2);
                 ctx.fill();
                 ctx.restore();
-                
-                // Хвост
+
+                // Хвост (короткий)
                 ctx.beginPath();
-                ctx.ellipse(-22 * s, -5 * s, 10 * s, 6 * s, 0.5, 0, Math.PI * 2);
+                ctx.ellipse(-25 * s, -2 * s, 12 * s, 7 * s, 0.3, 0, Math.PI * 2);
                 ctx.fill();
             }
 
             drawFallingChicken(ctx, s) {
-                // Парашют
-                ctx.fillStyle = '#FF6347';
+                // Парашют (зелёный, камуфляжный)
+                ctx.fillStyle = '#228B22';
                 ctx.beginPath();
                 ctx.arc(0, -35 * s, 25 * s, Math.PI, 0);
                 ctx.fill();
-                
+
                 // Стропы
                 ctx.strokeStyle = '#FFF';
                 ctx.lineWidth = 1;
@@ -787,9 +783,12 @@
                 ctx.moveTo(20 * s, -35 * s);
                 ctx.lineTo(0, -10 * s);
                 ctx.stroke();
-                
-                // Курица
+
+                // Утка (с зелёным оттенком для камуфляжа)
+                const originalColor = this.color;
+                this.color = '#6B8E6B';
                 this.drawChicken(ctx, s * 0.8);
+                this.color = originalColor;
             }
 
             drawUFO(ctx, s) {
@@ -819,7 +818,7 @@
             isOffScreen() {
                 const margin = 150;
                 if (this.type.name === 'falling') {
-                    // Падающая курица удаляется, когда ушла вниз за экран
+                    // Падающая утка удаляется, когда ушла вниз за экран
                     return this.y > this.canvasHeight + margin;
                 }
                 
@@ -982,9 +981,9 @@
                     // Треугольная крона (в 4 раза больше оригинала)
                     ctx.fillStyle = '#006400';
                     ctx.beginPath();
-                    ctx.moveTo(x - 120, y);
-                    ctx.lineTo(x, y - 240);
-                    ctx.lineTo(x + 120, y);
+                    ctx.moveTo(x - 120, y + 10);
+                    ctx.lineTo(x, y - 230);
+                    ctx.lineTo(x + 120, y + 10);
                     ctx.fill();
 
                     ctx.beginPath();
@@ -1425,7 +1424,7 @@
                 this.gameTimer = 0;
                 this.spawnTimer = 0;
 
-                // Спавн первой курицы для теста
+                // Спавн первой утки для теста
                 setTimeout(() => this.spawnChicken(), 500);
 
                 // Сворачиваем секции при старте игры
@@ -1483,19 +1482,14 @@
                 let hitTree = false;
                 const ch = this.canvas.height;
                 const trees = [
-                    { x: 150, y: ch - 120, width: 240, height: 320 },
-                    { x: this.canvas.width * 0.35, y: ch - 130, width: 200, height: 320 },
-                    { x: this.canvas.width * 0.65, y: ch - 140, width: 200, height: 320 },
-                    { x: this.canvas.width - 150, y: ch - 120, width: 240, height: 320 }
+                    { x: 150, y: ch - 120, type: 'triangle' },
+                    { x: this.canvas.width * 0.35, y: ch - 130, type: 'round' },
+                    { x: this.canvas.width * 0.65, y: ch - 140, type: 'round' },
+                    { x: this.canvas.width - 150, y: ch - 120, type: 'triangle' }
                 ];
                 
                 for (const tree of trees) {
-                    // ��роверяем, попал ли клик в область дерева
-                    const halfWidth = tree.width / 2;
-                    if (this.mouseX >= tree.x - halfWidth &&
-                        this.mouseX <= tree.x + halfWidth &&
-                        this.mouseY >= tree.y - tree.height &&
-                        this.mouseY <= tree.y + 50) { // +50 для запаса на ствол
+                    if (this.checkTreeHit(tree)) {
                         hitTree = true;
                         break;
                     }
@@ -1513,12 +1507,12 @@
                     return;
                 }
 
-                // Проверка попаданий в куриц
+                // Проверка попаданий в уток
                 let isHit = false;
                 for (let i = this.chickens.length - 1; i >= 0; i--) {
                     const chicken = this.chickens[i];
                     if (chicken.checkHit(this.mouseX, this.mouseY)) {
-                        // Попа��������ание!
+                        // П���па��������ание!
                         this.score += chicken.points;
                         this.hit++;
                         this.soundManager.playHit();
@@ -1539,6 +1533,64 @@
                 if (this.ammo <= 0) {
                     setTimeout(() => this.gameOver(), 500);
                 }
+            }
+
+            // Проверка попадания в дерево с учётом формы кроны
+            checkTreeHit(tree) {
+                const trunkWidth = 80;
+                const trunkHeight = 160;
+                const trunkTop = tree.y;
+                const trunkBottom = tree.y + trunkHeight;
+                
+                // Проверка попадания в ствол
+                if (this.mouseX >= tree.x - trunkWidth / 2 &&
+                    this.mouseX <= tree.x + trunkWidth / 2 &&
+                    this.mouseY >= trunkTop &&
+                    this.mouseY <= trunkBottom) {
+                    return true;
+                }
+                
+                // Проверка попадания в крону
+                if (tree.type === 'round') {
+                    // Округлая крона - три яруса
+                    const crownLayers = [
+                        { y: tree.y - 90, r: 100 },   // Нижний ярус (опущен на 10px)
+                        { y: tree.y - 170, r: 85 },    // Средний ярус (опущен на 10px)
+                        { y: tree.y - 240, r: 70 }     // Верхний ярус (опущен на 10px)
+                    ];
+                    
+                    for (const layer of crownLayers) {
+                        const dx = this.mouseX - tree.x;
+                        const dy = this.mouseY - layer.y;
+                        const dist = Math.sqrt(dx * dx + dy * dy);
+                        if (dist <= layer.r) {
+                            return true;
+                        }
+                    }
+                } else {
+                    // Треугольная крона - два треугольника (опущены на 10px)
+                    const triangles = [
+                        { baseY: tree.y + 10, topY: tree.y - 230, halfWidth: 120 },
+                        { baseY: tree.y - 120, topY: tree.y - 320, halfWidth: 100 }
+                    ];
+
+                    for (const tri of triangles) {
+                        // Проверка попадания в треугольник
+                        if (this.mouseY >= tri.topY && this.mouseY <= tri.baseY) {
+                            // Ширина треугольника на уровне клика (линейная интерполяция от вершины к основанию)
+                            const triHeight = tri.baseY - tri.topY;
+                            const progress = (this.mouseY - tri.topY) / triHeight;
+                            const currentHalfWidth = tri.halfWidth * progress;
+
+                            if (this.mouseX >= tree.x - currentHalfWidth &&
+                                this.mouseX <= tree.x + currentHalfWidth) {
+                                return true;
+                            }
+                        }
+                    }
+                }
+                
+                return false;
             }
 
             createParticles(x, y, color) {
@@ -1581,7 +1633,7 @@
                     }
                 }
                 
-                // Спавн куриц
+                // Спавн уток
                 this.spawnTimer += deltaTime;
                 const spawnInterval = Math.max(800, 2000 - this.score * 5); // Чем больше очков, тем чаще спавн (минимум 800мс)
                 if (this.spawnTimer >= spawnInterval) {
@@ -1589,7 +1641,7 @@
                     this.spawnChicken();
                 }
                 
-                // Обновление куриц
+                // Обновление уток
                 for (let i = this.chickens.length - 1; i >= 0; i--) {
                     this.chickens[i].update();
                     if (this.chickens[i].isOffScreen()) {
@@ -1615,12 +1667,12 @@
                     this.drawBackgroundWithoutTrees();
                 }
 
-                // Курицы
+                // Утки
                 for (const chicken of this.chickens) {
                     chicken.draw(this.ctx);
                 }
 
-                // Деревья (поверх куриц)
+                // Деревья (поверх уток)
                 if (this.background) {
                     this.drawTrees();
                 }
@@ -1759,27 +1811,27 @@
                 ctx.fillRect(x - 40, y, 80, 160);
 
                 if (roundCrown) {
-                    // Округлая крона
+                    // Округлая крона (опущена на 10 пикселей)
                     ctx.fillStyle = '#006400';
                     // Нижний ярус
                     ctx.beginPath();
-                    ctx.arc(x, y - 100, 100, 0, Math.PI * 2);
+                    ctx.arc(x, y - 90, 100, 0, Math.PI * 2);
                     ctx.fill();
                     // Средний ярус
                     ctx.beginPath();
-                    ctx.arc(x, y - 180, 85, 0, Math.PI * 2);
+                    ctx.arc(x, y - 170, 85, 0, Math.PI * 2);
                     ctx.fill();
                     // Верхний ярус
                     ctx.beginPath();
-                    ctx.arc(x, y - 250, 70, 0, Math.PI * 2);
+                    ctx.arc(x, y - 240, 70, 0, Math.PI * 2);
                     ctx.fill();
                 } else {
                     // Треугольная крона (в 4 р��за больше оригинала)
                     ctx.fillStyle = '#006400';
                     ctx.beginPath();
-                    ctx.moveTo(x - 120, y);
-                    ctx.lineTo(x, y - 240);
-                    ctx.lineTo(x + 120, y);
+                    ctx.moveTo(x - 120, y + 10);
+                    ctx.lineTo(x, y - 230);
+                    ctx.lineTo(x + 120, y + 10);
                     ctx.fill();
 
                     ctx.beginPath();
