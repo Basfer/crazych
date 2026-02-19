@@ -115,7 +115,7 @@
         <button class="menu-btn" id="restartBtn" data-i18n="gameOver.playAgainBtn">ИГРАТЬ СНОВА</button>
     </div>
 
-    <!-- Language Manager -->
+    <!-- Language Manager - load before main script -->
     <script src="locales/language-manager.js"></script>
 
     <script>
@@ -997,7 +997,6 @@
 
                 // Language Manager
                 this.languageManager = window.languageManager;
-                console.log('GameManager constructor: languageManager =', this.languageManager, 'window.languageManager =', window.languageManager);
 
                 // Highscores
                 this.highscores = [];
@@ -1007,10 +1006,11 @@
                 // Initialization
                 this.resize();
 
-                // Initialize language manager first (await to ensure translations are loaded)
-                this.initLanguage().then(() => {
-                    // Language initialized, translations applied
-                });
+                // Language manager already initialized before GameManager creation
+                this.updateInstructions();
+                
+                // Set up language change listeners
+                this.initLanguage();
 
                 this.setupEventListeners();
 
@@ -1194,14 +1194,9 @@
                 }
             }
 
-            // Initialize language manager
-            async initLanguage() {
-                console.log('initLanguage called, languageManager exists:', !!this.languageManager);
-                
+            // Initialize language manager (already initialized, just set up listeners)
+            initLanguage() {
                 if (this.languageManager) {
-                    await this.languageManager.init();
-                    this.updateInstructions();
-
                     // Listen for language changes
                     window.addEventListener('languageChanged', () => {
                         this.updateInstructions();
@@ -1210,8 +1205,6 @@
                             this.finalScoreEl.textContent = this.languageManager.t('gameOver.finalScore', { score: this.score });
                         }
                     });
-                } else {
-                    console.error('languageManager is not available!');
                 }
             }
 
@@ -1882,7 +1875,11 @@
         // ============================================
         // GAME START
         // ============================================
-        window.addEventListener('DOMContentLoaded', () => {
+        window.addEventListener('DOMContentLoaded', async () => {
+            // Wait for languageManager to be available
+            if (window.languageManager) {
+                await window.languageManager.init();
+            }
             const game = new GameManager();
         });
     </script>

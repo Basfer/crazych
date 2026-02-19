@@ -12,24 +12,16 @@ class LanguageManager {
 
     // Initialize language manager
     async init() {
-        console.log('LanguageManager.init() started');
-        
         // Load saved language or detect default
         const savedLang = this.getSavedLanguage();
         const detectedLang = this.detectDefaultLanguage();
         this.currentLanguage = savedLang || detectedLang;
-        
-        console.log('LanguageManager: saved=', savedLang, 'detected=', detectedLang, 'using=', this.currentLanguage);
 
         // Load current language translations
         const loaded = await this.loadLanguage(this.currentLanguage);
-        console.log('LanguageManager: language loaded=', loaded);
 
         // Apply translations to UI
         this.applyTranslations();
-        console.log('LanguageManager: translations applied');
-
-        console.log(`LanguageManager initialized with: ${this.currentLanguage}`);
     }
 
     // Get saved language from localStorage
@@ -197,19 +189,11 @@ class LanguageManager {
     // Update language selector UI
     updateLanguageSelector() {
         const selector = document.getElementById('languageSelector');
-        console.log('updateLanguageSelector called, selector exists:', !!selector);
-        
-        if (!selector) {
-            console.warn('Language selector not found in DOM');
-            return;
-        }
+        if (!selector) return;
 
         // Update current language display
         const currentFlag = document.getElementById('currentFlag');
         const currentName = document.getElementById('currentName');
-        const optionsList = document.getElementById('languageOptions');
-        
-        console.log('currentFlag:', !!currentFlag, 'currentName:', !!currentName, 'optionsList:', !!optionsList);
 
         if (currentFlag) {
             currentFlag.textContent = this.getFlag(this.currentLanguage);
@@ -219,9 +203,9 @@ class LanguageManager {
         }
 
         // Update language options
+        const optionsList = document.getElementById('languageOptions');
         if (optionsList) {
             optionsList.innerHTML = '';
-            console.log('Populating language options, count:', this.supportedLanguages.length);
 
             this.supportedLanguages.forEach(langCode => {
                 const option = document.createElement('div');
@@ -243,8 +227,6 @@ class LanguageManager {
 
                 optionsList.appendChild(option);
             });
-            
-            console.log('Language options populated, child count:', optionsList.children.length);
         }
     }
 
@@ -260,4 +242,3 @@ class LanguageManager {
 
 // Create global instance
 const languageManager = new LanguageManager();
-console.log('LanguageManager created, global instance available');
