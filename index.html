@@ -1009,9 +1009,8 @@
 
                 this.setupEventListeners();
 
-                // Language manager already initialized before GameManager creation
-                // Update instructions after translations are loaded
-                setTimeout(() => this.updateInstructions(), 0);
+                // Update instructions after translations are loaded (with small delay)
+                setTimeout(() => this.updateInstructions(), 100);
 
                 // IMMEDIATELY load records from Supabase and migrate local ones
                 // First load local for instant display
@@ -1208,7 +1207,7 @@
                 if (!instructionList || !this.languageManager) return;
 
                 const items = this.languageManager.t('menu.instructionItems');
-                if (Array.isArray(items)) {
+                if (items && Array.isArray(items) && items.length > 0) {
                     instructionList.innerHTML = items.map(item => `<li>${item}</li>`).join('');
                 }
             }
