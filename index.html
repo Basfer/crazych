@@ -1130,25 +1130,18 @@
             setupLanguageSelector() {
                 const languageSelector = document.getElementById('languageSelector');
                 const currentLanguageBtn = document.getElementById('currentLanguageBtn');
-                
+
                 if (!languageSelector || !currentLanguageBtn) return;
-                
+
                 // Toggle dropdown on button click
                 currentLanguageBtn.addEventListener('click', (e) => {
                     e.stopPropagation();
                     languageSelector.classList.toggle('open');
                 });
-                
+
                 // Close dropdown when clicking outside
-                document.addEventListener('click', (e) => {
-                    if (!languageSelector.contains(e.target)) {
-                        languageSelector.classList.remove('open');
-                    }
-                });
-                
-                // Prevent dropdown from closing when clicking inside it
-                languageSelector.addEventListener('click', (e) => {
-                    e.stopPropagation();
+                document.addEventListener('click', () => {
+                    languageSelector.classList.remove('open');
                 });
             }
 
@@ -1181,14 +1174,16 @@
             toggleSection(contentId, toggleId) {
                 const content = document.getElementById(contentId);
                 const toggle = document.getElementById(toggleId);
-                
+
                 if (content && toggle) {
-                    if (content.style.display === 'none') {
-                        content.style.display = 'block';
-                        toggle.textContent = '▼';
-                    } else {
+                    const isVisible = window.getComputedStyle(content).display !== 'none';
+                    
+                    if (isVisible) {
                         content.style.display = 'none';
                         toggle.textContent = '▲';
+                    } else {
+                        content.style.display = 'block';
+                        toggle.textContent = '▼';
                     }
                 }
             }
