@@ -1,4 +1,4 @@
-# 🐔 Crazy Chicken (Moorhuhn Clone)
+# 🐔 Crazy Chicken
 
 Браузерная игра-клон классической Moorhuhn (Охота на куропаток) на HTML5 Canvas и Vanilla JavaScript.
 
