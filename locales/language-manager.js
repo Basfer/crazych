@@ -260,4 +260,6 @@ class LanguageManager {
 
 // Create global instance
 const languageManager = new LanguageManager();
-console.log('languageManager created:', languageManager);
+window.languageManager = languageManager;
+console.log('languageManager created and assigned to window');
+console.log('window.languageManager:', window.languageManager);

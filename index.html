@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Crazy Duck - MoorDuck Clone</title>
     <link rel="stylesheet" href="styles.css">
+    <script src="locales/language-manager.js" defer></script>
 </head>
 <body>
     <!-- ============================================
@@ -114,9 +115,6 @@
 
         <button class="menu-btn" id="restartBtn" data-i18n="gameOver.playAgainBtn">ИГРАТЬ СНОВА</button>
     </div>
-
-    <!-- Language Manager - load before main script -->
-    <script src="locales/language-manager.js"></script>
 
     <script>
         // ============================================
@@ -997,6 +995,7 @@
 
                 // Language Manager
                 this.languageManager = window.languageManager;
+                console.log(window.languageManager);
 
                 // Highscores
                 this.highscores = [];
@@ -1196,6 +1195,7 @@
 
             // Initialize language manager (already initialized, just set up listeners)
             initLanguage() {
+                console.log(this.languageManager);
                 if (this.languageManager) {
                     // Listen for language changes
                     window.addEventListener('languageChanged', () => {
@@ -1876,8 +1876,11 @@
         // GAME START
         // ============================================
         window.addEventListener('DOMContentLoaded', () => {
+            console.log('DOMContentLoaded fired, languageManager exists:', !!window.languageManager);
+            
             // Initialize language manager (non-blocking)
             if (window.languageManager) {
+                console.log('Calling languageManager.init()...');
                 window.languageManager.init().catch(err => {
                     console.warn('Language initialization failed:', err);
                 });
