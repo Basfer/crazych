@@ -48,8 +48,8 @@
         <!-- Language Selector -->
         <div id="languageSelector">
             <button id="currentLanguageBtn">
-                <span id="currentFlag">🇷🇺</span>
-                <span id="currentName">Русский</span>
+                <span id="currentFlag">En</span>
+                <span id="currentName">English</span>
             </button>
             <div class="language-dropdown" id="languageOptions">
                 <!-- Language options will be populated by JavaScript -->
@@ -60,13 +60,13 @@
     <!-- Main Menu -->
     <div id="menu">
         <h1 class="menu-title" data-i18n="menu.title">🐥 CRAZY DUCK 🐥</h1>
-        <p class="menu-subtitle" data-i18n="menu.subtitle">Охота на уток</p>
-        <button class="menu-btn" id="startBtn" data-i18n="menu.startBtn">НАЧАТЬ ИГРУ</button>
+        <p class="menu-subtitle" data-i18n="menu.subtitle">Duck Hunting</p>
+        <button class="menu-btn" id="startBtn" data-i18n="menu.startBtn">START GAME</button>
 
         <!-- Leaderboard (collapsible) -->
         <div id="menuHighscores" style="margin: 20px 0; padding: 15px; background: rgba(139, 69, 19, 0.5); border-radius: 10px; max-width: 500px; width: 90%;">
             <h3 id="menuHighscoresHeader" style="color: #FFD700; margin: 0; text-align: center; cursor: pointer; user-select: none;" title="Click to collapse/expand">
-                <span data-i18n="menu.leaderboard">🏆 ТАБЛИЦА ЛИДЕРОВ</span> <span id="menuHighscoresToggle" data-i18n="menu.leaderboardToggle">▼</span>
+                <span data-i18n="menu.leaderboard">🏆 LEADERBOARD</span> <span id="menuHighscoresToggle" data-i18n="menu.leaderboardToggle">▼</span>
             </h3>
             <div id="menuHighscoresContent" style="margin-top: 10px;">
                 <ol id="menuHighscoreListOl" style="color: #DEB887; padding-left: 20px;"></ol>
@@ -79,7 +79,7 @@
         <!-- Instructions (collapsible) -->
         <div class="instructions" style="max-width: 500px; width: 90%;">
             <h3 id="instructionsHeader" style="color: #FFD700; margin: 0; text-align: center; cursor: pointer; user-select: none;" title="Click to collapse/expand">
-                <span data-i18n="menu.instructions">📜 ИНСТРУКЦИЯ</span> <span id="instructionsToggle" data-i18n="menu.instructionsToggle">▼</span>
+                <span data-i18n="menu.instructions">📜 INSTRUCTIONS</span> <span id="instructionsToggle" data-i18n="menu.instructionsToggle">▼</span>
             </h3>
             <div id="instructionsContent">
                 <ul id="instructionList">
@@ -91,19 +91,19 @@
 
     <!-- Game Over Screen -->
     <div id="gameOver">
-        <h1 class="menu-title" id="gameOverTitle" data-i18n="gameOver.title">ИГРА ОКОНЧЕНА</h1>
-        <div id="finalScore" data-i18n="gameOver.finalScore">Счёт: 0</div>
+        <h1 class="menu-title" id="gameOverTitle" data-i18n="gameOver.title">GAME OVER</h1>
+        <div id="finalScore" data-i18n="gameOver.finalScore">Score: 0</div>
 
         <div id="highscoreForm">
-            <label style="color: #DEB887;" data-i18n="gameOver.enterName">Введите ваше имя:</label>
+            <label style="color: #DEB887;" data-i18n="gameOver.enterName">Enter your name:</label>
             <input type="text" id="playerName" maxlength="10" data-i18n="gameOver.enterName" placeholder="Имя">
-            <button class="menu-btn" id="saveScoreBtn" data-i18n="gameOver.saveBtn">СОХРАНИТЬ</button>
+            <button class="menu-btn" id="saveScoreBtn" data-i18n="gameOver.saveBtn">SAVE</button>
         </div>
 
         <!-- Using the same leaderboard as in the menu -->
         <div id="gameOverHighscores" style="margin: 20px 0; padding: 15px; background: rgba(139, 69, 19, 0.5); border-radius: 10px; max-width: 500px; width: 90%;">
             <h3 id="gameOverHighscoresHeader" style="color: #FFD700; margin: 0; text-align: center; cursor: pointer; user-select: none;" title="Click to collapse/expand">
-                <span data-i18n="gameOver.leaderboard">🏆 ТАБЛИЦА ЛИДЕРОВ</span> <span id="gameOverHighscoresToggle" data-i18n="menu.leaderboardToggle">▼</span>
+                <span data-i18n="gameOver.leaderboard">🏆 LEADERBOARD</span> <span id="gameOverHighscoresToggle" data-i18n="menu.leaderboardToggle">▼</span>
             </h3>
             <div id="gameOverHighscoresContent" style="margin-top: 10px;">
                 <ol id="gameOverHighscoreListOl" style="color: #DEB887; padding-left: 20px;"></ol>
@@ -113,7 +113,7 @@
             </div>
         </div>
 
-        <button class="menu-btn" id="restartBtn" data-i18n="gameOver.playAgainBtn">ИГРАТЬ СНОВА</button>
+        <button class="menu-btn" id="restartBtn" data-i18n="gameOver.playAgainBtn">PLAY AGAIN</button>
     </div>
 
     <script>
