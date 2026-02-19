@@ -1,6 +1,6 @@
-# 🐔 Crazy Chicken (Moorhuhn Clone)
+# 🐔 Crazy Duck
 
-Браузерная игра-клон классической Moorhuhn (Охота на куропаток) на HTML5 Canvas и Vanilla JavaScript.
+Браузерная игра "Утиная охота" на HTML5 Canvas и Vanilla JavaScript.
 
 ## 🎮 Как играть
 

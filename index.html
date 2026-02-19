@@ -4,244 +4,20 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Crazy Duck - MoorDuck Clone</title>
-    <style>
-        /* ============================================
-           CSS - Стили игры
-           ============================================ */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            overflow: hidden;
-            cursor: none;
-            font-family: 'Courier New', monospace;
-            background: #000;
-        }
-
-        #gameCanvas {
-            display: block;
-            width: 100vw;
-            height: 100vh;
-        }
-
-        /* UI Контейнер */
-        #ui {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-        }
-
-        /* Верхняя панель */
-        #topBar {
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-start;
-            padding: 20px;
-            background: linear-gradient(to bottom, rgba(0,0,0,0.7), transparent);
-        }
-
-        .stat-box {
-            background: rgba(139, 69, 19, 0.8);
-            border: 3px solid #8B4513;
-            border-radius: 10px;
-            padding: 10px 20px;
-            color: #FFD700;
-            text-shadow: 2px 2px 4px #000;
-            min-width: 150px;
-            text-align: center;
-        }
-
-        .stat-label {
-            font-size: 14px;
-            color: #DEB887;
-            margin-bottom: 5px;
-        }
-
-        .stat-value {
-            font-size: 28px;
-            font-weight: bold;
-        }
-
-        #ammoValue {
-            color: #FF6347;
-        }
-
-        #timeValue {
-            color: #32CD32;
-        }
-
-        #scoreValue {
-            color: #FFD700;
-        }
-
-        /* Меню */
-        #menu, #gameOver {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            background: rgba(0, 0, 0, 0.8);
-            pointer-events: auto;
-            cursor: default;
-            overflow-y: auto;
-            padding: 20px 0;
-        }
-
-        #gameOver {
-            display: none;
-        }
-
-        .menu-title {
-            font-size: 72px;
-            color: #FFD700;
-            text-shadow: 4px 4px 8px #000, 0 0 30px #FF6347;
-            margin-bottom: 20px;
-            animation: pulse 2s infinite;
-        }
-
-        @keyframes pulse {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.05); }
-        }
-
-        .menu-subtitle {
-            font-size: 24px;
-            color: #DEB887;
-            margin-bottom: 40px;
-            text-align: center;
-            line-height: 1.6;
-        }
-
-        .menu-btn {
-            font-family: 'Courier New', monospace;
-            font-size: 28px;
-            padding: 15px 50px;
-            background: linear-gradient(to bottom, #8B4513, #5D2906);
-            color: #FFD700;
-            border: 4px solid #DEB887;
-            border-radius: 10px;
-            cursor: pointer;
-            text-shadow: 2px 2px 4px #000;
-            transition: all 0.3s;
-            margin: 10px;
-        }
-
-        .menu-btn:hover {
-            background: linear-gradient(to bottom, #A0522D, #8B4513);
-            transform: scale(1.1);
-            box-shadow: 0 0 20px #FF6347;
-        }
-
-        .instructions {
-            margin-top: 40px;
-            padding: 20px;
-            background: rgba(139, 69, 19, 0.5);
-            border-radius: 10px;
-            color: #DEB887;
-            font-size: 16px;
-            text-align: center;
-        }
-
-        .instructions h3 {
-            color: #FFD700;
-            margin-bottom: 15px;
-        }
-
-        .instructions ul {
-            list-style: none;
-            text-align: left;
-        }
-
-        .instructions li {
-            margin: 8px 0;
-        }
-
-        /* Game Over экран */
-        #finalScore {
-            font-size: 48px;
-            color: #FFD700;
-            margin: 20px 0;
-        }
-
-        #highscoreForm {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            margin: 20px 0;
-        }
-
-        #highscoreForm input {
-            font-family: 'Courier New', monospace;
-            font-size: 20px;
-            padding: 10px;
-            margin: 10px;
-            background: #2a1810;
-            border: 2px solid #8B4513;
-            color: #FFD700;
-            border-radius: 5px;
-            text-align: center;
-        }
-
-        #highscoreList {
-            margin-top: 20px;
-            padding: 20px;
-            background: rgba(139, 69, 19, 0.5);
-            border-radius: 10px;
-            color: #DEB887;
-            max-height: 200px;
-            overflow-y: auto;
-        }
-
-        #highscoreList h3 {
-            color: #FFD700;
-            margin-bottom: 10px;
-        }
-
-        #highscoreList ol {
-            text-align: left;
-            padding-left: 20px;
-        }
-
-        #highscoreList li {
-            margin: 5px 0;
-        }
-
-        /* Скрытый курсор при игре */
-        body.playing {
-            cursor: none;
-        }
-
-        body.menu {
-            cursor: default;
-        }
-    </style>
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
     <!-- ============================================
-         HTML - Разметка игры
+         HTML - Game Markup
          ============================================ -->
 
     <!-- Supabase Client (CDN) -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
-    <!-- Canvas для рендеринга -->
+    <!-- Canvas for rendering -->
     <canvas id="gameCanvas"></canvas>
 
-    <!-- UI элементы -->
+    <!-- UI elements -->
     <div id="ui">
         <div id="topBar">
             <div class="stat-box">
@@ -269,13 +45,13 @@
         </div>
     </div>
 
-    <!-- Главное меню -->
+    <!-- Main Menu -->
     <div id="menu">
         <h1 class="menu-title">🐥 CRAZY DUCK 🐥</h1>
         <p class="menu-subtitle">Охота на уток</p>
         <button class="menu-btn" id="startBtn">НАЧАТЬ ИГРУ</button>
 
-        <!-- Таблица лидеров (схлопывающаяся) -->
+        <!-- Leaderboard (collapsible) -->
         <div id="menuHighscores" style="margin: 20px 0; padding: 15px; background: rgba(139, 69, 19, 0.5); border-radius: 10px; max-width: 500px; width: 90%;">
             <h3 id="menuHighscoresHeader" style="color: #FFD700; margin: 0; text-align: center; cursor: pointer; user-select: none;" title="Нажмите, чтобы свернуть/развернуть">
                 🏆 ТАБЛИЦА ЛИДЕРОВ <span id="menuHighscoresToggle">▼</span>
@@ -288,7 +64,7 @@
             </div>
         </div>
 
-        <!-- Инструкция (схлопывающаяся) -->
+        <!-- Instructions (collapsible) -->
         <div class="instructions" style="max-width: 500px; width: 90%;">
             <h3 id="instructionsHeader" style="color: #FFD700; margin: 0; text-align: center; cursor: pointer; user-select: none;" title="Нажмите, чтобы свернуть/развернуть">
                 📜 ИНСТРУКЦИЯ <span id="instructionsToggle">▼</span>
@@ -306,7 +82,7 @@
         </div>
     </div>
 
-    <!-- Экран Game Over -->
+    <!-- Game Over Screen -->
     <div id="gameOver">
         <h1 class="menu-title" id="gameOverTitle">ИГРА ОКОНЧЕНА</h1>
         <div id="finalScore">Счёт: 0</div>
@@ -317,7 +93,7 @@
             <button class="menu-btn" id="saveScoreBtn">СОХРАНИТЬ</button>
         </div>
 
-        <!-- Используем ту же таблицу лидеров, что и в меню -->
+        <!-- Using the same leaderboard as in the menu -->
         <div id="gameOverHighscores" style="margin: 20px 0; padding: 15px; background: rgba(139, 69, 19, 0.5); border-radius: 10px; max-width: 500px; width: 90%;">
             <h3 id="gameOverHighscoresHeader" style="color: #FFD700; margin: 0; text-align: center; cursor: pointer; user-select: none;" title="Нажмите, чтобы свернуть/развернуть">
                 🏆 ТАБЛИЦА ЛИДЕРОВ <span id="gameOverHighscoresToggle">▼</span>
@@ -335,11 +111,11 @@
 
     <script>
         // ============================================
-        // JAVASCRIPT - Логика игры
+        // JAVASCRIPT - Game Logic
         // ============================================
 
         /* ============================================
-           SOUND MANAGER - Управление звуками
+           SOUND MANAGER - Sound Management
            ============================================ */
         class SoundManager {
             constructor() {
@@ -357,14 +133,14 @@
                 }
             }
 
-            // Синтезированный звук выстрела
+            // Synthesized gunshot sound
             playShoot() {
                 if (!this.initialized) return;
                 
                 const ctx = this.audioContext;
                 const duration = 0.15;
                 
-                // Создаем шум для выстрела
+                // Create noise for gunshot
                 const bufferSize = ctx.sampleRate * duration;
                 const buffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
                 const data = buffer.getChannelData(0);
@@ -376,12 +152,12 @@
                 const noise = ctx.createBufferSource();
                 noise.buffer = buffer;
                 
-                // Фильтр для звука выстрела
+                // Filter for gunshot sound
                 const filter = ctx.createBiquadFilter();
                 filter.type = 'lowpass';
                 filter.frequency.value = 3000;
                 
-                // Огибающая громкости
+                // Volume envelope
                 const gain = ctx.createGain();
                 gain.gain.setValueAtTime(0.5, ctx.currentTime);
                 gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + duration);
@@ -392,22 +168,21 @@
                 noise.start();
             }
 
-            // Звук попадания (крик утки)
+            // Hit sound (duck scream)
             playHit() {
                 if (!this.initialized) return;
 
                 const ctx = this.audioContext;
 
-                // Создаем "крик утки" с помощью частотной модуляции
-                // Куриный крик имеет характерные быстрые изменения частоты
-
+                // Create "duck scream" using frequency modulation
+                // Chicken scream has characteristic fast frequency changes
                 const oscillator = ctx.createOscillator();
                 const modulator = ctx.createOscillator();
                 const modGain = ctx.createGain();
                 const gain = ctx.createGain();
 
-                // Основная частота с модуляцией для эффекта "кудахтанья"
-                // Повышено на 2 тона от оригинала
+                // Main frequency with modulation for "clucking" effect
+                // Raised by 2 tones from original
                 oscillator.type = 'sawtooth';
                 oscillator.frequency.setValueAtTime(750, ctx.currentTime);
                 oscillator.frequency.linearRampToValueAtTime(875, ctx.currentTime + 0.05);
@@ -415,7 +190,7 @@
                 oscillator.frequency.linearRampToValueAtTime(812, ctx.currentTime + 0.15);
                 oscillator.frequency.linearRampToValueAtTime(500, ctx.currentTime + 0.25);
 
-                // Модулятор для эффекта трели
+                // Modulator for trill effect
                 modulator.type = 'sine';
                 modulator.frequency.value = 30;
                 modGain.gain.value = 50;
@@ -423,7 +198,7 @@
                 modulator.connect(modGain);
                 modGain.connect(oscillator.frequency);
 
-                // Огибающая громкости
+                // Volume envelope
                 gain.gain.setValueAtTime(0.4, ctx.currentTime);
                 gain.gain.linearRampToValueAtTime(0.3, ctx.currentTime + 0.1);
                 gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.35);
@@ -437,26 +212,26 @@
                 modulator.stop(ctx.currentTime + 0.35);
             }
 
-            // Звук промаха (забавный "упс")
+            // Miss sound (funny "oops")
             playMiss() {
                 if (!this.initialized) return;
 
                 const ctx = this.audioContext;
 
-                // Забавный нисходящий звук с вибрацией - очень громкий и длинный
+                // Funny descending sound with vibration - very loud and long
                 const oscillator = ctx.createOscillator();
                 const modulator = ctx.createOscillator();
                 const modGain = ctx.createGain();
                 const gain = ctx.createGain();
 
                 oscillator.type = 'triangle';
-                // Смешная частота с "вилянием"
+                // Funny frequency with "wobble"
                 oscillator.frequency.setValueAtTime(450, ctx.currentTime);
                 oscillator.frequency.linearRampToValueAtTime(280, ctx.currentTime + 0.15);
                 oscillator.frequency.linearRampToValueAtTime(400, ctx.currentTime + 0.25);
                 oscillator.frequency.linearRampToValueAtTime(200, ctx.currentTime + 0.45);
 
-                // Модуляция для эффекта "виляния"
+                // Modulation for "wobble" effect
                 modulator.type = 'sine';
                 modulator.frequency.value = 10;
                 modGain.gain.value = 40;
@@ -477,13 +252,13 @@
                 modulator.stop(ctx.currentTime + 0.6);
             }
 
-            // Звук Game Over
+            // Game Over sound
             playGameOver() {
                 if (!this.initialized) return;
                 
                 const ctx = this.audioContext;
                 
-                // Простая мелодия
+                // Simple melody
                 const notes = [523.25, 440.00, 392.00, 349.23, 329.63, 261.63];
                 const duration = 0.4;
                 
@@ -505,7 +280,7 @@
                 });
             }
 
-            // Звук спавна утки
+            // Duck spawn sound
             playSpawn() {
                 if (!this.initialized) return;
                 
@@ -529,7 +304,7 @@
         }
 
         /* ============================================
-           PARTICLE - Система частиц (перья)
+           PARTICLE - Particle System (feathers)
            ============================================ */
         class Particle {
             constructor(x, y, color) {
@@ -567,14 +342,14 @@
         }
 
         /* ============================================
-           CHICKEN - Класс утки
+           CHICKEN - Duck Class
            ============================================ */
         class Chicken {
             constructor(canvasWidth, canvasHeight) {
                 this.canvasWidth = canvasWidth;
                 this.canvasHeight = canvasHeight;
                 
-                // Типы уток
+                // Duck types
                 const types = [
                     { name: 'normal', points: 10, speed: 2, color: '#808080', probability: 0.5 },
                     { name: 'fast', points: 20, speed: 4, color: '#F5F5F5', probability: 0.25 },
@@ -582,7 +357,7 @@
                     { name: 'ufo', points: 50, speed: 6, color: '#32CD32', probability: 0.1 }
                 ];
                 
-                // Выбор типа на основе вероятности
+                // Select type based on probability
                 const rand = Math.random();
                 let cumulative = 0;
                 this.type = types[0];
@@ -598,52 +373,52 @@
                 this.speed = this.type.speed;
                 this.color = this.type.color;
 
-                // Анимация и размер (должно быть ДО startPosition!)
+                // Animation and size (must be BEFORE startPosition!)
                 this.wingAngle = 0;
                 this.wingSpeed = 0.3 + Math.random() * 0.2;
                 this.size = 40 + Math.random() * 20;
 
-                // Позиция и направление
+                // Position and direction
                 this.direction = Math.random() < 0.5 ? 1 : -1;
                 this.startPosition();
 
-                // Для зигзага (быстрая утка)
+                // For zigzag (fast duck)
                 this.zigzagOffset = Math.random() * Math.PI * 2;
 
-                // Состояние
+                // State
                 this.isDead = false;
                 this.deathY = this.y;
             }
 
             startPosition() {
-                // Защита от некорректных размеров
+                // Protection against incorrect sizes
                 const cw = this.canvasWidth || 1920;
                 const ch = this.canvasHeight || 1080;
 
                 if (this.type.name === 'falling') {
-                    // Падающая утка начинается сверху в случайной позиции по X
+                    // Falling duck starts from top at random X position
                     this.x = this.size * 2 + Math.random() * (cw - this.size * 4);
                     this.y = -this.size * 2;
                     this.vx = (Math.random() - 0.5) * 2;
                     this.vy = this.speed;
                 } else {
-                    // Обычные утки летят сбоку
+                    // Normal ducks fly from the side
                     if (this.direction === 1) {
-                        // Летит слева направо — появляется за левым краем
+                        // Flies left to right — appears beyond left edge
                         this.x = -this.size * 2;
                     } else {
-                        // Летит справа налево — появляется за правым краем
+                        // Flies right to left — appears beyond right edge
                         this.x = cw + this.size * 2;
                     }
-                    // Y позиция по всей высоте экрана кроме нижней трети
+                    // Y position across full screen height except bottom third
                     const minY = 50;
-                    const maxY = Math.floor(ch * 2 / 3); // Верхние 2/3 экрана
+                    const maxY = Math.floor(ch * 2 / 3); // Top 2/3 of screen
                     this.y = minY + Math.random() * (maxY - minY);
                     this.vx = this.speed * this.direction;
                     this.vy = 0;
                 }
 
-                // Проверка корректности позиций
+                // Position validity check
                 if (!isFinite(this.x) || !isFinite(this.y)) {
                     this.x = this.direction === 1 ? -this.size * 2 : cw + this.size * 2;
                     this.y = 150;
@@ -655,35 +430,35 @@
                     this.x += this.vx;
                     this.y += this.vy;
 
-                    // Парашют замедляет падение
+                    // Parachute slows down the fall
                     if (this.vy < 2) {
                         this.vy += 0.05;
                     }
                     
-                    // Ограничиваем движение по X, чтобы не улетать за границы экрана
+                    // Limit X movement to prevent going off screen
                     const margin = this.size * 2;
                     if (this.x < margin) {
                         this.x = margin;
-                        this.vx = Math.abs(this.vx) * 0.5; // Отскок вправо
+                        this.vx = Math.abs(this.vx) * 0.5; // Bounce right
                     } else if (this.x > this.canvasWidth - margin) {
                         this.x = this.canvasWidth - margin;
-                        this.vx = -Math.abs(this.vx) * 0.5; // Отскок влево
+                        this.vx = -Math.abs(this.vx) * 0.5; // Bounce left
                     }
                 } else if (this.type.name === 'fast') {
-                    // Зигзагообразное движение
+                    // Zigzag movement
                     this.x += this.vx;
                     this.zigzagOffset += 0.1;
                     this.y += Math.sin(this.zigzagOffset) * 3;
                 } else if (this.type.name === 'ufo') {
-                    // НЛО летит быстрее и с небольшим покачиванием
+                    // UFO flies faster with slight wobble
                     this.x += this.vx;
                     this.y += Math.sin(Date.now() / 100) * 2;
                 } else {
-                    // Обычная утка - прямая траектория
+                    // Normal duck - straight trajectory
                     this.x += this.vx;
                 }
 
-                // Анимация крыльев (в 2 раза реже, большая амплитуда)
+                // Wing animation (2x less frequent, larger amplitude)
                 this.wingAngle = Math.sin(Date.now() / 100 * this.wingSpeed * 5) * 1.2;
             }
 
@@ -691,25 +466,25 @@
                 ctx.save();
                 ctx.translate(this.x, this.y);
                 
-                // Отражение по горизонтали в зависимости от направления
+                // Horizontal flip based on direction
                 if (this.direction === -1) {
                     ctx.scale(-1, 1);
                 }
                 
-                const s = this.size / 40; // Масштаб
-                
+                const s = this.size / 40; // Scale
+
                 if (this.type.name === 'ufo') {
-                    // Рисуем НЛО
+                    // Draw UFO
                     this.drawUFO(ctx, s);
                 } else if (this.type.name === 'falling') {
-                    // Рисуем утку с парашютом
+                    // Draw duck with parachute
                     this.drawFallingChicken(ctx, s);
                 } else {
-                    // Рисуем обычную утку
+                    // Draw normal duck
                     this.drawChicken(ctx, s);
                 }
 
-                // Отладка: точка в центре утки
+                // Debug: dot at duck center
                 ctx.fillStyle = '#FF00FF';
                 ctx.beginPath();
                 ctx.arc(0, 0, 3, 0, Math.PI * 2);
@@ -719,24 +494,24 @@
             }
 
             drawChicken(ctx, s) {
-                // Тело (более вытянутое, утиное)
+                // Body (more elongated, duck-like)
                 ctx.fillStyle = this.color;
                 ctx.beginPath();
                 ctx.ellipse(0, 0, 28 * s, 15 * s, 0, 0, Math.PI * 2);
                 ctx.fill();
 
-                // Голова (более круглая)
+                // Head (more round)
                 ctx.beginPath();
                 ctx.arc(22 * s, -8 * s, 11 * s, 0, Math.PI * 2);
                 ctx.fill();
 
-                // Клюв (плоский, утиный)
+                // Beak (flat, duck-like)
                 ctx.fillStyle = '#FFA500';
                 ctx.beginPath();
                 ctx.ellipse(32 * s, -6 * s, 8 * s, 5 * s, 0, 0, Math.PI * 2);
                 ctx.fill();
 
-                // Глаз
+                // Eye
                 ctx.fillStyle = '#FFF';
                 ctx.beginPath();
                 ctx.arc(24 * s, -11 * s, 4 * s, 0, Math.PI * 2);
@@ -746,13 +521,13 @@
                 ctx.arc(25 * s, -11 * s, 2 * s, 0, Math.PI * 2);
                 ctx.fill();
 
-                // Шея (немного изогнутая)
+                // Neck (slightly curved)
                 ctx.fillStyle = this.color;
                 ctx.beginPath();
                 ctx.ellipse(15 * s, -2 * s, 8 * s, 10 * s, 0.2, 0, Math.PI * 2);
                 ctx.fill();
 
-                // Крылья (анимация)
+                // Wings (animation)
                 ctx.fillStyle = this.color;
                 ctx.save();
                 ctx.rotate(this.wingAngle);
@@ -761,20 +536,20 @@
                 ctx.fill();
                 ctx.restore();
 
-                // Хвост (короткий)
+                // Tail (short)
                 ctx.beginPath();
                 ctx.ellipse(-25 * s, -2 * s, 12 * s, 7 * s, 0.3, 0, Math.PI * 2);
                 ctx.fill();
             }
 
             drawFallingChicken(ctx, s) {
-                // Парашют (зелёный, камуфляжный)
+                // Parachute (green, camouflage)
                 ctx.fillStyle = '#228B22';
                 ctx.beginPath();
                 ctx.arc(0, -35 * s, 25 * s, Math.PI, 0);
                 ctx.fill();
 
-                // Стропы
+                // Suspension lines
                 ctx.strokeStyle = '#FFF';
                 ctx.lineWidth = 1;
                 ctx.beginPath();
@@ -784,7 +559,7 @@
                 ctx.lineTo(0, -10 * s);
                 ctx.stroke();
 
-                // Утка (с зелёным оттенком для камуфляжа)
+                // Duck (with green tint for camouflage)
                 const originalColor = this.color;
                 this.color = '#6B8E6B';
                 this.drawChicken(ctx, s * 0.8);
@@ -792,19 +567,19 @@
             }
 
             drawUFO(ctx, s) {
-                // Корпус НЛО
+                // UFO body
                 ctx.fillStyle = '#C0C0C0';
                 ctx.beginPath();
                 ctx.ellipse(0, 5 * s, 30 * s, 10 * s, 0, 0, Math.PI * 2);
                 ctx.fill();
-                
-                // Купол
+
+                // Dome
                 ctx.fillStyle = '#87CEEB';
                 ctx.beginPath();
                 ctx.arc(0, 0, 15 * s, Math.PI, 0);
                 ctx.fill();
-                
-                // Огни
+
+                // Lights
                 const colors = ['#FF0000', '#00FF00', '#0000FF', '#FFFF00'];
                 for (let i = 0; i < 4; i++) {
                     const angle = (Date.now() / 200 + i * Math.PI / 2) % (Math.PI * 2);
@@ -818,16 +593,16 @@
             isOffScreen() {
                 const margin = 150;
                 if (this.type.name === 'falling') {
-                    // Падающая утка удаляется, когда ушла вниз за экран
+                    // Falling duck removed when it goes below screen
                     return this.y > this.canvasHeight + margin;
                 }
-                
-                // Проверка по направлению полёта
+
+                // Check by flight direction
                 if (this.direction === 1) {
-                    // Летит вправо — удаляем, когда ушла за правый край
+                    // Flying right — remove when past right edge
                     return this.x > this.canvasWidth + margin;
                 } else {
-                    // Летит влево — удаляем, когда ушла за левый край
+                    // Flying left — remove when past left edge
                     return this.x < -margin;
                 }
             }
@@ -841,7 +616,7 @@
         }
 
         /* ============================================
-           BACKGROUND - Фон игры
+           BACKGROUND - Game Background
            ============================================ */
         class Background {
             constructor(canvasWidth, canvasHeight) {
@@ -850,24 +625,24 @@
             }
 
             draw(ctx) {
-                // Сбрасываем массив деревьев перед каждой отрисовкой
+                // Reset trees array before each render
                 this.trees = [];
-                
-                // Небо (градиент)
+
+                // Sky (gradient)
                 const skyGradient = ctx.createLinearGradient(0, 0, 0, this.canvasHeight);
                 skyGradient.addColorStop(0, '#1E90FF');
                 skyGradient.addColorStop(0.5, '#87CEEB');
                 skyGradient.addColorStop(1, '#E0F6FF');
                 ctx.fillStyle = skyGradient;
                 ctx.fillRect(0, 0, this.canvasWidth, this.canvasHeight);
-                
-                // Солнце
+
+                // Sun
                 ctx.fillStyle = '#FFD700';
                 ctx.beginPath();
                 ctx.arc(this.canvasWidth - 100, 80, 50, 0, Math.PI * 2);
                 ctx.fill();
                 
-                // Солнечные лучи
+                // Sun rays
                 ctx.strokeStyle = 'rgba(255, 215, 0, 0.3)';
                 ctx.lineWidth = 3;
                 for (let i = 0; i < 8; i++) {
@@ -883,27 +658,27 @@
                     );
                     ctx.stroke();
                 }
-                
-                // Облака
+
+                // Clouds
                 this.drawCloud(ctx, 150, 100, 1);
                 this.drawCloud(ctx, 400, 150, 0.8);
                 this.drawCloud(ctx, 700, 80, 1.2);
-                
-                // Горы
+
+                // Mountains
                 this.drawMountains(ctx);
-                
-                // Земля
+
+                // Ground
                 const groundGradient = ctx.createLinearGradient(0, this.canvasHeight - 100, 0, this.canvasHeight);
                 groundGradient.addColorStop(0, '#228B22');
                 groundGradient.addColorStop(1, '#006400');
                 ctx.fillStyle = groundGradient;
                 ctx.fillRect(0, this.canvasHeight - 100, this.canvasWidth, 100);
-                
-                // Деревья (увеличенные, 2 дерева ближе к середине с округлой кроной)
-                this.drawTree(ctx, 150, this.canvasHeight - 120); // треугольное
-                this.drawTree(ctx, this.canvasWidth * 0.35, this.canvasHeight - 130, true); // округлое
-                this.drawTree(ctx, this.canvasWidth * 0.65, this.canvasHeight - 140, true); // округлое
-                this.drawTree(ctx, this.canvasWidth - 150, this.canvasHeight - 120); // треугольное
+
+                // Trees (enlarged, 2 trees closer to center with round crown)
+                this.drawTree(ctx, 150, this.canvasHeight - 120); // triangle
+                this.drawTree(ctx, this.canvasWidth * 0.35, this.canvasHeight - 130, true); // round
+                this.drawTree(ctx, this.canvasWidth * 0.65, this.canvasHeight - 140, true); // round
+                this.drawTree(ctx, this.canvasWidth - 150, this.canvasHeight - 120); // triangle
             }
 
             drawCloud(ctx, x, y, scale) {
@@ -921,7 +696,7 @@
                 ctx.beginPath();
                 ctx.moveTo(0, this.canvasHeight - 100);
                 
-                // Горный хребет
+                // Mountain range
                 const peaks = [
                     { x: 100, h: 150 },
                     { x: 250, h: 200 },
@@ -941,7 +716,7 @@
                 ctx.lineTo(0, this.canvasHeight);
                 ctx.fill();
                 
-                // Снежные шапки
+                // Snow caps
                 ctx.fillStyle = '#FFF';
                 for (const peak of peaks) {
                     if (peak.h > 140) {
@@ -955,30 +730,30 @@
             }
 
             drawTree(ctx, x, y, roundCrown = false) {
-                // Ствол (в 4 раза больше оригинала)
+                // Trunk (4x larger than original)
                 ctx.fillStyle = '#8B4513';
                 ctx.fillRect(x - 40, y, 80, 160);
 
                 if (roundCrown) {
-                    // Округлая крона
+                    // Round crown
                     ctx.fillStyle = '#006400';
-                    // Нижний ярус
+                    // Lower tier
                     ctx.beginPath();
                     ctx.arc(x, y - 100, 100, 0, Math.PI * 2);
                     ctx.fill();
-                    // Средний ярус
+                    // Middle tier
                     ctx.beginPath();
                     ctx.arc(x, y - 180, 85, 0, Math.PI * 2);
                     ctx.fill();
-                    // Верхний ярус
+                    // Upper tier
                     ctx.beginPath();
                     ctx.arc(x, y - 250, 70, 0, Math.PI * 2);
                     ctx.fill();
-                    
-                    // Сохраняем параметры дерева для проверки попаданий
+
+                    // Save tree parameters for hit detection
                     this.trees.push({ x, y, width: 200, height: 320 });
                 } else {
-                    // Треугольная крона (в 4 раза больше оригинала)
+                    // Triangular crown (4x larger than original)
                     ctx.fillStyle = '#006400';
                     ctx.beginPath();
                     ctx.moveTo(x - 120, y + 10);
@@ -991,28 +766,28 @@
                     ctx.lineTo(x, y - 320);
                     ctx.lineTo(x + 100, y - 120);
                     ctx.fill();
-                    
-                    // Сохраняем параметры дерева для проверки попаданий
+
+                    // Save tree parameters for hit detection
                     this.trees.push({ x, y, width: 240, height: 320 });
                 }
             }
         }
 
         /* ============================================
-           DATABASE MANAGER - Работа с Supabase
+           DATABASE MANAGER - Supabase Integration
            ============================================ */
         class DatabaseManager {
             constructor() {
-                // ВНИМАНИЕ: Эти данные видны в браузере, но RLS защищает базу
+                // WARNING: This data is visible in browser, but RLS protects the database
                 this.supabaseUrl = 'https://qpbmtblatvtvwdpgbenn.supabase.co';
-                this.supabaseKey = 'sb_publishable_DYO3jI1gGsGOauDctyDH4g_I3lgVoFO'; // Анонимный ключ (только на запись)
+                this.supabaseKey = 'sb_publishable_DYO3jI1gGsGOauDctyDH4g_I3lgVoFO'; // Anonymous key (write-only)
                 this.supabase = null;
                 this.initialized = false;
                 this.migrationDone = false;
                 this.lastCheckTime = 0;
                 this.cacheAvailable = false;
 
-                // Проверяем, загружен ли Supabase
+                // Check if Supabase is loaded
                 if (typeof supabase !== 'undefined') {
                     try {
                         this.supabase = supabase.createClient(this.supabaseUrl, this.supabaseKey);
@@ -1024,7 +799,7 @@
                 }
             }
 
-            // Проверка доступности Supabase (с кэшированием результата)
+            // Check Supabase availability (with result caching)
             async checkConnection(force = false) {
                 if (!this.initialized) {
                     this.cacheAvailable = false;
@@ -1032,7 +807,7 @@
                     return false;
                 }
 
-                // Кэшируем результат на 5 секунд
+                // Cache result for 5 seconds
                 const now = Date.now();
                 if (!force && now - this.lastCheckTime < 5000) {
                     return this.cacheAvailable;
@@ -1062,7 +837,7 @@
                 }
             }
 
-            // Сохранение результата
+            // Save result
             async saveScore(name, score) {
                 if (!this.initialized) {
                     return false;
@@ -1086,7 +861,7 @@
                 }
             }
 
-            // Получение топ игроков
+            // Get top players
             async getHighscores(limit = 10) {
                 if (!this.initialized) {
                     return [];
@@ -1111,7 +886,7 @@
                 }
             }
 
-            // Миграция локальных рекордов в Supabase
+            // Migrate local records to Supabase
             async migrateLocalScores(localScores) {
                 if (!this.initialized || this.migrationDone || localScores.length === 0) {
                     return { migrated: 0, total: localScores.length };
@@ -1121,7 +896,7 @@
                 let migrated = 0;
 
                 try {
-                    // Проверяем, есть ли уже такие результаты в базе
+                    // Check if these results already exist in database
                     const { data: existingScores } = await this.getHighscores(100);
                     const existingSet = new Set();
                     
@@ -1131,13 +906,13 @@
                         });
                     }
 
-                    // Сохраняем только те, которых ещё нет в базе
+                    // Save only those not yet in database
                     for (const score of localScores) {
                         const key = `${score.name}-${score.score}`;
                         if (!existingSet.has(key)) {
                             const saved = await this.saveScore(score.name, score.score);
                             if (saved) migrated++;
-                            // Небольшая задержка между запросами
+                            // Small delay between requests
                             await new Promise(resolve => setTimeout(resolve, 50));
                         }
                     }
@@ -1152,14 +927,14 @@
         }
 
         /* ============================================
-           GAME MANAGER - Управление игрой
+           GAME MANAGER - Game Management
            ============================================ */
         class GameManager {
             constructor() {
                 this.canvas = document.getElementById('gameCanvas');
                 this.ctx = this.canvas.getContext('2d');
 
-                // UI элементы
+                // UI elements
                 this.scoreEl = document.getElementById('scoreValue');
                 this.ammoEl = document.getElementById('ammoValue');
                 this.timeEl = document.getElementById('timeValue');
@@ -1169,23 +944,23 @@
                 this.gameOverEl = document.getElementById('gameOver');
                 this.finalScoreEl = document.getElementById('finalScore');
                 this.playerNameEl = document.getElementById('playerName');
-                // Таблица лидеров (одна для меню и Game Over)
+                // Leaderboard (one for menu and Game Over)
                 this.menuHighscoreListOl = document.getElementById('menuHighscoreListOl');
                 this.menuNetworkIndicator = document.getElementById('menuNetworkIndicator');
                 this.gameOverHighscoreListOl = document.getElementById('gameOverHighscoreListOl');
                 this.gameOverNetworkIndicator = document.getElementById('gameOverNetworkIndicator');
 
-                // Кнопки
+                // Buttons
                 this.startBtn = document.getElementById('startBtn');
                 this.restartBtn = document.getElementById('restartBtn');
                 this.saveScoreBtn = document.getElementById('saveScoreBtn');
 
-                // Настройки игры
+                // Game settings
                 this.ROUND_TIME = 90;
                 this.MAX_AMMO = 60;
                 this.MAX_CHICKENS = 7;
 
-                // Состояние
+                // State
                 this.state = 'MENU'; // MENU, PLAYING, GAME_OVER
                 this.score = 0;
                 this.ammo = 0;
@@ -1193,22 +968,22 @@
                 this.spawned = 0;
                 this.hit = 0;
 
-                // Игровые объекты
+                // Game objects
                 this.chickens = [];
                 this.particles = [];
                 this.background = null;
                 
-                // Мышь
+                // Mouse
                 this.mouseX = 0;
                 this.mouseY = 0;
 
-                // Последнее имя игрока
+                // Last player name
                 this.lastPlayerName = localStorage.getItem('crazyChickenLastPlayerName') || '';
 
-                // Звук
+                // Sound
                 this.soundManager = new SoundManager();
 
-                // База данных
+                // Database
                 this.db = new DatabaseManager();
 
                 // Highscores
@@ -1216,19 +991,19 @@
                 this.loadingScores = false;
                 this.supabaseConnected = false;
 
-                // Инициализация
+                // Initialization
                 this.resize();
                 this.setupEventListeners();
 
-                // СРАЗУ загружаем рекорды из Supabase и мигрируем локальные
-                // Сначала загружаем локальные для мгновенного отображения
+                // IMMEDIATELY load records from Supabase and migrate local ones
+                // First load local for instant display
                 this.highscores = this.loadHighscores();
                 this.displayHighscores();
 
-                // Затем асинхронно загружаем из Supabase
+                // Then asynchronously load from Supabase
                 this.initHighscores();
 
-                // Запуск цикла
+                // Start loop
                 this.lastTime = 0;
                 this.spawnTimer = 0;
                 this.gameTimer = 0;
@@ -1238,12 +1013,12 @@
 
             async initHighscores() {
                 console.log('Starting initHighscores...');
-                
-                // 1. Проверяем подключение к Supabase
+
+                // 1. Check Supabase connection
                 await this.checkAndShowNetworkStatus();
                 console.log('Supabase connected:', this.supabaseConnected);
 
-                // 2. Мигрируем локальные рекорды
+                // 2. Migrate local records
                 const localScores = this.loadHighscores();
                 console.log('Local scores found:', localScores.length);
                 
@@ -1255,20 +1030,20 @@
                     }
                 }
 
-                // 3. Загружаем актуальные рекорды из Supabase или используем локальные
+                // 3. Load current records from Supabase or use local ones
                 await this.loadActiveHighscores();
                 console.log('Final highscores count:', this.highscores.length);
 
-                // 4. Обновляем UI
+                // 4. Update UI
                 this.displayHighscores();
             }
 
-            // Проверка и отображение статуса сети
+            // Check and display network status
             async checkAndShowNetworkStatus() {
                 this.supabaseConnected = await this.db.checkConnection(true);
             }
 
-            // Загрузка рекордов из активного источника
+            // Load records from active source
             async loadActiveHighscores() {
                 if (this.supabaseConnected) {
                     const scores = await this.db.getHighscores(10);
@@ -1282,7 +1057,7 @@
                         return;
                     }
                 }
-                // Если Supabase не подключён или пуст, используем локальные
+                // If Supabase not connected or empty, use local ones
                 this.highscores = this.loadHighscores();
                 console.log(`Using ${this.highscores.length} local scores`);
             }
@@ -1294,45 +1069,45 @@
             }
 
             setupEventListeners() {
-                // Изменение размера
+                // Resize
                 window.addEventListener('resize', () => this.resize());
-                
-                // Движение мыши
+
+                // Mouse movement
                 this.canvas.addEventListener('mousemove', (e) => {
                     this.mouseX = e.clientX;
                     this.mouseY = e.clientY;
                 });
                 
-                // Инициализация позиции мыши в центре
+                // Initialize mouse position at center
                 this.mouseX = this.canvas.width / 2;
                 this.mouseY = this.canvas.height / 2;
-                
-                // Клик (выстрел)
+
+                // Click (shoot)
                 this.canvas.addEventListener('click', () => {
                     if (this.state === 'PLAYING') {
                         this.shoot();
                     }
                 });
                 
-                // Кнопки меню
+                // Menu buttons
                 this.startBtn.addEventListener('click', () => this.startGame());
                 this.restartBtn.addEventListener('click', () => this.showMenu());
                 this.saveScoreBtn.addEventListener('click', () => this.saveHighscore());
                 // this.clearLocalScoresBtn.addEventListener('click', () => this.clearLocalScores());
 
-                // Enter для сохранения имени
+                // Enter to save name
                 this.playerNameEl.addEventListener('keypress', (e) => {
                     if (e.key === 'Enter') {
                         this.saveHighscore();
                     }
                 });
 
-                // Сворачивание/разворачивание таблицы лидеров и инструкции
+                // Collapse/expand leaderboard and instructions
                 this.setupCollapsibleSections();
             }
 
             setupCollapsibleSections() {
-                // Таблица лидеров в меню
+                // Leaderboard in menu
                 const menuHighscoresHeader = document.getElementById('menuHighscoresHeader');
                 if (menuHighscoresHeader) {
                     menuHighscoresHeader.addEventListener('click', () => {
@@ -1340,7 +1115,7 @@
                     });
                 }
 
-                // Таблица лидеров в Game Over
+                // Leaderboard in Game Over
                 const gameOverHighscoresHeader = document.getElementById('gameOverHighscoresHeader');
                 if (gameOverHighscoresHeader) {
                     gameOverHighscoresHeader.addEventListener('click', () => {
@@ -1348,7 +1123,7 @@
                     });
                 }
 
-                // Инструкция
+                // Instructions
                 const instructionsHeader = document.getElementById('instructionsHeader');
                 if (instructionsHeader) {
                     instructionsHeader.addEventListener('click', () => {
@@ -1372,7 +1147,7 @@
                 }
             }
 
-            // Управление состоянием свёрнутых секций
+            // Manage collapsed sections state
             setMenuSectionsCollapsed(collapsed) {
                 const menuContent = document.getElementById('menuHighscoresContent');
                 const instructionsContent = document.getElementById('instructionsContent');
@@ -1394,7 +1169,7 @@
             }
 
             clearLocalScores() {
-                // Проверяем подключение к Supabase
+                // Check Supabase connection
                 if (!this.supabaseConnected) {
                     alert('⚠️ Сначала сохраните результаты в облако!\n\nСейчас вы работаете в локальном режиме. Подключите интернет для сохранения в глобальную таблицу.');
                     return;
@@ -1402,7 +1177,7 @@
 
                 if (confirm('🗑️ Вы уверены, что хотите очистить локальные рекорды?\n\nВсе результаты уже сохранены в Supabase и будут загружены при следующем запуске.')) {
                     localStorage.removeItem('crazyChickenHighscores');
-                    // Загружаем из Supabase
+                    // Load from Supabase
                     this.loadActiveHighscores();
                     this.displayHighscores();
                     alert('✅ Локальные рекорды очищены!\n\nЗагружены актуальные результаты из Supabase.');
@@ -1424,18 +1199,18 @@
                 this.gameTimer = 0;
                 this.spawnTimer = 0;
 
-                // Спавн первой утки для теста
+                // Spawn first duck for test
                 setTimeout(() => this.spawnChicken(), 500);
 
-                // Сворачиваем секции при старте игры
+                // Collapse sections on game start
                 this.setMenuSectionsCollapsed(true);
 
                 this.menuEl.style.display = 'none';
                 this.gameOverEl.style.display = 'none';
-                // Показываем форму сохранения и заголовок для следующего Game Over
+                // Show save form and title for next Game Over
                 document.getElementById('highscoreForm').style.display = 'flex';
                 document.getElementById('gameOverTitle').style.display = 'block';
-                // Подставляем последнее имя игрока
+                // Insert last player name
                 this.playerNameEl.value = this.lastPlayerName;
                 document.body.classList.remove('menu');
                 document.body.classList.add('playing');
@@ -1447,7 +1222,7 @@
                 this.state = 'MENU';
                 this.menuEl.style.display = 'flex';
                 this.gameOverEl.style.display = 'none';
-                // Разворачиваем таблицу лидеров, сворачиваем инструкцию
+                // Expand leaderboard, collapse instructions
                 this.setMenuSectionsCollapsed(false);
                 const instructionsContent = document.getElementById('instructionsContent');
                 const instructionsToggle = document.getElementById('instructionsToggle');
@@ -1466,7 +1241,7 @@
                 document.body.classList.remove('playing');
                 document.body.classList.add('menu');
 
-                // Проверяем сеть и обновляем таблицу
+                // Check network and update table
                 await this.checkAndShowNetworkStatus();
                 await this.loadActiveHighscores();
                 this.displayHighscores();
@@ -1478,7 +1253,7 @@
                 this.ammo--;
                 this.soundManager.playShoot();
 
-                // ����роверка попадания в дерево (преграда)
+                // Check tree hit (obstacle)
                 let hitTree = false;
                 const ch = this.canvas.height;
                 const trees = [
@@ -1496,23 +1271,23 @@
                 }
 
                 if (hitTree) {
-                    // Попали в дерево - промах с забавным звуком
+                    // Hit tree - miss with funny sound
                     this.soundManager.playMiss();
                     this.updateUI();
 
-                    // Проверка окончания игры — если патроны кончились
+                    // Check game end — if ammo ran out
                     if (this.ammo <= 0) {
                         setTimeout(() => this.gameOver(), 500);
                     }
                     return;
                 }
 
-                // Проверка попаданий в уток
+                // Check duck hits
                 let isHit = false;
                 for (let i = this.chickens.length - 1; i >= 0; i--) {
                     const chicken = this.chickens[i];
                     if (chicken.checkHit(this.mouseX, this.mouseY)) {
-                        // П���па��������ание!
+                        // Hit!
                         this.score += chicken.points;
                         this.hit++;
                         this.soundManager.playHit();
@@ -1529,20 +1304,20 @@
 
                 this.updateUI();
 
-                // Проверка окончания игры — если ��атроны кончились
+                // Check game end — if ammo ran out
                 if (this.ammo <= 0) {
                     setTimeout(() => this.gameOver(), 500);
                 }
             }
 
-            // Проверка попадания в дерево с учётом формы кроны
+            // Check tree hit considering crown shape
             checkTreeHit(tree) {
                 const trunkWidth = 80;
                 const trunkHeight = 160;
                 const trunkTop = tree.y;
                 const trunkBottom = tree.y + trunkHeight;
                 
-                // Проверка попадания в ствол
+                // Check trunk hit
                 if (this.mouseX >= tree.x - trunkWidth / 2 &&
                     this.mouseX <= tree.x + trunkWidth / 2 &&
                     this.mouseY >= trunkTop &&
@@ -1550,13 +1325,13 @@
                     return true;
                 }
                 
-                // Проверка попадания в крону
+                // Check crown hit
                 if (tree.type === 'round') {
-                    // Округлая крона - три яруса
+                    // Round crown - three tiers
                     const crownLayers = [
-                        { y: tree.y - 90, r: 100 },   // Нижний ярус (опущен на 10px)
-                        { y: tree.y - 170, r: 85 },    // Средний ярус (опущен на 10px)
-                        { y: tree.y - 240, r: 70 }     // Верхний ярус (опущен на 10px)
+                        { y: tree.y - 90, r: 100 },   // Lower tier (lowered by 10px)
+                        { y: tree.y - 170, r: 85 },    // Middle tier (lowered by 10px)
+                        { y: tree.y - 240, r: 70 }     // Upper tier (lowered by 10px)
                     ];
                     
                     for (const layer of crownLayers) {
@@ -1568,16 +1343,16 @@
                         }
                     }
                 } else {
-                    // Треугольная крона - два треугольника (опущены на 10px)
+                    // Triangular crown - two triangles (lowered by 10px)
                     const triangles = [
                         { baseY: tree.y + 10, topY: tree.y - 230, halfWidth: 120 },
                         { baseY: tree.y - 120, topY: tree.y - 320, halfWidth: 100 }
                     ];
 
                     for (const tri of triangles) {
-                        // Проверка попадания в треугольник
+                        // Check triangle hit
                         if (this.mouseY >= tri.topY && this.mouseY <= tri.baseY) {
-                            // Ширина треугольника на уровне клика (линейная интерполяция от вершины к основанию)
+                            // Triangle width at click level (linear interpolation from vertex to base)
                             const triHeight = tri.baseY - tri.topY;
                             const progress = (this.mouseY - tri.topY) / triHeight;
                             const currentHalfWidth = tri.halfWidth * progress;
@@ -1602,7 +1377,7 @@
             spawnChicken() {
                 if (this.chickens.length >= this.MAX_CHICKENS) return;
 
-                // Убедимся, что размеры корректны
+                // Make sure sizes are correct
                 let width = this.canvas.width;
                 let height = this.canvas.height;
 
@@ -1619,8 +1394,8 @@
 
             update(deltaTime) {
                 if (this.state !== 'PLAYING') return;
-                
-                // Таймер игры
+
+                // Game timer
                 this.gameTimer += deltaTime;
                 if (this.gameTimer >= 1000) {
                     this.gameTimer -= 1000;
@@ -1633,23 +1408,23 @@
                     }
                 }
                 
-                // Спавн уток
+                // Duck spawn
                 this.spawnTimer += deltaTime;
-                const spawnInterval = Math.max(800, 2000 - this.score * 5); // Чем больше очков, тем чаще спавн (минимум 800мс)
+                const spawnInterval = Math.max(800, 2000 - this.score * 5); // More points = more frequent spawn (minimum 800ms)
                 if (this.spawnTimer >= spawnInterval) {
                     this.spawnTimer = 0;
                     this.spawnChicken();
                 }
-                
-                // Обновление уток
+
+                // Update ducks
                 for (let i = this.chickens.length - 1; i >= 0; i--) {
                     this.chickens[i].update();
                     if (this.chickens[i].isOffScreen()) {
                         this.chickens.splice(i, 1);
                     }
                 }
-                
-                // Обновление частиц
+
+                // Update particles
                 for (let i = this.particles.length - 1; i >= 0; i--) {
                     this.particles[i].update();
                     if (this.particles[i].isDead()) {
@@ -1659,30 +1434,30 @@
             }
 
             draw() {
-                // Очистка
+                // Clear
                 this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
 
-                // Фон (без деревьев)
+                // Background (without trees)
                 if (this.background) {
                     this.drawBackgroundWithoutTrees();
                 }
 
-                // Утки
+                // Ducks
                 for (const chicken of this.chickens) {
                     chicken.draw(this.ctx);
                 }
 
-                // Деревья (поверх уток)
+                // Trees (over ducks)
                 if (this.background) {
                     this.drawTrees();
                 }
 
-                // Частицы
+                // Particles
                 for (const particle of this.particles) {
                     particle.draw(this.ctx);
                 }
 
-                // Прицел
+                // Crosshair
                 if (this.state === 'PLAYING') {
                     this.drawCrosshair();
                 }
@@ -1693,7 +1468,7 @@
                 const cw = this.canvas.width;
                 const ch = this.canvas.height;
                 
-                // Небо (градиент)
+                // Sky (gradient)
                 const skyGradient = ctx.createLinearGradient(0, 0, 0, ch);
                 skyGradient.addColorStop(0, '#1E90FF');
                 skyGradient.addColorStop(0.5, '#87CEEB');
@@ -1701,13 +1476,13 @@
                 ctx.fillStyle = skyGradient;
                 ctx.fillRect(0, 0, cw, ch);
 
-                // Солнце
+                // Sun
                 ctx.fillStyle = '#FFD700';
                 ctx.beginPath();
                 ctx.arc(cw - 100, 80, 50, 0, Math.PI * 2);
                 ctx.fill();
 
-                // Солнечные лучи
+                // Sun rays
                 ctx.strokeStyle = 'rgba(255, 215, 0, 0.3)';
                 ctx.lineWidth = 3;
                 for (let i = 0; i < 8; i++) {
@@ -1724,15 +1499,15 @@
                     ctx.stroke();
                 }
 
-                // Облака
+                // Clouds
                 this.drawCloud(150, 100, 1);
                 this.drawCloud(400, 150, 0.8);
                 this.drawCloud(700, 80, 1.2);
 
-                // Горы
+                // Mountains
                 this.drawMountains();
 
-                // Земля
+                // Ground
                 const groundGradient = ctx.createLinearGradient(0, ch - 100, 0, ch);
                 groundGradient.addColorStop(0, '#228B22');
                 groundGradient.addColorStop(1, '#006400');
@@ -1759,7 +1534,7 @@
                 ctx.beginPath();
                 ctx.moveTo(0, ch - 100);
 
-                // Горный хребет
+                // Mountain range
                 const peaks = [
                     { x: 100, h: 150 },
                     { x: 250, h: 200 },
@@ -1779,7 +1554,7 @@
                 ctx.lineTo(0, ch);
                 ctx.fill();
 
-                // Снежные шапки
+                // Snow caps
                 ctx.fillStyle = '#FFF';
                 for (const peak of peaks) {
                     if (peak.h > 140) {
@@ -1796,37 +1571,38 @@
                 const ctx = this.ctx;
                 const ch = this.canvas.height;
                 
-                // Рисуем деревья в том же порядке, что и в background.draw()
-                this._drawTree(150, ch - 120); // треугольное
-                this._drawTree(this.canvas.width * 0.35, ch - 130, true); // округлое
-                this._drawTree(this.canvas.width * 0.65, ch - 140, true); // округлое
-                this._drawTree(this.canvas.width - 150, ch - 120); // треугольное
+                // Draw trees in same order as background.draw()
+                this._drawTree(150, ch - 120); // triangle
+                this._drawTree(this.canvas.width * 0.35, ch - 130, true); // round
+                this._drawTree(this.canvas.width * 0.65, ch - 140, true); // round
+                this._drawTree(this.canvas.width - 150, ch - 120); // triangle
             }
 
             _drawTree(x, y, roundCrown = false) {
                 const ctx = this.ctx;
-                
-                // Ствол (в 4 раза больше оригинала)
+
+                // Trunk (4x larger than original)
                 ctx.fillStyle = '#8B4513';
                 ctx.fillRect(x - 40, y, 80, 160);
 
                 if (roundCrown) {
-                    // Округлая крона (опущена на 10 пикселей)
+                    // Round crown (lowered by 10 pixels)
                     ctx.fillStyle = '#006400';
-                    // Нижний ярус
+                    // Lower tier
                     ctx.beginPath();
                     ctx.arc(x, y - 90, 100, 0, Math.PI * 2);
                     ctx.fill();
-                    // Средний ярус
+                    // Middle tier
                     ctx.beginPath();
                     ctx.arc(x, y - 170, 85, 0, Math.PI * 2);
                     ctx.fill();
-                    // Верхний ярус
+                    // Upper tier
                     ctx.beginPath();
                     ctx.arc(x, y - 240, 70, 0, Math.PI * 2);
                     ctx.fill();
                 } else {
-                    // Треугольная крона (в 4 р��за больше оригинала)
+                    // Triangular crown (4x larger than original)
+                    // Triangular crown (4x larger than original)
                     ctx.fillStyle = '#006400';
                     ctx.beginPath();
                     ctx.moveTo(x - 120, y + 10);
@@ -1853,17 +1629,17 @@
                 this.ctx.shadowColor = '#000';
                 this.ctx.shadowBlur = 4;
                 
-                // Внешний круг
+                // Outer circle
                 this.ctx.beginPath();
                 this.ctx.arc(x, y, size, 0, Math.PI * 2);
                 this.ctx.stroke();
                 
-                // Внутренний круг
+                // Inner circle
                 this.ctx.beginPath();
                 this.ctx.arc(x, y, size / 2, 0, Math.PI * 2);
                 this.ctx.stroke();
                 
-                // Перекрестие
+                // Crosshair
                 this.ctx.beginPath();
                 this.ctx.moveTo(x - size - 5, y);
                 this.ctx.lineTo(x + size + 5, y);
@@ -1871,7 +1647,7 @@
                 this.ctx.lineTo(x, y + size + 5);
                 this.ctx.stroke();
                 
-                // Точка в центре
+                // Center point
                 this.ctx.fillStyle = '#FF0000';
                 this.ctx.beginPath();
                 this.ctx.arc(x, y, 3, 0, Math.PI * 2);
@@ -1887,7 +1663,7 @@
                 this.spawnedEl.textContent = this.spawned;
                 this.hitEl.textContent = this.hit;
 
-                // Цвет патронов меняется когда мало
+                // Ammo color changes when low
                 if (this.ammo <= 10) {
                     this.ammoEl.style.color = '#FF0000';
                 } else {
@@ -1916,15 +1692,15 @@
             async saveHighscore() {
                 const name = this.playerNameEl.value.trim() || 'Аноним';
 
-                // ПРОВЕРКА: сначала проверяем доступность Supabase
+                // CHECK: first check Supabase availability
                 await this.checkAndShowNetworkStatus();
 
                 if (this.supabaseConnected) {
-                    // Сохраняем в Supabase
+                    // Save to Supabase
                     const saved = await this.db.saveScore(name, this.score);
                     if (saved) {
                         console.log('Score saved to Supabase');
-                        // Загружаем актуальные результаты
+                        // Load current results
                         const scores = await this.db.getHighscores(10);
                         if (scores.length > 0) {
                             this.highscores = scores.map(s => ({
@@ -1936,7 +1712,7 @@
                         }
                     }
                 } else {
-                    // Сохраняем локально
+                    // Save locally
                     const highscore = {
                         name: name,
                         score: this.score,
@@ -1947,26 +1723,26 @@
                     this.highscores = this.highscores.slice(0, 10);
                     localStorage.setItem('crazyChickenHighscores', JSON.stringify(this.highscores));
                     console.log('Score saved locally');
-                    
-                    // Сразу обновляем таблицу
+
+                    // Immediately update table
                     this.displayHighscores();
                 }
 
-                // Сохраняем последнее имя игрока
+                // Save last player name
                 localStorage.setItem('crazyChickenLastPlayerName', name);
                 this.lastPlayerName = name;
 
-                // Скрываем форму и показываем меню
+                // Hide form and show menu
                 document.getElementById('highscoreForm').style.display = 'none';
                 document.getElementById('gameOverTitle').style.display = 'none';
 
-                // Обновляем таблицу и показываем меню
+                // Update table and show menu
                 this.displayHighscores();
                 this.showMenu();
             }
 
             displayHighscores() {
-                // Обновляем таблицу в меню (топ-5)
+                // Update table in menu (top-5)
                 if (this.menuHighscoreListOl) {
                     this.menuHighscoreListOl.innerHTML = '';
 
@@ -1987,14 +1763,14 @@
                         this.menuHighscoreListOl.appendChild(li);
                     }
 
-                    // Обновляем индикатор сети в меню
+                    // Update network indicator in menu
                     if (this.menuNetworkIndicator) {
                         this.menuNetworkIndicator.textContent = this.supabaseConnected ? '🌐 Онлайн' : '🔴 Оффлайн';
                         this.menuNetworkIndicator.style.color = this.supabaseConnected ? '#32CD32' : '#FF6347';
                     }
                 }
 
-                // Обновляем таблицу в Game Over (топ-10)
+                // Update table in Game Over (top-10)
                 if (this.gameOverHighscoreListOl) {
                     this.gameOverHighscoreListOl.innerHTML = '';
 
@@ -2015,7 +1791,7 @@
                         this.gameOverHighscoreListOl.appendChild(li);
                     }
 
-                    // Обновляем индикатор сети в Game Over
+                    // Update network indicator in Game Over
                     if (this.gameOverNetworkIndicator) {
                         this.gameOverNetworkIndicator.textContent = this.supabaseConnected ? '🌐 Онлайн' : '🔴 Оффлайн';
                         this.gameOverNetworkIndicator.style.color = this.supabaseConnected ? '#32CD32' : '#FF6347';
@@ -2025,7 +1801,7 @@
         }
 
         // ============================================
-        // ЗАПУСК ИГРЫ
+        // GAME START
         // ============================================
         window.addEventListener('DOMContentLoaded', () => {
             const game = new GameManager();
