@@ -166,24 +166,26 @@ class GameManager {
         this.mouseX = this.canvas.width / 2;
         this.mouseY = this.canvas.height / 2;
 
-        // Click (shoot)
-        this.canvas.addEventListener('click', () => {
-            if (this.state === 'PLAYING') {
+        // Click (shoot) - only left mouse button
+        this.canvas.addEventListener('click', (e) => {
+            if (this.state === 'PLAYING' && e.button === 0) {
                 this.shoot();
             }
         });
 
-        // Firefox-specific: Block all mouse buttons except left in capture phase
-        window.addEventListener('mousedown', (e) => {
-            if (this.state === 'PLAYING' && e.button !== 0) {
+        // Right click (reload) - use mousedown with button check
+        this.canvas.addEventListener('mousedown', (e) => {
+            if (this.state === 'PLAYING' && e.button === 2) {
                 e.preventDefault();
                 e.stopPropagation();
+                this.reload();
                 return false;
             }
-        }, { capture: true });
+        });
 
-        window.addEventListener('mouseup', (e) => {
-            if (this.state === 'PLAYING' && e.button !== 0) {
+        // Block middle mouse button and browser gestures
+        window.addEventListener('mousedown', (e) => {
+            if (this.state === 'PLAYING' && e.button === 1) {
                 e.preventDefault();
                 e.stopPropagation();
                 return false;
@@ -195,27 +197,9 @@ class GameManager {
             if (this.state === 'PLAYING') {
                 e.preventDefault();
                 e.stopPropagation();
-                
-                // Only allow reload on canvas right-click
-                if (e.target === this.canvas) {
-                    this.reload();
-                }
                 return false;
             }
         }, { capture: true });
-
-        // Disable touch gestures (capture phase for priority)
-        this.canvas.addEventListener('touchstart', (e) => {
-            e.preventDefault();
-        }, { passive: false, capture: true });
-
-        this.canvas.addEventListener('touchmove', (e) => {
-            e.preventDefault();
-        }, { passive: false, capture: true });
-
-        this.canvas.addEventListener('gesturestart', (e) => {
-            e.preventDefault();
-        }, true);
 
         // Disable browser keyboard shortcuts during game (capture phase)
         window.addEventListener('keydown', (e) => {
