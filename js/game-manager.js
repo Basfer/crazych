@@ -160,13 +160,36 @@ class GameManager {
             }
         });
 
-        // Disable browser gestures and context menu on canvas
-        this.canvas.addEventListener('mousedown', (e) => {
-            // Prevent middle and right click default actions
-            if (e.button === 1 || e.button === 2) {
+        // Firefox-specific: Block all mouse buttons except left in capture phase
+        window.addEventListener('mousedown', (e) => {
+            if (this.state === 'PLAYING' && e.button !== 0) {
                 e.preventDefault();
+                e.stopPropagation();
+                return false;
             }
-        });
+        }, { capture: true });
+
+        window.addEventListener('mouseup', (e) => {
+            if (this.state === 'PLAYING' && e.button !== 0) {
+                e.preventDefault();
+                e.stopPropagation();
+                return false;
+            }
+        }, { capture: true });
+
+        // Block context menu completely
+        window.addEventListener('contextmenu', (e) => {
+            if (this.state === 'PLAYING') {
+                e.preventDefault();
+                e.stopPropagation();
+                
+                // Only allow reload on canvas right-click
+                if (e.target === this.canvas) {
+                    this.reload();
+                }
+                return false;
+            }
+        }, { capture: true });
 
         // Disable touch gestures (capture phase for priority)
         this.canvas.addEventListener('touchstart', (e) => {
@@ -186,53 +209,15 @@ class GameManager {
             if (this.state === 'PLAYING') {
                 // Block F5, Ctrl+R, Ctrl+Shift+R, Alt+Home, etc.
                 if (e.key === 'F5' ||
-                    (e.ctrlKey && e.key === 'r') ||
-                    (e.ctrlKey && e.key === 'R') ||
-                    (e.ctrlKey && e.shiftKey && e.key === 'r') ||
-                    (e.ctrlKey && e.shiftKey && e.key === 'R') ||
-                    (e.ctrlKey && e.key === 'к') ||
-                    (e.ctrlKey && e.key === 'К') ||
-                    (e.ctrlKey && e.shiftKey && e.key === 'к') ||
-                    (e.ctrlKey && e.shiftKey && e.key === 'К') ||
-                    (e.altKey && e.key === 'Home') ||
-                    (e.altKey && e.key === 'Left') ||
-                    (e.altKey && e.key === 'Right')) {
+                    (e.ctrlKey && (e.key === 'r' || e.key === 'R' || e.key === 'к' || e.key === 'К')) ||
+                    (e.ctrlKey && e.shiftKey && (e.key === 'r' || e.key === 'R' || e.key === 'к' || e.key === 'К')) ||
+                    (e.altKey && (e.key === 'Home' || e.key === 'Left' || e.key === 'Right'))) {
                     e.preventDefault();
                     e.stopPropagation();
+                    return false;
                 }
             }
-        }, true);
-
-        // Block browser mouse gestures globally during game (capture phase)
-        window.addEventListener('mousedown', (e) => {
-            if (this.state === 'PLAYING') {
-                // Block middle and right mouse buttons
-                if (e.button === 1 || e.button === 2) {
-                    e.preventDefault();
-                    e.stopPropagation();
-                }
-            }
-        }, true);
-
-        // Block mouse back/forward buttons (buttons 3 and 4)
-        window.addEventListener('mouseup', (e) => {
-            if (this.state === 'PLAYING') {
-                if (e.button === 3 || e.button === 4) {
-                    e.preventDefault();
-                    e.stopPropagation();
-                }
-            }
-        }, true);
-
-        // Right click (reload) - handle after blocking
-        this.canvas.addEventListener('contextmenu', (e) => {
-            e.preventDefault();
-            e.stopPropagation();
-            if (this.state === 'PLAYING') {
-                this.reload();
-            }
-            return false;
-        });
+        }, { capture: true });
 
 
         // Menu buttons

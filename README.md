@@ -23,6 +23,19 @@ Browser-based "Duck Hunting" game built with HTML5 Canvas and Vanilla JavaScript
 4. Aim with the mouse and shoot with the left mouse button
 5. Score as many points as possible in 90 seconds!
 
+### 🖱️ Controls
+
+- **Left Mouse Button** — Shoot
+- **Right Mouse Button** — Reload (refill ammo to MAX)
+- **Mouse Movement** — Aim
+
+> **⚠️ Firefox users:** If mouse gestures still work (back/forward navigation), disable them in Firefox settings:
+> 1. Type `about:config` in address bar
+> 2. Search for `mousegesture`
+> 3. Set `browser.mousegesture.enabled` to `false`
+> 
+> Or install an extension like "GestureBlocker" to disable gestures per-site.
+
 ## 🎯 Target Types
 
 | Type | Points | Description |

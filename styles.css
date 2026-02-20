@@ -18,6 +18,14 @@ body {
     display: block;
     width: 100vw;
     height: 100vh;
+    /* Disable browser touch actions and gestures */
+    touch-action: none;
+    -ms-touch-action: none;
+    -ms-content-zooming: none;
+    user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
 }
 
 /* UI Container */
