@@ -160,15 +160,6 @@ class GameManager {
             }
         });
 
-        // Right click (reload)
-        this.canvas.addEventListener('contextmenu', (e) => {
-            e.preventDefault();
-            if (this.state === 'PLAYING') {
-                this.reload();
-            }
-            return false;
-        });
-
         // Disable browser gestures and context menu on canvas
         this.canvas.addEventListener('mousedown', (e) => {
             // Prevent middle and right click default actions
@@ -177,34 +168,72 @@ class GameManager {
             }
         });
 
-        // Disable touch gestures
+        // Disable touch gestures (capture phase for priority)
         this.canvas.addEventListener('touchstart', (e) => {
             e.preventDefault();
-        }, { passive: false });
+        }, { passive: false, capture: true });
 
         this.canvas.addEventListener('touchmove', (e) => {
             e.preventDefault();
-        }, { passive: false });
+        }, { passive: false, capture: true });
 
         this.canvas.addEventListener('gesturestart', (e) => {
             e.preventDefault();
+        }, true);
+
+        // Disable browser keyboard shortcuts during game (capture phase)
+        window.addEventListener('keydown', (e) => {
+            if (this.state === 'PLAYING') {
+                // Block F5, Ctrl+R, Ctrl+Shift+R, Alt+Home, etc.
+                if (e.key === 'F5' ||
+                    (e.ctrlKey && e.key === 'r') ||
+                    (e.ctrlKey && e.key === 'R') ||
+                    (e.ctrlKey && e.shiftKey && e.key === 'r') ||
+                    (e.ctrlKey && e.shiftKey && e.key === 'R') ||
+                    (e.ctrlKey && e.key === 'к') ||
+                    (e.ctrlKey && e.key === 'К') ||
+                    (e.ctrlKey && e.shiftKey && e.key === 'к') ||
+                    (e.ctrlKey && e.shiftKey && e.key === 'К') ||
+                    (e.altKey && e.key === 'Home') ||
+                    (e.altKey && e.key === 'Left') ||
+                    (e.altKey && e.key === 'Right')) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                }
+            }
+        }, true);
+
+        // Block browser mouse gestures globally during game (capture phase)
+        window.addEventListener('mousedown', (e) => {
+            if (this.state === 'PLAYING') {
+                // Block middle and right mouse buttons
+                if (e.button === 1 || e.button === 2) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                }
+            }
+        }, true);
+
+        // Block mouse back/forward buttons (buttons 3 and 4)
+        window.addEventListener('mouseup', (e) => {
+            if (this.state === 'PLAYING') {
+                if (e.button === 3 || e.button === 4) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                }
+            }
+        }, true);
+
+        // Right click (reload) - handle after blocking
+        this.canvas.addEventListener('contextmenu', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            if (this.state === 'PLAYING') {
+                this.reload();
+            }
+            return false;
         });
 
-        // Disable browser keyboard shortcuts during game
-        document.addEventListener('keydown', (e) => {
-            // Block F5, Ctrl+R, Ctrl+Shift+R, Alt+Home, etc.
-            if (e.key === 'F5' || 
-                (e.ctrlKey && e.key === 'r') || 
-                (e.ctrlKey && e.key === 'R') ||
-                (e.ctrlKey && e.shiftKey && e.key === 'r') ||
-                (e.ctrlKey && e.shiftKey && e.key === 'R') ||
-                (e.altKey && e.key === 'Home') ||
-                (e.altKey && e.key === 'Left') ||
-                (e.altKey && e.key === 'Right')) {
-                e.preventDefault();
-                return false;
-            }
-        });
 
         // Menu buttons
         this.startBtn.addEventListener('click', () => this.startGame());
