@@ -100,23 +100,11 @@ class GameManager {
         await this.checkAndShowNetworkStatus();
         console.log('Supabase connected:', this.supabaseConnected);
 
-        // 2. Migrate local records
-        const localScores = this.loadHighscores();
-        console.log('Local scores found:', localScores.length);
-
-        if (localScores.length > 0 && this.supabaseConnected) {
-            console.log(`Found ${localScores.length} local scores to migrate`);
-            const result = await this.db.migrateLocalScores(localScores);
-            if (result.migrated > 0) {
-                console.log(`Migrated ${result.migrated} scores to Supabase`);
-            }
-        }
-
-        // 3. Load current records from Supabase or use local ones
+        // 2. Load records from active source (Supabase or local)
         await this.loadActiveHighscores();
         console.log('Final highscores count:', this.highscores.length);
 
-        // 4. Update UI
+        // 3. Update UI
         this.displayHighscores();
     }
 
@@ -128,20 +116,19 @@ class GameManager {
     // Load records from active source
     async loadActiveHighscores() {
         if (this.supabaseConnected) {
+            // Use only Supabase when connected
             const scores = await this.db.getHighscores(10);
-            if (scores.length > 0) {
-                this.highscores = scores.map(s => ({
-                    name: s.name,
-                    score: s.score,
-                    date: new Date(s.created_at).toLocaleDateString('ru-RU')
-                }));
-                console.log(`Loaded ${this.highscores.length} scores from Supabase`);
-                return;
-            }
+            this.highscores = scores.map(s => ({
+                name: s.name,
+                score: s.score,
+                date: new Date(s.created_at).toLocaleDateString('ru-RU')
+            }));
+            console.log(`Loaded ${this.highscores.length} scores from Supabase`);
+        } else {
+            // Use only local storage when offline
+            this.highscores = this.loadHighscores();
+            console.log(`Using ${this.highscores.length} local scores`);
         }
-        // If Supabase not connected or empty, use local ones
-        this.highscores = this.loadHighscores();
-        console.log(`Using ${this.highscores.length} local scores`);
     }
 
     resize() {
@@ -790,18 +777,23 @@ class GameManager {
     saveHighscore() {
         const name = this.playerNameEl.value.trim() || 'Anonymous';
         this.lastPlayerName = name;
-        localStorage.setItem('crazyChickenLastPlayerName', name);
 
-        // Save to local storage
-        const localScores = this.loadHighscores();
-        localScores.push({ name, score: this.score, date: new Date().toLocaleDateString('ru-RU') });
-        localScores.sort((a, b) => b.score - a.score);
-        localScores.splice(10); // Keep only top 10
-        localStorage.setItem('crazyChickenHighscores', JSON.stringify(localScores));
-
-        // Save to Supabase
         if (this.supabaseConnected) {
-            this.db.saveScore(name, this.score);
+            // Save only to Supabase when connected
+            this.db.saveScore(name, this.score).then(() => {
+                // Reload and display leaderboard after save
+                this.loadActiveHighscores().then(() => {
+                    this.displayHighscores();
+                });
+            });
+        } else {
+            // Save only to local storage when offline
+            localStorage.setItem('crazyChickenLastPlayerName', name);
+            const localScores = this.loadHighscores();
+            localScores.push({ name, score: this.score, date: new Date().toLocaleDateString('ru-RU') });
+            localScores.sort((a, b) => b.score - a.score);
+            localScores.splice(10); // Keep only top 10
+            localStorage.setItem('crazyChickenHighscores', JSON.stringify(localScores));
         }
 
         // Hide save form and show Game Over title
