@@ -182,4 +182,52 @@ class SoundManager {
         oscillator.start();
         oscillator.stop(ctx.currentTime + 0.1);
     }
+
+    // Reload sound (shotgun pump)
+    playReload() {
+        if (!this.initialized) return;
+
+        const ctx = this.audioContext;
+        const duration = 1.0;
+
+        // Create noise for shotgun pump sound
+        const bufferSize = ctx.sampleRate * duration;
+        const buffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
+        const data = buffer.getChannelData(0);
+
+        // Create mechanical pumping noise
+        for (let i = 0; i < bufferSize; i++) {
+            const t = i / ctx.sampleRate;
+            // Two pump actions
+            if (t < 0.3 || (t > 0.4 && t < 0.7)) {
+                data[i] = (Math.random() * 2 - 1) * 0.5;
+            } else {
+                data[i] = 0;
+            }
+        }
+
+        const noise = ctx.createBufferSource();
+        noise.buffer = buffer;
+
+        // Lowpass filter for mechanical sound
+        const filter = ctx.createBiquadFilter();
+        filter.type = 'lowpass';
+        filter.frequency.value = 800;
+
+        // Volume envelope
+        const gain = ctx.createGain();
+        gain.gain.setValueAtTime(0.6, ctx.currentTime);
+        gain.gain.linearRampToValueAtTime(0.4, ctx.currentTime + 0.3);
+        gain.gain.setValueAtTime(0, ctx.currentTime + 0.4);
+        gain.gain.setValueAtTime(0.5, ctx.currentTime + 0.4);
+        gain.gain.linearRampToValueAtTime(0.3, ctx.currentTime + 0.7);
+        gain.gain.setValueAtTime(0, ctx.currentTime + 0.8);
+        gain.gain.setValueAtTime(0.7, ctx.currentTime + 0.8);
+        gain.gain.linearRampToValueAtTime(0.01, ctx.currentTime + duration);
+
+        noise.connect(filter);
+        filter.connect(gain);
+        gain.connect(ctx.destination);
+        noise.start();
+    }
 }

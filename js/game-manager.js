@@ -27,7 +27,7 @@ class GameManager {
 
         // Game settings
         this.ROUND_TIME = 20;
-        this.MAX_AMMO = 60;
+        this.MAX_AMMO = 7;
         this.MAX_CHICKENS = 7;
 
         // State
@@ -37,6 +37,9 @@ class GameManager {
         this.time = 0;
         this.spawned = 0;
         this.hit = 0;
+
+        // Reloading state
+        this.isReloading = false;
 
         // Game objects
         this.chickens = [];
@@ -154,6 +157,14 @@ class GameManager {
         this.canvas.addEventListener('click', () => {
             if (this.state === 'PLAYING') {
                 this.shoot();
+            }
+        });
+
+        // Right click (reload)
+        this.canvas.addEventListener('contextmenu', (e) => {
+            e.preventDefault();
+            if (this.state === 'PLAYING') {
+                this.reload();
             }
         });
 
@@ -356,7 +367,8 @@ class GameManager {
     }
 
     shoot() {
-        if (this.ammo <= 0) return;
+        // Can't shoot while reloading or out of ammo
+        if (this.isReloading || this.ammo <= 0) return;
 
         this.ammo--;
         this.soundManager.playShoot();
@@ -407,6 +419,23 @@ class GameManager {
         }
 
         this.updateUI();
+    }
+
+    // Reload weapon (right click)
+    reload() {
+        // Can't reload if already reloading or ammo is full
+        if (this.isReloading || this.ammo >= this.MAX_AMMO) return;
+
+        this.isReloading = true;
+        this.soundManager.playReload();
+
+        // Reload completes after 1 second (sound duration)
+        setTimeout(() => {
+            this.ammo = this.MAX_AMMO;
+            this.isReloading = false;
+            this.updateUI();
+            console.log('Reloaded! Ammo:', this.ammo);
+        }, 1000);
     }
 
     // Check tree hit considering crown shape
@@ -755,6 +784,12 @@ class GameManager {
         this.timeEl.textContent = this.time;
         this.spawnedEl.textContent = this.spawned;
         this.hitEl.textContent = this.hit;
+
+        // Show/hide reload indicator
+        const reloadIndicator = document.getElementById('reloadIndicator');
+        if (reloadIndicator) {
+            reloadIndicator.style.display = this.isReloading ? 'block' : 'none';
+        }
     }
 
     saveHighscore() {
