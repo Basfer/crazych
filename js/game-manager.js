@@ -26,7 +26,7 @@ class GameManager {
         this.saveScoreBtn = document.getElementById('saveScoreBtn');
 
         // Game settings
-        this.ROUND_TIME = 20;
+        this.ROUND_TIME = 90;
         this.MAX_AMMO = 7;
         this.MAX_CHICKENS = 7;
 
@@ -165,6 +165,44 @@ class GameManager {
             e.preventDefault();
             if (this.state === 'PLAYING') {
                 this.reload();
+            }
+            return false;
+        });
+
+        // Disable browser gestures and context menu on canvas
+        this.canvas.addEventListener('mousedown', (e) => {
+            // Prevent middle and right click default actions
+            if (e.button === 1 || e.button === 2) {
+                e.preventDefault();
+            }
+        });
+
+        // Disable touch gestures
+        this.canvas.addEventListener('touchstart', (e) => {
+            e.preventDefault();
+        }, { passive: false });
+
+        this.canvas.addEventListener('touchmove', (e) => {
+            e.preventDefault();
+        }, { passive: false });
+
+        this.canvas.addEventListener('gesturestart', (e) => {
+            e.preventDefault();
+        });
+
+        // Disable browser keyboard shortcuts during game
+        document.addEventListener('keydown', (e) => {
+            // Block F5, Ctrl+R, Ctrl+Shift+R, Alt+Home, etc.
+            if (e.key === 'F5' || 
+                (e.ctrlKey && e.key === 'r') || 
+                (e.ctrlKey && e.key === 'R') ||
+                (e.ctrlKey && e.shiftKey && e.key === 'r') ||
+                (e.ctrlKey && e.shiftKey && e.key === 'R') ||
+                (e.altKey && e.key === 'Home') ||
+                (e.altKey && e.key === 'Left') ||
+                (e.altKey && e.key === 'Right')) {
+                e.preventDefault();
+                return false;
             }
         });
 
