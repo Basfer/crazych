@@ -16,11 +16,9 @@ class GameManager {
         this.gameOverEl = document.getElementById('gameOver');
         this.finalScoreEl = document.getElementById('finalScore');
         this.playerNameEl = document.getElementById('playerName');
-        // Leaderboard (one for menu and Game Over)
+        // Leaderboard
         this.menuHighscoreListOl = document.getElementById('menuHighscoreListOl');
-        this.menuNetworkIndicator = document.getElementById('menuNetworkIndicator');
-        this.gameOverHighscoreListOl = document.getElementById('gameOverHighscoreListOl');
-        this.gameOverNetworkIndicator = document.getElementById('gameOverNetworkIndicator');
+        this.menuNetworkIndicator = document.getElementById('menuNetworkIndicator'); 
 
         // Buttons
         this.startBtn = document.getElementById('startBtn');
@@ -28,7 +26,7 @@ class GameManager {
         this.saveScoreBtn = document.getElementById('saveScoreBtn');
 
         // Game settings
-        this.ROUND_TIME = 90;
+        this.ROUND_TIME = 20;
         this.MAX_AMMO = 60;
         this.MAX_CHICKENS = 7;
 
@@ -115,6 +113,7 @@ class GameManager {
 
     // Load records from active source
     async loadActiveHighscores() {
+        console.debug('loadActiveHighscores...')
         if (this.supabaseConnected) {
             // Use only Supabase when connected
             const scores = await this.db.getHighscores(10);
@@ -160,11 +159,10 @@ class GameManager {
 
         // Menu buttons
         this.startBtn.addEventListener('click', () => this.startGame());
-        this.restartBtn.addEventListener('click', () => this.showMenu());
         this.saveScoreBtn.addEventListener('click', () => this.saveHighscore());
 
         // Enter to save name
-        this.playerNameEl.addEventListener('keypress', (e) => {
+    this.playerNameEl.addEventListener('keypress', (e) => {
             if (e.key === 'Enter') {
                 this.saveHighscore();
             }
@@ -201,14 +199,6 @@ class GameManager {
         if (menuHighscoresHeader) {
             menuHighscoresHeader.addEventListener('click', () => {
                 this.toggleSection('menuHighscoresContent', 'menuHighscoresToggle');
-            });
-        }
-
-        // Leaderboard in Game Over
-        const gameOverHighscoresHeader = document.getElementById('gameOverHighscoresHeader');
-        if (gameOverHighscoresHeader) {
-            gameOverHighscoresHeader.addEventListener('click', () => {
-                this.toggleSection('gameOverHighscoresContent', 'gameOverHighscoresToggle');
             });
         }
 
@@ -325,7 +315,7 @@ class GameManager {
         this.gameOverEl.style.display = 'none';
         // Show save form and title for next Game Over
         document.getElementById('highscoreForm').style.display = 'flex';
-        document.getElementById('gameOverTitle').style.display = 'block';
+        document.getElementById('gameOver').style.display = 'block';
         // Insert last player name
         this.playerNameEl.value = this.lastPlayerName;
         document.body.classList.remove('menu');
@@ -349,11 +339,13 @@ class GameManager {
     }
 
     async gameOver() {
+        console.debug('gameOver...')
         this.state = 'GAME_OVER';
         this.soundManager.playGameOver();
 
         this.finalScoreEl.textContent = this.languageManager?.t('gameOver.finalScore', { score: this.score }) || `Score: ${this.score}`;
-        this.gameOverEl.style.display = 'flex';
+        this.showMenu();
+        this.gameOverEl.style.display = 'contents';
         document.body.classList.remove('playing');
         document.body.classList.add('menu');
 
@@ -391,10 +383,6 @@ class GameManager {
             this.soundManager.playMiss();
             this.updateUI();
 
-            // Check game end — if ammo ran out
-            if (this.ammo <= 0) {
-                setTimeout(() => this.gameOver(), 500);
-            }
             return;
         }
 
@@ -419,11 +407,6 @@ class GameManager {
         }
 
         this.updateUI();
-
-        // Check game end — if ammo ran out
-        if (this.ammo <= 0) {
-            setTimeout(() => this.gameOver(), 500);
-        }
     }
 
     // Check tree hit considering crown shape
@@ -775,6 +758,7 @@ class GameManager {
     }
 
     saveHighscore() {
+        console.debug('saveHighscore...')
         const name = this.playerNameEl.value.trim() || 'Anonymous';
         this.lastPlayerName = name;
 
@@ -798,7 +782,7 @@ class GameManager {
 
         // Hide save form and show Game Over title
         document.getElementById('highscoreForm').style.display = 'none';
-        document.getElementById('gameOverTitle').style.display = 'none';
+        document.getElementById('gameOver').style.display = 'none';
 
         // Reload and display leaderboard
         this.loadActiveHighscores();
@@ -840,12 +824,11 @@ class GameManager {
             // Update network indicator
             if (networkIndicator) {
                 networkIndicator.textContent = this.supabaseConnected ? '🟢' : '🔴';
-                networkIndicator.title = this.supabaseConnected ? 'Онлайн' : 'Офлайн';
+                networkIndicator.title = this.supabaseConnected ? 'DB online' : 'DB offline';
             }
         };
 
         displayList(this.menuHighscoreListOl, this.menuNetworkIndicator);
-        displayList(this.gameOverHighscoreListOl, this.gameOverNetworkIndicator);
     }
 
     gameLoop(timestamp) {

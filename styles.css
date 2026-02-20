@@ -40,6 +40,7 @@ body {
     align-items: flex-start;
     padding: 20px;
     background: linear-gradient(to bottom, rgba(0,0,0,0.7), transparent);
+
 }
 
 .stat-box {
@@ -127,6 +128,10 @@ body {
     z-index: 10;
 }
 
+.gameOver-title {
+    top: 110px;
+}
+
 @keyframes pulse {
     0%, 100% { transform: scale(1); }
     50% { transform: scale(1.05); }
@@ -152,6 +157,8 @@ body {
     text-shadow: 2px 2px 4px #000;
     transition: all 0.3s;
     margin: 10px;
+    position: sticky;
+    top: 200px;
 }
 
 .menu-btn:hover {
@@ -248,7 +255,7 @@ body.menu {
    ============================================ */
 #languageSelector {
     position: absolute;
-    top: 20px;
+    top: 90px;
     right: 20px;
     z-index: 1000;
     pointer-events: auto;
