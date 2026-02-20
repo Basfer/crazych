@@ -145,8 +145,21 @@ class GameManager {
 
         // Mouse movement
         this.canvas.addEventListener('mousemove', (e) => {
-            this.mouseX = e.clientX;
-            this.mouseY = e.clientY;
+            if (document.pointerLockElement === this.canvas ||
+                document.mozPointerLockElement === this.canvas ||
+                document.webkitPointerLockElement === this.canvas) {
+                // Pointer lock mode - use movementX/movementY
+                this.mouseX += e.movementX || e.mozMovementX || e.webkitMovementX || 0;
+                this.mouseY += e.movementY || e.mozMovementY || e.webkitMovementY || 0;
+
+                // Keep within canvas bounds
+                this.mouseX = Math.max(0, Math.min(this.canvas.width, this.mouseX));
+                this.mouseY = Math.max(0, Math.min(this.canvas.height, this.mouseY));
+            } else {
+                // Normal mode - use client coordinates
+                this.mouseX = e.clientX;
+                this.mouseY = e.clientY;
+            }
         });
 
         // Initialize mouse position at center
@@ -207,6 +220,17 @@ class GameManager {
         // Disable browser keyboard shortcuts during game (capture phase)
         window.addEventListener('keydown', (e) => {
             if (this.state === 'PLAYING') {
+                // Exit pointer lock on ESC
+                if (e.key === 'Escape') {
+                    document.exitPointerLock = document.exitPointerLock ||
+                                               document.mozExitPointerLock ||
+                                               document.webkitExitPointerLock;
+                    if (document.exitPointerLock) {
+                        document.exitPointerLock();
+                    }
+                    return;
+                }
+
                 // Block F5, Ctrl+R, Ctrl+Shift+R, Alt+Home, etc.
                 if (e.key === 'F5' ||
                     (e.ctrlKey && (e.key === 'r' || e.key === 'R' || e.key === 'к' || e.key === 'К')) ||
@@ -367,6 +391,14 @@ class GameManager {
         this.particles = [];
         this.gameTimer = 0;
         this.spawnTimer = 0;
+
+        // Request pointer lock to capture mouse and disable browser gestures
+        this.canvas.requestPointerLock = this.canvas.requestPointerLock ||
+                                          this.canvas.mozRequestPointerLock ||
+                                          this.canvas.webkitRequestPointerLock;
+        if (this.canvas.requestPointerLock) {
+            this.canvas.requestPointerLock();
+        }
 
         // Spawn first duck for test
         setTimeout(() => this.spawnChicken(), 500);
