@@ -228,9 +228,61 @@ class GameManager {
         }, { capture: true });
 
 
-        // Menu buttons
-        this.startBtn.addEventListener('click', () => this.startGame());
+        // Menu buttons - start game with pointer lock and fullscreen
+        this.startBtn.addEventListener('click', () => {
+            // Request pointer lock FIRST (must be in user gesture handler)
+            const requestPointerLock = this.canvas.requestPointerLock ||
+                                        this.canvas.mozRequestPointerLock ||
+                                        this.canvas.webkitRequestPointerLock;
+            if (requestPointerLock) {
+                requestPointerLock.call(this.canvas).then(() => {
+                    console.log('Pointer lock acquired');
+                }).catch(err => {
+                    console.log('Pointer lock failed:', err);
+                });
+            }
+
+            // Request fullscreen mode
+            const requestFullscreen = document.documentElement.requestFullscreen ||
+                                      document.documentElement.mozRequestFullScreen ||
+                                      document.documentElement.webkitRequestFullscreen ||
+                                      document.documentElement.msRequestFullscreen;
+            if (requestFullscreen && !document.fullscreenElement) {
+                requestFullscreen.call(document.documentElement).then(() => {
+                    console.log('Fullscreen entered');
+                }).catch(err => {
+                    console.log('Fullscreen request failed:', err);
+                });
+            }
+
+            // Start the game
+            this.startGame();
+        });
         this.saveScoreBtn.addEventListener('click', () => this.saveHighscore());
+
+        // Restart button - exit fullscreen and pointer lock
+        this.restartBtn.addEventListener('click', () => {
+            // Exit pointer lock
+            document.exitPointerLock = document.exitPointerLock ||
+                                       document.mozExitPointerLock ||
+                                       document.webkitExitPointerLock;
+            if (document.exitPointerLock) {
+                document.exitPointerLock();
+            }
+
+            // Exit fullscreen mode
+            const exitFullscreen = document.exitFullscreen ||
+                                   document.mozCancelFullScreen ||
+                                   document.webkitExitFullscreen ||
+                                   document.msExitFullscreen;
+            if (exitFullscreen && document.fullscreenElement) {
+                exitFullscreen.call(document).catch(err => {
+                    console.log('Exit fullscreen failed:', err);
+                });
+            }
+
+            this.showMenu();
+        });
 
         // Enter to save name
     this.playerNameEl.addEventListener('keypress', (e) => {
@@ -376,25 +428,6 @@ class GameManager {
         this.gameTimer = 0;
         this.spawnTimer = 0;
 
-        // Request pointer lock to capture mouse and disable browser gestures
-        this.canvas.requestPointerLock = this.canvas.requestPointerLock ||
-                                          this.canvas.mozRequestPointerLock ||
-                                          this.canvas.webkitRequestPointerLock;
-        if (this.canvas.requestPointerLock) {
-            this.canvas.requestPointerLock();
-        }
-
-        // Request fullscreen mode
-        const requestFullscreen = document.documentElement.requestFullscreen ||
-                                  document.documentElement.mozRequestFullScreen ||
-                                  document.documentElement.webkitRequestFullscreen ||
-                                  document.documentElement.msRequestFullscreen;
-        if (requestFullscreen && !document.fullscreenElement) {
-            requestFullscreen.call(document.documentElement).catch(err => {
-                console.log('Fullscreen request failed:', err);
-            });
-        }
-
         // Spawn first duck for test
         setTimeout(() => this.spawnChicken(), 500);
 
@@ -425,16 +458,16 @@ class GameManager {
             document.exitPointerLock();
         }
 
-        // Exit fullscreen mode
-        const exitFullscreen = document.exitFullscreen ||
-                               document.mozCancelFullScreen ||
-                               document.webkitExitFullscreen ||
-                               document.msExitFullscreen;
-        if (exitFullscreen && document.fullscreenElement) {
-            exitFullscreen.call(document).catch(err => {
-                console.log('Exit fullscreen failed:', err);
-            });
-        }
+        // // Exit fullscreen mode
+        // const exitFullscreen = document.exitFullscreen ||
+        //                        document.mozCancelFullScreen ||
+        //                        document.webkitExitFullscreen ||
+        //                        document.msExitFullscreen;
+        // if (exitFullscreen && document.fullscreenElement) {
+        //     exitFullscreen.call(document).catch(err => {
+        //         console.log('Exit fullscreen failed:', err);
+        //     });
+        // }
         
         this.menuEl.style.display = 'flex';
         this.gameOverEl.style.display = 'none';
