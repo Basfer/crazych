@@ -405,6 +405,15 @@ class GameManager {
 
     showMenu() {
         this.state = 'MENU';
+        
+        // Exit pointer lock to show mouse cursor
+        document.exitPointerLock = document.exitPointerLock ||
+                                   document.mozExitPointerLock ||
+                                   document.webkitExitPointerLock;
+        if (document.exitPointerLock) {
+            document.exitPointerLock();
+        }
+        
         this.menuEl.style.display = 'flex';
         this.gameOverEl.style.display = 'none';
         // Expand leaderboard, collapse instructions
@@ -423,6 +432,15 @@ class GameManager {
         this.soundManager.playGameOver();
 
         this.finalScoreEl.textContent = this.languageManager?.t('gameOver.finalScore', { score: this.score }) || `Score: ${this.score}`;
+        
+        // Exit pointer lock to show mouse cursor in menu
+        document.exitPointerLock = document.exitPointerLock ||
+                                   document.mozExitPointerLock ||
+                                   document.webkitExitPointerLock;
+        if (document.exitPointerLock) {
+            document.exitPointerLock();
+        }
+        
         this.showMenu();
         this.gameOverEl.style.display = 'contents';
         document.body.classList.remove('playing');
