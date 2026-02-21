@@ -384,6 +384,17 @@ class GameManager {
             this.canvas.requestPointerLock();
         }
 
+        // Request fullscreen mode
+        const requestFullscreen = document.documentElement.requestFullscreen ||
+                                  document.documentElement.mozRequestFullScreen ||
+                                  document.documentElement.webkitRequestFullscreen ||
+                                  document.documentElement.msRequestFullscreen;
+        if (requestFullscreen && !document.fullscreenElement) {
+            requestFullscreen.call(document.documentElement).catch(err => {
+                console.log('Fullscreen request failed:', err);
+            });
+        }
+
         // Spawn first duck for test
         setTimeout(() => this.spawnChicken(), 500);
 
@@ -412,6 +423,17 @@ class GameManager {
                                    document.webkitExitPointerLock;
         if (document.exitPointerLock) {
             document.exitPointerLock();
+        }
+
+        // Exit fullscreen mode
+        const exitFullscreen = document.exitFullscreen ||
+                               document.mozCancelFullScreen ||
+                               document.webkitExitFullscreen ||
+                               document.msExitFullscreen;
+        if (exitFullscreen && document.fullscreenElement) {
+            exitFullscreen.call(document).catch(err => {
+                console.log('Exit fullscreen failed:', err);
+            });
         }
         
         this.menuEl.style.display = 'flex';
