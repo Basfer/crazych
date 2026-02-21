@@ -22,7 +22,6 @@ class GameManager {
 
         // Buttons
         this.startBtn = document.getElementById('startBtn');
-        this.restartBtn = document.getElementById('restartBtn');
         this.saveScoreBtn = document.getElementById('saveScoreBtn');
 
         // Game settings
@@ -235,11 +234,8 @@ class GameManager {
                                         this.canvas.mozRequestPointerLock ||
                                         this.canvas.webkitRequestPointerLock;
             if (requestPointerLock) {
-                requestPointerLock.call(this.canvas).then(() => {
-                    console.log('Pointer lock acquired');
-                }).catch(err => {
-                    console.log('Pointer lock failed:', err);
-                });
+                requestPointerLock.call(this.canvas);
+                console.log('Pointer lock requested');
             }
 
             // Request fullscreen mode
@@ -248,41 +244,22 @@ class GameManager {
                                       document.documentElement.webkitRequestFullscreen ||
                                       document.documentElement.msRequestFullscreen;
             if (requestFullscreen && !document.fullscreenElement) {
-                requestFullscreen.call(document.documentElement).then(() => {
-                    console.log('Fullscreen entered');
-                }).catch(err => {
-                    console.log('Fullscreen request failed:', err);
-                });
+                const fullscreenPromise = requestFullscreen.call(document.documentElement);
+                if (fullscreenPromise && fullscreenPromise.then) {
+                    fullscreenPromise.then(() => {
+                        console.log('Fullscreen entered');
+                    }).catch(err => {
+                        console.log('Fullscreen request failed:', err);
+                    });
+                } else {
+                    console.log('Fullscreen requested');
+                }
             }
 
             // Start the game
             this.startGame();
         });
         this.saveScoreBtn.addEventListener('click', () => this.saveHighscore());
-
-        // Restart button - exit fullscreen and pointer lock
-        this.restartBtn.addEventListener('click', () => {
-            // Exit pointer lock
-            document.exitPointerLock = document.exitPointerLock ||
-                                       document.mozExitPointerLock ||
-                                       document.webkitExitPointerLock;
-            if (document.exitPointerLock) {
-                document.exitPointerLock();
-            }
-
-            // Exit fullscreen mode
-            const exitFullscreen = document.exitFullscreen ||
-                                   document.mozCancelFullScreen ||
-                                   document.webkitExitFullscreen ||
-                                   document.msExitFullscreen;
-            if (exitFullscreen && document.fullscreenElement) {
-                exitFullscreen.call(document).catch(err => {
-                    console.log('Exit fullscreen failed:', err);
-                });
-            }
-
-            this.showMenu();
-        });
 
         // Enter to save name
     this.playerNameEl.addEventListener('keypress', (e) => {
