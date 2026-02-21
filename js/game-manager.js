@@ -229,6 +229,10 @@ class GameManager {
 
         // Menu buttons - start game with pointer lock and fullscreen
         this.startBtn.addEventListener('click', () => {
+            // Focus canvas first (required for pointer lock)
+            this.canvas.focus();
+            this.canvas.tabIndex = 1;
+
             // Request pointer lock FIRST (must be in user gesture handler)
             const requestPointerLock = this.canvas.requestPointerLock ||
                                         this.canvas.mozRequestPointerLock ||
@@ -258,6 +262,17 @@ class GameManager {
 
             // Start the game
             this.startGame();
+        });
+
+        // Listen for pointer lock changes
+        document.addEventListener('pointerlockchange', () => {
+            console.log('Pointer lock changed:', document.pointerLockElement === this.canvas);
+        });
+        document.addEventListener('mozpointerlockchange', () => {
+            console.log('Mozilla pointer lock changed');
+        });
+        document.addEventListener('webkitpointerlockchange', () => {
+            console.log('WebKit pointer lock changed');
         });
         this.saveScoreBtn.addEventListener('click', () => this.saveHighscore());
 
