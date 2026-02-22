@@ -138,6 +138,17 @@ class GameManager {
         this.background = new Background(this.canvas.width, this.canvas.height);
     }
 
+    // Request pointer lock on canvas
+    requestPointerLock() {
+        const requestPointerLock = this.canvas.requestPointerLock ||
+                                    this.canvas.mozRequestPointerLock ||
+                                    this.canvas.webkitRequestPointerLock;
+        if (requestPointerLock) {
+            requestPointerLock.call(this.canvas);
+            console.log('Pointer lock requested');
+        }
+    }
+
     setupEventListeners() {
         // Resize
         window.addEventListener('resize', () => this.resize());
@@ -227,52 +238,40 @@ class GameManager {
         }, { capture: true });
 
 
-        // Menu buttons - start game with pointer lock and fullscreen
+        // Menu buttons - start game with fullscreen and pointer lock
         this.startBtn.addEventListener('click', () => {
             // Focus canvas first (required for pointer lock)
             this.canvas.focus();
             this.canvas.tabIndex = 1;
 
-            // Request pointer lock FIRST (must be in user gesture handler)
-            const requestPointerLock = this.canvas.requestPointerLock ||
-                                        this.canvas.mozRequestPointerLock ||
-                                        this.canvas.webkitRequestPointerLock;
-            if (requestPointerLock) {
-                requestPointerLock.call(this.canvas);
-                console.log('Pointer lock requested');
-            }
-
-            // Request fullscreen mode
+            // Request fullscreen mode FIRST
             const requestFullscreen = document.documentElement.requestFullscreen ||
                                       document.documentElement.mozRequestFullScreen ||
                                       document.documentElement.webkitRequestFullscreen ||
                                       document.documentElement.msRequestFullscreen;
+            
             if (requestFullscreen && !document.fullscreenElement) {
                 const fullscreenPromise = requestFullscreen.call(document.documentElement);
                 if (fullscreenPromise && fullscreenPromise.then) {
+                    // Request pointer lock AFTER fullscreen is entered
                     fullscreenPromise.then(() => {
                         console.log('Fullscreen entered');
+                        this.requestPointerLock();
                     }).catch(err => {
                         console.log('Fullscreen request failed:', err);
+                        this.startGame();
                     });
+                    return; // Will start game in then()
                 } else {
                     console.log('Fullscreen requested');
                 }
             }
 
+            // If no fullscreen or already in fullscreen, just request pointer lock
+            this.requestPointerLock();
+
             // Start the game
             this.startGame();
-        });
-
-        // Listen for pointer lock changes
-        document.addEventListener('pointerlockchange', () => {
-            console.log('Pointer lock changed:', document.pointerLockElement === this.canvas);
-        });
-        document.addEventListener('mozpointerlockchange', () => {
-            console.log('Mozilla pointer lock changed');
-        });
-        document.addEventListener('webkitpointerlockchange', () => {
-            console.log('WebKit pointer lock changed');
         });
         this.saveScoreBtn.addEventListener('click', () => this.saveHighscore());
 
