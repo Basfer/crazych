@@ -257,6 +257,7 @@ class GameManager {
                     fullscreenPromise.then(() => {
                         console.log('Fullscreen entered');
                         this.requestPointerLock();
+                        this.startGame();
                     }).catch(err => {
                         console.log('Fullscreen request failed:', err);
                         this.startGame();
